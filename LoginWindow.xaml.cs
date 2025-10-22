@@ -1,7 +1,7 @@
-﻿using System.Windows; // <-- Mude o using
+﻿using System.Windows;
 using Canguru.Core;
 using Canguru.Business;
-using System.Windows.Input; // <-- Adicione para o KeyDown
+using System.Windows.Input; 
 
 namespace Canguru.WPF
 {
@@ -10,24 +10,16 @@ namespace Canguru.WPF
         public LoginWindow()
         {
             InitializeComponent();
-
-            // Carregue suas imagens (exemplo)
-            // (Certifique-se que as imagens estão no seu projeto WPF)
-            // imgFundo.Source = new BitmapImage(new Uri("pack://application:,,,/Recursos/bgPrincipal.png"));
-            // imgLogo.Source = new BitmapImage(new Uri("pack://application:,,,/Recursos/logo_canguruu.png"));
         }
-
-        // --- LÓGICA COPIADA E ADAPTADA ---
 
         private void BtnEntrar_Click(object sender, RoutedEventArgs e)
         {
-            // MUDANÇA: 'PasswordBox' usa .Password, não .Text
             string login = txtLogin.Text;
             string senha = txtSenha.Password;
 
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Preencha todos os campos!"); // MessageBox funciona igual
+                MessageBox.Show("Preencha todos os campos!");
                 return;
             }
 
@@ -38,11 +30,8 @@ namespace Canguru.WPF
             {
                 MessageBox.Show($"Bem-vindo, {usuarioLogado.Nome}!");
 
-                // Crie sua PrincipalWindow (você fará esta tela depois)
-                // PrincipalWindow principal = new PrincipalWindow(usuarioLogado);
-                // principal.Show();
 
-                this.Close(); // MUDANÇA: this.Hide() vira this.Close()
+                this.Close(); 
             }
             else
             {
