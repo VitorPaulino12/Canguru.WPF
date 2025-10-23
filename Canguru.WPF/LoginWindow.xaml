@@ -5,20 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Canguru.WPF"
         mc:Ignorable="d"
-        Title="CANGURUU - Login" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen" 
+        Title="CANGURUU - Login" 
+        Height="720" 
+        Width="350" WindowStartupLocation="CenterScreen" 
         WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" 
-                Background="{StaticResource CorLaranjaPrincipal}" 
-                CornerRadius="5,0,0,5">
-
+        <Border Background="{StaticResource CorLaranjaPrincipal}" 
+                CornerRadius="5">
             <StackPanel VerticalAlignment="Center" Margin="30">
 
                 <Border Width="120" Height="120" CornerRadius="60" Background="White"
@@ -30,6 +28,7 @@
 
                 <Label Content="Senha" Foreground="White" FontSize="14"/>
                 <PasswordBox x:Name="txtSenha" Margin="0,5,0,30" KeyDown="txtSenha_KeyDown"/>
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -45,15 +44,6 @@
 
             </StackPanel>
         </Border>
-
-        <Grid Grid.Column="1">
-
-            <Image x:Name="imgFundo" Stretch="UniformToFill"/>
-
-            <Image x:Name="imgLogo" Width="300"
-                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="20"/>
-
-        </Grid>
 
     </Grid>
 </Window>
