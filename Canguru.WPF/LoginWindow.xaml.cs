@@ -31,7 +31,8 @@ namespace Canguru.WPF
                 MessageBox.Show($"Bem-vindo, {usuarioLogado.Nome}!");
 
 
-                this.Close(); 
+                this.Close();
+                
             }
             else
             {
@@ -41,7 +42,9 @@ namespace Canguru.WPF
 
         private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
-            
+            CadastroWindow TelaCadastro = new CadastroWindow();
+            this.Close();
+            TelaCadastro.ShowDialog();
         }
 
         private void txtSenha_KeyDown(object sender, KeyEventArgs e)
