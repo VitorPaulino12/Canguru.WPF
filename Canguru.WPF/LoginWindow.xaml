@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Canguru.WPF"
         mc:Ignorable="d"
-        Title="CANGURUU - Login" 
-        Height="720" 
-        Width="350" WindowStartupLocation="CenterScreen" 
+        Title="CANGURUU - Login"
+        Height="720"
+        Width="350" WindowStartupLocation="CenterScreen"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
     <Grid>
@@ -15,19 +15,26 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Background="{StaticResource CorLaranjaPrincipal}" 
-                CornerRadius="5">
+        <Border Background="{StaticResource CorLaranjaPrincipal}"
+                CornerRadius="5" Height="500">
             <StackPanel VerticalAlignment="Center" Margin="30">
+                
 
-                <Border Width="120" Height="120" CornerRadius="60" Background="White"
-                        BorderBrush="Gainsboro" BorderThickness="2" Margin="0,0,0,40">
-                </Border>
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Margin="0,0,0,25"> <Run Text="CANG" Foreground="Black"/><Run Text="URUU" Foreground="White"/>
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="2" Direction="315" Color="DarkGray" Opacity="0.5" BlurRadius="3"/>
+                    </TextBlock.Effect>
+                </TextBlock>
 
                 <Label Content="Login" Foreground="White" FontSize="14"/>
-                <TextBox x:Name="txtLogin" Margin="0,5,0,15"/>
+                <TextBox x:Name="txtLogin" Margin="0,5,0,10"/>
 
                 <Label Content="Senha" Foreground="White" FontSize="14"/>
-                <PasswordBox x:Name="txtSenha" Margin="0,5,0,30" KeyDown="txtSenha_KeyDown"/>
+                <PasswordBox x:Name="txtSenha" Margin="0,5,0,50" KeyDown="txtSenha_KeyDown"/>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -35,10 +42,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="BtnCadastrar" Grid.Column="0" Content="Cadastrar" Margin="0,0,5,0" 
+                    <Button x:Name="BtnCadastrar" Grid.Column="0" Content="Cadastrar" Margin="0,0,5,0"
                             Click="BtnCadastrar_Click"/>
 
-                    <Button x:Name="BtnEntrar" Grid.Column="1" Content="Entrar" Margin="5,0,0,0" 
+                    <Button x:Name="BtnEntrar" Grid.Column="1" Content="Entrar" Margin="5,0,0,0"
                             Click="BtnEntrar_Click" IsDefault="True"/>
                 </Grid>
 

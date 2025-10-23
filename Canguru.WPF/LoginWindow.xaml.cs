@@ -41,7 +41,7 @@ namespace Canguru.WPF
 
         private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void txtSenha_KeyDown(object sender, KeyEventArgs e)
