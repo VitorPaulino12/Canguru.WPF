@@ -1,0 +1,179 @@
+﻿<Window x:Class="Canguru.WPF.Page1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:Canguru.WPF" mc:Ignorable="d" Title="TelaHome" Height="1080" Width="1920">
+    <Window.Resources>
+        <!-- Estilo para os botões da sidebar -->
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="50" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="10,5" />
+        </Style>
+    </Window.Resources>
+    <!-- GRID PRINCIPAL: Com 3 COLUNAS -->
+    <Grid Background="#F0F0F0">
+        <!-- Adicionei um fundo cinza claro para a janela inteira -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="326"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="White">
+            <!-- 1. PRIMEIRO PASSO: Dividir a Sidebar em 3 LINHAS -->
+            <Grid.RowDefinitions>
+                <!-- Linha 0: Cabeçalho do Perfil (altura automática) -->
+                <RowDefinition Height="Auto"/>
+                <!-- Linha 1: Menu de Navegação (ocupa o resto do espaço) -->
+                <RowDefinition Height="*"/>
+                <!-- Linha 2: Rodapé (altura automática) -->
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!-- 2. SEGUNDO PASSO: Preencher cada seção -->
+            <!-- ============================================= -->
+            <!-- = SEÇÃO TOPO (LINHA 0) - PERFIL DO USUÁRIO = -->
+            <!-- ============================================= -->
+            <Border Grid.Row="0" Padding="20,20,20,20" Background="#FFE59500" CornerRadius="25,25,25,25" Margin="15,90,35,0">
+                <StackPanel Orientation="Horizontal">
+                    <!-- Imagem de perfil (placeholder) -->
+                    <Ellipse Width="50" Height="50" Margin="0,0,15,0" Fill="White">
+                        <Ellipse.Effect>
+                            <!-- para efeitos de sombra-->
+                            <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Direction="190" Opacity="9" />
+                        </Ellipse.Effect>
+                    </Ellipse>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Nome Usuário :D" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                        <TextBlock Text="@ra usuário" FontSize="12" Foreground="#FFD4A3"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Direction="190" Opacity="9"></DropShadowEffect>
+                </Border.Effect>
+            </Border>
+            <!-- ============================================= -->
+            <!-- = SEÇÃO MEIO (LINHA 1) - MENU DE NAVEGAÇÃO = -->
+            <!-- ============================================= -->
+            <StackPanel Grid.Row="1">
+                <Button Content="Home" Background="#FFDDDDDD" Margin="15,200,10,4.6" />
+                <Button Content="Meu Perfil" Margin="15,35,10,5" />
+                <Button Content="Atividades" Margin="15,35,10,5" />
+                <Button Content="Criar atividade" Margin="15,35,10,5" />
+                <Button Content="Gerenciar classe" Margin="15,35,10,5" />
+            </StackPanel>
+            <!-- ============================================= -->
+            <!-- = SEÇÃO FUNDO (LINHA 2) - RODAPÉ = -->
+            <!-- ============================================= -->
+            <Border Grid.Row="2" Background="#E59500" Padding="9.2,15,10,15" CornerRadius="25,25,25,25" Margin="0,25,0,0">
+                <Button Content="Sair" Background="Transparent" BorderBrush="White" Foreground="White" Margin="10,5"/>
+            </Border>
+        </Grid>
+        <!-- ======================================================= -->
+        <!-- = CONTEÚDO DA COLUNA 1 (MEIO - FEED DE POSTAGENS) = -->
+        <!-- ======================================================= -->
+        <!-- NOVO: Border Laranja que envolve toda a área do feed -->
+        <Border Grid.Column="1" Background="#FFA64D" CornerRadius="35" Margin="10" Padding="15,65,15,13">
+            <!-- Grid interno para organizar o painel de novo post e o feed -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- =================================================== -->
+                <!-- = PAINEL "NOVO POST" (LINHA 0) - AGORA BRANCO = -->
+                <!-- =================================================== -->
+                <Border Grid.Row="0" Background="White" CornerRadius="15" Padding="15" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!-- Título -->
+                        <TextBlock Grid.Row="0" Text="Novo post" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+                        <!-- Conteúdo (Imagem + Texto) -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Width="80" Height="80" Background="LightSlateGray" BorderThickness="0">
+                                <TextBlock Text="📷" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button>
+                            <TextBox Grid.Column="2" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Text="Digite aqui o seu post..."/>
+                        </Grid>
+                        <!-- Botão de Enviar -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button Content="Enviar Post" Padding="20,5" Background="#FFA64D" Foreground="White" BorderThickness="0" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Direction="190" Opacity="9"></DropShadowEffect>
+                    </Border.Effect>
+                </Border>
+                <!-- =================================================== -->
+                <!-- = FEED DE POSTAGENS (LINHA 1) = -->
+                <!-- =================================================== -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Background="White" CornerRadius="15" Padding="15" Margin="0,5" Height="697">
+                            <StackPanel>
+                                <!-- AQUI FICARAM OS POSTS DOS USUÁRIOS-->
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+        <!-- ======================================================= -->
+        <!-- = CONTEÚDO DA COLUNA 2 (DIREITA - USUÁRIOS) = -->
+        <!-- ======================================================= -->
+        <!-- IMAGINO ESSA ÁREA PARA COLOCAR DUAS COISAS IMPORTANTES-->
+        <!-- 1 = A LISTA DE USUARIOS CADASTRADOS NO SISTEMA -->
+        <!-- 2 =UM PEQUENO PAINEL ACIMA DA LISTA QUE AGRUPA UM ICONE -->
+        <!-- QUE DIZ RESPEITO AS NOTIFICAÇÕES DE NOVAS ATIVIDADES DISPONÍVEIS-->
+        <Border Grid.Column="2" Background="White" CornerRadius="10" Margin="10">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" MinHeight="260"/>
+                    <RowDefinition Height="725*"/>
+                    <RowDefinition Height="7*"/>
+                    <RowDefinition Height="12*"/>
+                </Grid.RowDefinitions>
+                <!--PAINEL DE NOTIFICAÇÕES // BOTÃO-->
+                <Border Grid.Row="0" Background="#FFFFA64D" CornerRadius="10" Margin="150,25,0,165">
+                    <!-- Container principal para o widget de notificação -->
+                    <Grid HorizontalAlignment="Left" Margin="10,10,0,10">
+                        <!-- Definimos duas colunas: uma para o ícone e uma para o contador -->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <!-- Largura automática para o botão do sino -->
+                            <ColumnDefinition Width="Auto"/>
+                            <!-- Largura automática para o contador -->
+                        </Grid.ColumnDefinitions>
+                        <!-- ============================================================= -->
+                        <!-- = PARTE 1: O BOTÃO CLICÁVEL DO SINO (COLUNA 0) = -->
+                        <!-- ============================================================= -->
+                        <Button Grid.Column="0" Name="NotificationButton" Click="NotificationButton_Click" Background="Transparent" BorderThickness="0" Padding="0" Width="40" Height="40" ToolTip="Notificações">
+                            <Image Source="/icons8-bell-50.png" Stretch="Uniform"/>
+                        </Button>
+                        <!-- ============================================================= -->
+                        <!-- = PARTE 2: O CONTADOR DE NOTIFICAÇÕES (COLUNA 1) = -->
+                        <!-- ============================================================= -->
+                        <Border Grid.Column="1" Background="Red" CornerRadius="10" Margin="-10, -5, 0, 0" VerticalAlignment="Top" MinWidth="20" MinHeight="20">
+
+                        </Border>
+                    </Grid>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="4" Direction="190" Opacity="9"></DropShadowEffect>
+                    </Border.Effect>
+                </Border>
+                <Border Background="#FFFFA64D" CornerRadius="10" Padding="15,0,15,0" Margin="0,130,0,0" Grid.RowSpan="2">
+                    <StackPanel Margin="0,0,0,33">
+                        <TextBlock Text="Usuários cadastrados" FontSize="20" FontWeight="Bold" Margin="0,1,0,20"/>
+                        <ListView Background="Transparent" Margin="0,0,0,0" Grid.RowSpan="4">
+                            <!-- AKI FICARAM OS USUÁRIOS CADASTRADOS NO SISTEMA-->
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
