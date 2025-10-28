@@ -18,11 +18,13 @@ namespace Canguru.WPF
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class PrincipalPage : Page
     {
-        public Page1()
+        public PrincipalPage()
         {
             InitializeComponent();
+
+
         }
     }
 }
