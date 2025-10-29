@@ -1,0 +1,44 @@
+﻿<Window x:Class="Compilador.CriarSessaoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Criar Sessão" Height="450" Width="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Campo para nova sessão -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Nome da Sessão:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBox x:Name="txtSessoes" Grid.Row="1" Grid.Column="0" Margin="0,0,10,10" Height="25"/>
+
+        <!-- Botões de ação -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="btnSalvar" Content="Salvar" Click="btnSalvar_Click" Width="80" Height="25" Margin="0,0,5,10"/>
+            <Button x:Name="btnCancelar" Content="Cancelar" Click="btnCancelar_Click" Width="80" Height="25" Margin="0,0,0,10"/>
+        </StackPanel>
+
+        <!-- Lista de sessões -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Sessões Criadas:" FontWeight="Bold" Margin="0,10,0,5"/>
+        <ListBox x:Name="listBoxSessoes" Grid.Row="3" Grid.Column="0" Margin="0,0,10,0" 
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+        <!-- Botões de editar/excluir - AGORA NA HORIZONTAL -->
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0" VerticalAlignment="Top">
+            <Button x:Name="btnAdicionarPergunta" Content="Add Pergunta" Click="btnAdicionarPergunta_Click" 
+                    Width="100" Height="30" Margin="0,0,5,0"/>
+            <Button x:Name="btnEditar" Content="Editar" Click="btnEditar_Click" 
+                    Width="100" Height="30" Margin="0,0,5,0"/>
+            <Button x:Name="btnExcluir" Content="Excluir" Click="btnExcluir_Click" 
+                    Width="100" Height="30"/>
+        </StackPanel>
+    </Grid>
+</Window>
