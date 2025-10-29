@@ -21,6 +21,7 @@ namespace Canguru.WPF
             {
                 MessageBox.Show("Preencha todos os campos!");
                 return;
+                
             }
 
 
@@ -29,10 +30,11 @@ namespace Canguru.WPF
             if (usuarioLogado != null)
             {
                 MessageBox.Show($"Bem-vindo, {usuarioLogado.Nome}!");
-
+                TelaHome tela = new TelaHome();
+                tela.Show();
 
                 this.Close();
-                
+
             }
             else
             {

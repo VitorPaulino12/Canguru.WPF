@@ -1,24 +1,23 @@
 ﻿using Canguru.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Canguru.Business
 {
-    public class GerenciadorDePosts
+    public static class GerenciadorDePosts
     {
-        private static List<Post> posts = new List<Post>();
+        // A lista de posts agora é estática e persiste durante a execução da aplicação
+        private static List<Post> _posts = new List<Post>();
 
         public static void AdicionarPost(Post p)
         {
-            posts.Add(p);
+            _posts.Insert(0, p); // Adiciona no topo da lista
         }
 
         public static List<Post> ObterPosts()
         {
-            return posts;
+            // Retorna a lista ordenada por data, do mais novo para o mais antigo
+            return _posts.OrderByDescending(p => p.Data).ToList();
         }
     }
 }

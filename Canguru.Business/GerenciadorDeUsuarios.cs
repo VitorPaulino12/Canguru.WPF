@@ -23,16 +23,15 @@ namespace Canguru.Business
             };
             Usuarios.Add(admin);
         }
-        public static bool CadastrarUsuario(Usuario novoUsuario)
+
+        public static void CadastrarUsuario(Usuario novoUsuario)
         {
-            if (Usuarios.Any(u => u.Login.Equals(novoUsuario.Login, StringComparison.OrdinalIgnoreCase))) 
+            if (Usuarios.Any(u => u.Login.ToLower() == novoUsuario.Login.ToLower()))
             {
-                // Login já existe, cadastro falhou
-                return false; // <-- Retorna false
+                throw new Exception("Este login já está em uso.");
             }
             novoUsuario.Id = proximoId++;
             Usuarios.Add(novoUsuario);
-            return true; // <-- Retorna true (sucesso)
         }
 
         public static Usuario ValidarLogin(string login, string senha)

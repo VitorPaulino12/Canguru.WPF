@@ -23,7 +23,7 @@
                                Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
                     <Label Content="Nome Completo:" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtNome" Margin="0,0,0,15" TextChanged="txtNome_TextChanged"/>
+                    <TextBox x:Name="txtNome" Margin="0,0,0,15"/>
 
                     <Label Content="Email:" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBox x:Name="txtEmail" Margin="0,0,0,15"/>
