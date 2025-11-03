@@ -15,5 +15,6 @@ namespace Canguru.Core
         public string Senha { get; set; }
         public TipoUsuario Tipo { get; set; }
         public string Imagem { get; set; }
+        public string CaminhoFotoPerfil { get; set; }
     }
 }
