@@ -1,5 +1,6 @@
 ﻿using Canguru.Business; // PARA ENCONTRAR A CLASSE (PROFESSOR)
 using Canguru.Core;
+using Compilador;
 using System;
 using System.IO;
 using System.Windows;
@@ -115,7 +116,10 @@ namespace Canguru.WPF
         // DEPOIS TEM QUE ADICIONAR CADA EVENTO DE ABRIR E FECHAR TELA
         private void BtnMeuPerfil_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Meu Perfil");
         private void BtnAtividades_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Atividades");
-        private void BtnCriarAtividade_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Criar Atividade");
+        private void BtnCriarAtividade_Click(object sender, RoutedEventArgs e) {
+            CriarSessaoWindow TelaSessao = new CriarSessaoWindow();
+            TelaSessao.Show();
+        }
         private void BtnGerenciarClasse_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Gerenciar Classe");
         private void BtnSair_Click(object sender, RoutedEventArgs e) => this.Close();
         private void BtnNotificacoes_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Você tem 3 novas notificações!");

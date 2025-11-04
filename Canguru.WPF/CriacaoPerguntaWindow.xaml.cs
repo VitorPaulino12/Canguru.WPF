@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,16 +8,14 @@ namespace Canguru.Telas.TelaCriacaoPergunta
 {
     public partial class MainWindow : Window
     {
-        private List<Pergunta> perguntas;
-        private string caminhoArquivo = "perguntas.txt";
+        private ArrayList perguntas;
         private int proximoId = 1;
 
         public MainWindow()
         {
             InitializeComponent();
-            perguntas = new List<Pergunta>();
+            perguntas = new ArrayList();
             ConfigurarComboBox();
-            CarregarPerguntasExistentes();
         }
 
         private void ConfigurarComboBox()
@@ -30,29 +26,6 @@ namespace Canguru.Telas.TelaCriacaoPergunta
             cmbResposta.Items.Add("C");
             cmbResposta.Items.Add("D");
             cmbResposta.SelectedIndex = 0;
-        }
-
-        private void CarregarPerguntasExistentes()
-        {
-            try
-            {
-                if (File.Exists(caminhoArquivo))
-                {
-                    var linhas = File.ReadAllLines(caminhoArquivo);
-                    foreach (var linha in linhas)
-                    {
-                        if (!string.IsNullOrEmpty(linha) && linha.StartsWith("ID:"))
-                        {
-                            proximoId++;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao carregar perguntas: {ex.Message}", "Erro",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         private void btnAdicionar_Click(object sender, RoutedEventArgs e)
@@ -100,7 +73,7 @@ namespace Canguru.Telas.TelaCriacaoPergunta
                 {
                     Id = proximoId++,
                     Enunciado = txtPergunta.Text.Trim(),
-                    Alternativas = new List<string>
+                    Alternativas = new ArrayList
                     {
                         txtAlternativaA.Text.Trim(),
                         txtAlternativaB.Text.Trim(),
@@ -110,10 +83,7 @@ namespace Canguru.Telas.TelaCriacaoPergunta
                     IndiceRespostaCorreta = cmbResposta.SelectedIndex
                 };
 
-                
-                SalvarNoArquivo(novaPergunta);
-
-                
+                // Adicionar no ArrayList
                 perguntas.Add(novaPergunta);
 
                 // Limpar campos
@@ -126,21 +96,6 @@ namespace Canguru.Telas.TelaCriacaoPergunta
             {
                 MessageBox.Show($"Erro ao salvar pergunta: {ex.Message}", "Erro",
                               MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void SalvarNoArquivo(Pergunta pergunta)
-        {
-            using (StreamWriter sw = new StreamWriter(caminhoArquivo, true, Encoding.UTF8))
-            {
-                sw.WriteLine($"ID: {pergunta.Id}");
-                sw.WriteLine($"Pergunta: {pergunta.Enunciado}");
-                sw.WriteLine($"A: {pergunta.Alternativas[0]}");
-                sw.WriteLine($"B: {pergunta.Alternativas[1]}");
-                sw.WriteLine($"C: {pergunta.Alternativas[2]}");
-                sw.WriteLine($"D: {pergunta.Alternativas[3]}");
-                sw.WriteLine($"Resposta: {(char)('A' + pergunta.IndiceRespostaCorreta)}");
-                sw.WriteLine("---"); 
             }
         }
 
@@ -160,12 +115,12 @@ namespace Canguru.Telas.TelaCriacaoPergunta
         {
             public int Id { get; set; }
             public string Enunciado { get; set; }
-            public List<string> Alternativas { get; set; }
+            public ArrayList Alternativas { get; set; }
             public int IndiceRespostaCorreta { get; set; }
 
             public Pergunta()
             {
-                Alternativas = new List<string>();
+                Alternativas = new ArrayList();
             }
 
             public bool VerificarResposta(int indiceResposta)

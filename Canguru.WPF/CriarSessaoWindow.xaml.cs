@@ -1,27 +1,27 @@
-﻿using System;
+﻿using Canguru.Core;
+using Canguru.WPF;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows;
-using System.Windows.Controls; // Adicione esta linha
-using Canguru.Core;
+using System.Windows.Controls;
 
 namespace Compilador
 {
     public partial class CriarSessaoWindow : Window
     {
         private List<Sessao> sessoes = new List<Sessao>();
-        private string arquivoSessoes = "sessoes.txt";
 
         public CriarSessaoWindow()
         {
             InitializeComponent();
-            CarregarSessoes();
             CarregarSessoesNaLista();
         }
 
         private void btnAdicionarPergunta_Click(object sender, RoutedEventArgs e)
-        {
-            //adicionar funcionalidade
+        {   
+            //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            //CriacaoPerguntaWindow telaSessao = new CriacaoPerguntaWindow();
+            //telaSessao.ShowDialog();
         }
 
         private void btnSalvar_Click(object sender, RoutedEventArgs e)
@@ -33,16 +33,15 @@ namespace Compilador
                 return;
             }
 
-            // Cria nova sessão
+
             Sessao novaSessao = new Sessao();
             novaSessao.Id = sessoes.Count + 1;
             novaSessao.Nome = txtSessoes.Text.Trim();
 
             sessoes.Add(novaSessao);
-            SalvarSessoes();
             CarregarSessoesNaLista();
 
-            txtSessoes.Text = ""; // Limpa o campo
+            txtSessoes.Text = "";
             MessageBox.Show($"Sessão '{novaSessao.Nome}' criada com sucesso!", "Sucesso",
                           MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -58,14 +57,13 @@ namespace Compilador
             {
                 Sessao sessaoSelecionada = sessoes[listBoxSessoes.SelectedIndex];
 
-                // Abre dialog para editar nome
+
                 var inputDialog = new InputDialog("Editar nome da sessão:", "Editar Sessão", sessaoSelecionada.Nome);
                 if (inputDialog.ShowDialog() == true)
                 {
                     if (!string.IsNullOrWhiteSpace(inputDialog.Answer))
                     {
                         sessaoSelecionada.Nome = inputDialog.Answer.Trim();
-                        SalvarSessoes();
                         CarregarSessoesNaLista();
                     }
                 }
@@ -90,7 +88,6 @@ namespace Compilador
                 if (result == MessageBoxResult.Yes)
                 {
                     sessoes.Remove(sessaoSelecionada);
-                    SalvarSessoes();
                     CarregarSessoesNaLista();
                 }
             }
@@ -110,84 +107,13 @@ namespace Compilador
             }
         }
 
-        private void SalvarSessoes()
+        private void txtSessoes_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                using (StreamWriter sw = new StreamWriter(arquivoSessoes))
-                {
-                    foreach (var sessao in sessoes)
-                    {
-                        sw.WriteLine($"SESSAO:{sessao.Id}|{sessao.Nome}");
-                        foreach (var pergunta in sessao.Perguntas)
-                        {
-                            sw.WriteLine($"PERGUNTA:{pergunta.Id}|{pergunta.Enunciado}|{pergunta.IndiceRespostaCorreta}");
-                            foreach (var alternativa in pergunta.Alternativas)
-                            {
-                                sw.WriteLine($"ALTERNATIVA:{alternativa}");
-                            }
-                        }
-                        sw.WriteLine("FIM_SESSAO");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao salvar sessões: {ex.Message}", "Erro",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
-        private void CarregarSessoes()
-        {
-            if (!File.Exists(arquivoSessoes)) return;
-
-            try
-            {
-                sessoes.Clear();
-                string[] linhas = File.ReadAllLines(arquivoSessoes);
-
-                Sessao sessaoAtual = null;
-                Pergunta perguntaAtual = null;
-
-                foreach (string linha in linhas)
-                {
-                    if (linha.StartsWith("SESSAO:"))
-                    {
-                        string[] dados = linha.Substring(7).Split('|');
-                        sessaoAtual = new Sessao
-                        {
-                            Id = int.Parse(dados[0]),
-                            Nome = dados[1]
-                        };
-                        sessoes.Add(sessaoAtual);
-                    }
-                    else if (linha.StartsWith("PERGUNTA:"))
-                    {
-                        string[] dados = linha.Substring(9).Split('|');
-                        perguntaAtual = new Pergunta
-                        {
-                            Id = int.Parse(dados[0]),
-                            Enunciado = dados[1],
-                            IndiceRespostaCorreta = int.Parse(dados[2])
-                        };
-                        sessaoAtual.Perguntas.Add(perguntaAtual);
-                    }
-                    else if (linha.StartsWith("ALTERNATIVA:"))
-                    {
-                        perguntaAtual.Alternativas.Add(linha.Substring(12));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao carregar sessões: {ex.Message}", "Erro",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
     }
 
-    // Classe auxiliar para InputDialog
+
     public partial class InputDialog : Window
     {
         public string Answer { get; set; }
@@ -238,7 +164,7 @@ namespace Compilador
             stackPanel.Children.Add(buttonPanel);
             this.Content = stackPanel;
 
-            // Set references for event handlers
+
             this.txtAnswer = txtAnswer;
             this.lblQuestion = lblQuestion;
         }

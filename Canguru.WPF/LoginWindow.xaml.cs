@@ -21,9 +21,8 @@ namespace Canguru.WPF
             {
                 MessageBox.Show("Preencha todos os campos!");
                 return;
-                
-            }
 
+            }
 
             Usuario usuarioLogado = GerenciadorDeUsuarios.ValidarLogin(login, senha);
 
