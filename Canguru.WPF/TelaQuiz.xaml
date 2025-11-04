@@ -1,0 +1,67 @@
+﻿<Window x:Class="QuizTeste.TelaPerguntas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Quiz - Protótipo" Height="450" Width="700"
+        WindowStartupLocation="CenterScreen"
+        Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="142*" />
+            <!-- Parte do enunciado -->
+            <RowDefinition Height="75*" />
+            <!-- Parte das alternativas -->
+        </Grid.RowDefinitions>
+
+        <!-- Área do enunciado -->
+        <Border Background="#FFA500" Grid.Row="0" Padding="20">
+            <TextBlock x:Name="txtPergunta"
+                       Text="ENUNCIADO DA PERGUNTA"
+                       Foreground="White"
+                       FontSize="24"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"/>
+        </Border>
+
+        <!-- Área das alternativas -->
+        <UniformGrid Grid.Row="1" 
+             Background="White" 
+             Rows="2" Columns="2" 
+             VerticalAlignment="Center" 
+             HorizontalAlignment="Center" Height="140" Width="618">
+
+            <UniformGrid.Resources>
+                <!-- Estilo global para os botões -->
+                <Style TargetType="Button">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Background" Value="#FFA500"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </UniformGrid.Resources>
+
+            <Button x:Name="btnAlt1" Click="Responder_Click" Tag="0" Content="Alternativa A"/>
+            <Button x:Name="btnAlt2" Click="Responder_Click" Tag="1" Content="Alternativa B"/>
+            <Button x:Name="btnAlt3" Click="Responder_Click" Tag="2" Content="Alternativa C"/>
+            <Button x:Name="btnAlt4" Click="Responder_Click" Tag="3" Content="Alternativa D"/>
+
+        </UniformGrid>
+
+
+    </Grid>
+</Window>

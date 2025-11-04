@@ -28,8 +28,9 @@ namespace Canguru.WPF
 
             if (usuarioLogado != null)
             {
+                
                 MessageBox.Show($"Bem-vindo, {usuarioLogado.Nome}!");
-                TelaHome tela = new TelaHome();
+                TelaHome tela = new TelaHome(usuarioLogado);
                 tela.Show();
 
                 this.Close();

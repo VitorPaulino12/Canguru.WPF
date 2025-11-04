@@ -7,7 +7,7 @@ namespace Canguru.Core
         public Usuario Autor { get; set; }
         public string Conteudo { get; set; }
         public DateTime Data { get; set; }
-        public string Imagem { get; set; } // Caminho para a imagem do post
+        
 
         public override string ToString()
         {
