@@ -34,8 +34,17 @@
 
                 <!-- Avatar e campo -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,15">
-                    <Border Width="90" Height="90" CornerRadius="20" Background="White" Margin="0,0,15,0" RenderTransformOrigin="0.478,0.587"/>
-                    <TextBox Width="140" Height="25" VerticalAlignment="Center"/>
+                    <Border x:Name="FotoProf"  Width="90"  Height="90"   CornerRadius="20"  Margin="0,0,15,0" RenderTransformOrigin="0.478,0.587">
+                        <Border.Background>
+                            <ImageBrush x:Name="FotoProfBrush" Stretch="UniformToFill"/>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock x:Name="NomeProf" Text="Nome do Professor" Foreground="White" FontSize="16" FontWeight="SemiBold" TextAlignment="Center"  VerticalAlignment="Center" Margin="10,0,10,0">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="0.4"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+
                 </StackPanel>
 
                 <!-- Título histórico -->
@@ -103,27 +112,10 @@
                         Margin="20,15,0,15"
                         Width="250"
                         HorizontalAlignment="Left">
-                    <StackPanel>
-                        <TextBlock Text="Nome Professor" FontWeight="Bold"/>
-                        <TextBlock Text="Id Sala"/>
-                        <TextBlock Text="Alunos cadastrados na sala:"/>
-                    </StackPanel>
+                    <StackPanel/>
                 </Border>
 
-                <!-- Botão adicionar usuário -->
-                <Button x:Name="btnAddUsuario"
-                        Grid.Column="1"
-                        Content="+ Usuário"
-                        FontSize="18"
-                        FontWeight="Bold"
-                        Background="#181726"
-                        Foreground="White"
-                        Padding="20,5"
-                        Margin="0,15,30,15"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"/>
+               
             </Grid>
 
             <!-- Conteúdo central -->

@@ -26,7 +26,28 @@ namespace Canguru.WPF
         public MainGerentClasse(Usuario usuario)
         {
             InitializeComponent();
+            NomeProf.Text = usuario.Nome;
             usuarioLogado = usuario;
+            if (!string.IsNullOrEmpty(usuarioLogado.CaminhoFotoPerfil))
+            {
+                try
+                {
+                    string caminhoFoto = System.IO.Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "FotosPerfil",
+                        usuarioLogado.CaminhoFotoPerfil);
+
+                    if (System.IO.File.Exists(caminhoFoto))
+                    {
+                        var imagem = new BitmapImage(new Uri(caminhoFoto));
+                        FotoProfBrush.ImageSource = imagem;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao carregar foto de perfil: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
         }
 
         private void dgUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -40,6 +61,12 @@ namespace Canguru.WPF
             TelaHome telaHome = new TelaHome(usuarioLogado);
                 telaHome.Show();
                 this.Close();
+        }
+
+        private void NomeProf_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            
+                //NomeProf.Text = usuarioLogado.Nome;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Canguru.Business; // PARA ENCONTRAR A CLASSE (PROFESSOR)
 using Canguru.Core;
-using Compilador;
 using System;
 using System.IO;
 using System.Windows;
@@ -188,16 +187,26 @@ namespace Canguru.WPF
         private void BtnMeuPerfil_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Meu Perfil");
         private void BtnAtividades_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Atividades");
         private void BtnCriarAtividade_Click(object sender, RoutedEventArgs e) {
-            CriarSessaoWindow TelaSessao = new CriarSessaoWindow();
+            MainGerentSessao TelaSessao = new MainGerentSessao(usuarioLogado);
+            this.Close();
             TelaSessao.Show();
+            
         }
         private void BtnGerenciarClasse_Click(object sender, RoutedEventArgs e)
         {
             MainGerentClasse tela = new MainGerentClasse(usuarioLogado);
-            tela.Show();          
             this.Close();
+            tela.Show();          
+            
         }
         private void BtnSair_Click(object sender, RoutedEventArgs e) => this.Close();
-        private void BtnNotificacoes_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Você tem 3 novas notificações!");
+        private void BtnNotificacoes_Click(object sender, RoutedEventArgs e)
+        {
+            var popup = new NotificacaoPopup(usuarioLogado);
+            popup.ShowDialog();
+        }
+        //Tem que adicioinar o evento de checagem se existe um quiz para ser feito
+        // e isso é definido pelo professor dono da sala
+        //private void PanelNotifica_Click(object sender, RoutedEventArgs e) { }
     }
 }

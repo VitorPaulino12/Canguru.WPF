@@ -1,4 +1,6 @@
-﻿using QuizTeste.Core;
+﻿using Canguru.Core;
+using Canguru.WPF;
+using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +13,15 @@ namespace QuizTeste
 {
     public partial class TelaPerguntas : Window
     {
+        private Usuario usuarioLogado;
         private List<Pergunta> _quiz;
         private int _indiceAtual = 0;
         private int _pontuacao = 0;
 
-        public TelaPerguntas()
+        public TelaPerguntas(Usuario usuario)
         {
             InitializeComponent();
+            usuarioLogado = usuario;
             IniciarQuiz();
         }
 
@@ -83,7 +87,9 @@ namespace QuizTeste
             double percentual = (double)_pontuacao / _quiz.Count * 100;
             MessageBox.Show($"Quiz finalizado!\n\nAcertos: {_pontuacao} de {_quiz.Count}\nDesempenho: {percentual:F1}%",
                 "Resultado", MessageBoxButton.OK, MessageBoxImage.Information);
-            
+            //Volta para tela principal
+            TelaHome telaHome = new TelaHome(usuarioLogado);
+            telaHome.Show();
             this.Close();
         }
     }

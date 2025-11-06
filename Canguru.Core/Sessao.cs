@@ -10,14 +10,12 @@ namespace Canguru.Core
     public class Sessao
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public string NomeSessao { get; set; }
+        public string descricaoSessao { get; set; }
 
         // Trocou o array fixo por uma lista flexível
-        public List<Pergunta> Perguntas { get; set; }
+       // public List<Pergunta> Perguntas { get; set; }
 
-        public Sessao()
-        {
-            Perguntas = new List<Pergunta>();
-        }
+      
     }
 }

@@ -108,7 +108,7 @@
                                 <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <!-- AKI TEM UMA IMAGEM DE USUÁRIO E NÃO ESTA SENDO CARREGADA NO SISTEMA-->
                             <Ellipse Grid.Column="0" Width="45">
                                 <Ellipse.Fill>
@@ -170,10 +170,9 @@
                             Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand">
                         <Grid>
 
-                            <Border Background="Red" CornerRadius="10" 
-                                    HorizontalAlignment="Right" VerticalAlignment="Top" 
-                                    Margin="-8,-8,0,0" Width="20" Height="20">
-                                <TextBlock Text="3" Foreground="White" FontWeight="Bold" 
+                            <Border x:Name="PanelNotifica" Background="Red" CornerRadius="5" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" Width="116" Height="28">
+                                <TextBlock Text="!" Foreground="White" FontWeight="Bold" 
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
