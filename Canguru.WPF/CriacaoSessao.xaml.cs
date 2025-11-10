@@ -39,13 +39,22 @@ namespace Canguru.WPF
                 return;
             }
 
+           
             GerenciadorSessao.AddSessao(nome, descricao);
             MessageBox.Show("Sessão adicionada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-
-            // Limpa campos após salvar
+            
             txtNomeSessao.Clear();
             txtDescricaoSessao.Clear();
+
+            
+            this.Close();
+        }
+
+        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            
+            this.Close();
         }
     }
 }
