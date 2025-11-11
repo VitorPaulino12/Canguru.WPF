@@ -33,6 +33,12 @@ namespace Canguru.Business
             }
 
             novoUsuario.Id = proximoId++;
+            novoUsuario.DataEntrada = DateTime.Now;
+            novoUsuario.Status = "Ativo";
+            if (string.IsNullOrWhiteSpace(novoUsuario.Email))
+            {
+                novoUsuario.Email = $"{novoUsuario.Login}@canguru.com";
+            }
             Usuarios.Add(novoUsuario);
 
             return true;
@@ -46,6 +52,18 @@ namespace Canguru.Business
         public static List<Usuario> GetTodosUsuarios()
         {
             return Usuarios;
+        }
+        public static bool ExcluirUsuario(int id)
+        {
+            var usuario = Usuarios.FirstOrDefault(u => u.Id == id);
+
+            if (usuario != null)
+            {
+                Usuarios.Remove(usuario);
+                return true;
+            }
+
+            return false;
         }
     }
 }

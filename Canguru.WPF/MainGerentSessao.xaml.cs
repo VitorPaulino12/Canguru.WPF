@@ -1,5 +1,6 @@
 ﻿using Canguru.Business;
 using Canguru.Core;
+using QuizTeste;
 using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Canguru.WPF
             CarregarSessoes();
             usuarioLogado = usuario;
             SessaoSelecionadaId = 0;
-
+            _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
             lblSessaoSelecionada.Text = "Nenhuma sessão selecionada";
         }
 
@@ -68,6 +69,7 @@ namespace Canguru.WPF
                 MessageBox.Show($"Sessão selecionada: {sessaoSelecionada.NomeSessao} (ID: {sessaoSelecionada.Id})",
                     "Sessão Selecionada", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            
         }
 
         private void CarregarPerguntasDaSessao(int idSessao)
@@ -185,10 +187,10 @@ namespace Canguru.WPF
                     return;
                 }
 
-                
-                int novaPerguntaId = AdicionarPerguntaUsuario(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
 
-                MessageBox.Show($"Pergunta salva com sucesso! ID: {novaPerguntaId}",
+                //int novaPerguntaId = AdicionarPerguntaUsuario(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
+                GerenciadorPerguntas.AdicionarPergunta(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
+                MessageBox.Show($"Pergunta salva com sucesso!", // eu retirei o texto que mencionava o id da pergunta que acabou de ser criada, por favor coloque aki de novo :D esqueci como faz!
                     "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 LimparCamposPergunta();
@@ -201,7 +203,8 @@ namespace Canguru.WPF
             }
         }
 
-        
+        /*eu retirei essa parte porque dessa forma as perguntas aparentemente não são de id exclusivo
+            da forma com que eu fiz o metodo 'AdicionarPergunta' ele eprmite na teoria deixar a pergunta com id exclusivo
         private int AdicionarPerguntaUsuario(int idSessao, string enunciado, string[] alternativas, int idRespostaCorreta)
         {
             var pergunta = new Pergunta
@@ -217,8 +220,8 @@ namespace Canguru.WPF
             _proximoIdPergunta++;
             return pergunta.Id;
         }
+        */
 
-        
         private List<Pergunta> ObterPerguntasUsuarioPorSessao(int idSessao)
         {
             return _perguntasUsuario.Where(p => p.IdSessao == idSessao).ToList();

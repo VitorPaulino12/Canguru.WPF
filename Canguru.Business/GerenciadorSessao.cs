@@ -14,8 +14,8 @@ namespace Canguru.Business
 
         public static void AddSessao(string nomeSessao, string descricaoSessaobase)
         {
-            int novoId = _norteSessao.Count == 0 ? 0 : _norteSessao.Max(s => s.Id) + 1;
-
+           // int novoId = _norteSessao.Count == 0 ? 0 : _norteSessao.Max(s => s.Id) + 1;
+            int novoId = _norteSessao.Count == 0 ? 1 : _norteSessao.Max(s => s.Id) + 1;
             Sessao novaSessao = new Sessao
             {
                 Id = novoId,

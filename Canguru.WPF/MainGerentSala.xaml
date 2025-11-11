@@ -49,6 +49,7 @@
 
                 <!-- Título histórico -->
                 <TextBlock Text="Interações (Quiz Histórico)"
+                           x:Name="lblHistoricoTitulo"
                            Foreground="White"
                            FontWeight="Bold"
                            FontSize="14"
@@ -56,18 +57,21 @@
 
                 <!-- Lista histórico -->
                 <DataGrid x:Name="dgHistorico"
-                          HeadersVisibility="Column"
-                          AutoGenerateColumns="False"
-                          Background="White"
-                          BorderThickness="1"
-                          Height="160"
-                          Margin="0,0,0,10">
+                            HeadersVisibility="Column"
+                            AutoGenerateColumns="False"
+                            Background="White"
+                            BorderThickness="1"
+                            Height="160"
+                            Margin="0,0,0,10"
+                            SelectionChanged="dgHistorico_SelectionChanged">
+
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Id" Width="*" />
-                        <DataGridTextColumn Header="Data de realização" Width="2*" />
-                        <DataGridTextColumn Header="Nota" Width="*" />
+                        <DataGridTextColumn Header="ID" Width="*" Binding="{Binding IdentificadorQuiz}" />
+                        <DataGridTextColumn Header="Data de realização" Width="2*" Binding="{Binding DataEntradaResult, StringFormat={}{0:dd/MM/yyyy HH:mm}}" />
+                        <DataGridTextColumn Header="Nota" Width="*" Binding="{Binding MediaTotal}" />
                     </DataGrid.Columns>
                 </DataGrid>
+
 
                 <!-- Quiz Selecionado -->
                 <TextBlock Text="Quiz (Selecionado)"
@@ -83,10 +87,10 @@
                           BorderThickness="1"
                           Height="160">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Pergunta" Width="2*" />
-                        <DataGridTextColumn Header="Sessão" Width="*" />
-                        <DataGridTextColumn Header="Acerto" Width="*" />
-                        <DataGridTextColumn Header="Erro" Width="*" />
+                        <DataGridTextColumn Header="Pergunta" Width="2*" Binding="{Binding Pergunta}" />
+                        <DataGridTextColumn Header="Sessão" Width="*" Binding="{Binding Sessao}" />
+                        <DataGridTextColumn Header="Acerto" Width="*" Binding="{Binding Acerto}" />
+                        <DataGridTextColumn Header="Erro" Width="*" Binding="{Binding Erro}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -124,49 +128,29 @@
                     <StackPanel>
 
                         <!-- Título -->
-                        <TextBlock Text="Usuários cadastrados"
-                                   FontSize="22"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
-
-                        <!-- DataGrid Usuários -->
+                        <TextBlock Text="Usuários cadastrados" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
                         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="15">
                             <DataGrid 
-                                x:Name="dgUsuarios"
-                                AutoGenerateColumns="False"
-                                Background="White"
-                                HeadersVisibility="Column"
-                                BorderThickness="0"
-                                RowHeight="40"
+                                x:Name="dgUsuarios" AutoGenerateColumns="False" Background="White" HeadersVisibility="Column" BorderThickness="0" RowHeight="40"
                                 FontSize="14" Width="851" SelectionChanged="dgUsuarios_SelectionChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Nome" Width="2*" Binding="{Binding Nome}"/>
-                                    <DataGridTextColumn Header="e-mail" Width="2*" Binding="{Binding Email}"/>
-                                    <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Status}"/>
-                                    <DataGridTextColumn Header="Data de entrada" Width="2*" Binding="{Binding DataEntrada}"/>
+                                    <DataGridTextColumn Header="Nome" Width="2*" Binding="{Binding Nome}" />
+                                    <DataGridTextColumn Header="E-mail" Width="2*" Binding="{Binding Login}" />
+                                    <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Status}" />
+                                    <DataGridTextColumn Header="Data de entrada" Width="2*" Binding="{Binding DataEntrada, StringFormat={}{0:dd/MM/yyyy}}" />
+
                                     <DataGridTemplateColumn Header="Editar" Width="Auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button x:Name="btnEditar"
-                                                        Content="✏️"
-                                                        Width="35"
-                                                        Height="25"
-                                                        Background="#E0E0E0"
-                                                        BorderThickness="0"
-                                                        Cursor="Hand"/>
+                                                <Button Content="✏️" Width="35" Height="25" Background="#E0E0E0" BorderThickness="0" Cursor="Hand" Click="btnEditar_Click"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
+
                                     <DataGridTemplateColumn Header="Excluir" Width="Auto">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button x:Name="btnExcluir"
-                                                        Content="🗑️"
-                                                        Width="35"
-                                                        Height="25"
-                                                        Background="#FFBEBE"
-                                                        BorderThickness="0"
-                                                        Cursor="Hand"/>
+                                                <Button Content="🗑️" Width="35" Height="25" Background="#FFBEBE" BorderThickness="0" Cursor="Hand" Click="btnExcluir_Click"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>

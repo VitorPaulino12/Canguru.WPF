@@ -62,6 +62,7 @@ namespace Canguru.WPF
             string email = txtEmail.Text.Trim();
             string senha = txtSenhaCadastro.Password;
             string confSenha = txtConfirmarSenha.Password;
+            
 
             // --- Validações (Seu código aqui já estava bom) ---
             if (string.IsNullOrWhiteSpace(nome) ||

@@ -1,59 +1,96 @@
-﻿using QuizTeste.Core;
+﻿using Canguru.Business;
+using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace QuizTeste
 {
     public static class GerenciadorPerguntas
     {
         private static List<Pergunta> _todasAsPerguntas = new List<Pergunta>();
-        private static Random _rand = new Random();
+        private static Random GirarDaddo = new Random();
+        // Troquei o nome para ficar mais fácil imaginar a lógica disso funcionando
+        // a ideia para essa parte é que ele tem que pegar o nº de perguntas que tem na sessão -1
+        // e girar um dado para pegar uma pergunta aleatória dentre esse tanto de perguntas que tem nessa sessão
+
 
         static GerenciadorPerguntas()
         {
-            PopularTodasAsPerguntas();
+           // PopularTodasAsPerguntas();
+            //Esse é um método para pegar as perguntas e colcoar no vetor que vai
+            //armazenar as perguntas no quiz
         }
 
         public static List<Pergunta> GerarQuizAleatorio()
         {
-            var perguntasPorSessao = _todasAsPerguntas
-                .GroupBy(p => p.IdSessao)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
             List<Pergunta> quiz = new List<Pergunta>();
 
-            // O quiz terá 10 perguntas, misturadas de sessões diferentes
+            // Pega todas as sessões cadastradas
+            var sessoes = GerenciadorSessao.GetSessoes();
+
+            // Verifica se há sessões registradas
+            if (sessoes == null || sessoes.Count == 0)
+            {
+                //pop-up de erro nãp hjá sessões registradas ainda
+                return quiz;
+            }
+
+            // Filtra apenas as sessões que têm pelo menos 5 perguntas
+            List<int> sessoesValidas = new List<int>();
+
+            foreach (var sessao in sessoes)
+            {
+                int qtdPerguntas = _todasAsPerguntas.Count(p => p.IdSessao == sessao.Id);
+
+                if (qtdPerguntas >= 5)
+                {
+                    sessoesValidas.Add(sessao.Id);
+                }
+            }
+
+            // Se não há sessões válidas, não dá pra gerar quiz
+            if (sessoesValidas.Count == 0)
+            {
+                //Exbibir pop-up de erro aki! não há sessões válidas
+                
+                return quiz;
+            }
+
+            // Gera 10 perguntas aleatórias misturadas entre as sessões válidas
             for (int i = 0; i < 10; i++)
             {
-                // Escolhe uma sessão aleatória
-                int sessaoEscolhida = perguntasPorSessao.Keys.ElementAt(_rand.Next(perguntasPorSessao.Count));
-                var perguntasDaSessao = perguntasPorSessao[sessaoEscolhida];
+                int indiceSessao = GirarDaddo.Next(sessoesValidas.Count);
+                int idSessaoEscolhida = sessoesValidas[indiceSessao];
 
-                // Escolhe uma pergunta aleatória dessa sessão
-                var perguntaEscolhida = perguntasDaSessao[_rand.Next(perguntasDaSessao.Count)];
+                // Pega todas as perguntas dessa sessão
+                var perguntasDaSessao = _todasAsPerguntas.Where(p => p.IdSessao == idSessaoEscolhida).ToList();
+
+                // Escolhe uma aleatória
+                var perguntaEscolhida = perguntasDaSessao[GirarDaddo.Next(perguntasDaSessao.Count)];
 
                 quiz.Add(perguntaEscolhida);
             }
 
             return quiz;
         }
-
-        private static void PopularTodasAsPerguntas()
+        public static List<Pergunta> GetTodasPerguntas()
         {
-            // Sessão 1
-            _todasAsPerguntas.Add(new Pergunta { Id = 1, IdSessao = 1, Enunciado = "Quanto é 5 + 3?", Alternativas = new[] { "6", "7", "8", "9" }, IdRespostaCorreta = 2 });
-            _todasAsPerguntas.Add(new Pergunta { Id = 2, IdSessao = 1, Enunciado = "Quanto é 9 - 4?", Alternativas = new[] { "4", "5", "6", "3" }, IdRespostaCorreta = 1 });
-            _todasAsPerguntas.Add(new Pergunta { Id = 3, IdSessao = 1, Enunciado = "Quanto é 3 x 2?", Alternativas = new[] { "5", "6", "7", "8" }, IdRespostaCorreta = 1 });
-            _todasAsPerguntas.Add(new Pergunta { Id = 4, IdSessao = 1, Enunciado = "Quanto é 15 / 3?", Alternativas = new[] { "3", "4", "5", "6" }, IdRespostaCorreta = 2 });
+            return _todasAsPerguntas;
+        }
+        //método para adicionar uma pergunta,q ue eu disse que iria fazer
+        public static void AdicionarPergunta(int idSessao, string enunciado, string[] alternativas, int idRespostaCorreta)
+        {
+            int novoid = _todasAsPerguntas.Count == 0 ? 1 : _todasAsPerguntas.Max(i => i.Id) + 1;
+            var pergunta = new Pergunta
+            {
+                Id = novoid,
+                IdSessao = idSessao,
+                Enunciado = enunciado,
+                Alternativas = alternativas,
+                IdRespostaCorreta = idRespostaCorreta
+            };
 
-            // Sessão 2
-            _todasAsPerguntas.Add(new Pergunta { Id = 11, IdSessao = 2, Enunciado = "Quanto é 8 + 7?", Alternativas = new[] { "13", "14", "15", "16" }, IdRespostaCorreta = 1 });
-            _todasAsPerguntas.Add(new Pergunta { Id = 12, IdSessao = 2, Enunciado = "Quanto é 25 - 9?", Alternativas = new[] { "14", "15", "16", "17" }, IdRespostaCorreta = 2 });
-
-            // Sessão 3
-            _todasAsPerguntas.Add(new Pergunta { Id = 21, IdSessao = 3, Enunciado = "Quanto é 4 x 4?", Alternativas = new[] { "14", "15", "16", "17" }, IdRespostaCorreta = 2 });
-            _todasAsPerguntas.Add(new Pergunta { Id = 22, IdSessao = 3, Enunciado = "Quanto é 30 / 5?", Alternativas = new[] { "5", "6", "7", "8" }, IdRespostaCorreta = 0 });
+            _todasAsPerguntas.Add(pergunta);
         }
     }
 }
