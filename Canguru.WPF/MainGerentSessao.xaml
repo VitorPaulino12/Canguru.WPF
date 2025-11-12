@@ -118,11 +118,17 @@
                 <!-- Painel Perguntas (col 0) -->
                 <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="10">
                     <Grid>
-                        <StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0">
                             <Border Background="#DD8431" CornerRadius="15" Margin="20,20,20,10" Padding="10">
                                 <TextBlock Text="Perguntas da Sessão" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
                             </Border>
-                            <ScrollViewer Margin="20,0,20,20" >
+                            <ScrollViewer Margin="20,0,20,20">
                                 <StackPanel x:Name="ListaPerguntas"/>
                             </ScrollViewer>
                         </StackPanel>
@@ -168,10 +174,11 @@
                                 <TextBox x:Name="txtAlternativaCorreta" Height="28" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RenderTransformOrigin="0.505,0.459" >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RenderTransformOrigin="0.505,0.459" Width="402" >
                                 <Button x:Name="btnLimpar" Width="90" Height="30" Background="#8E7CC3" Foreground="White" Content="Limpar" BorderThickness="0" Margin="9" Click="Button_Click_3"/>
                                 <Button x:Name="btnSalvar" Width="90" Height="30" Background="#A5D6A7" Foreground="White" Content="Salvar" BorderThickness="0" Margin="9" Click="Button_Click_1"/>
                                 <Button x:Name="btnAtualizarPergunta" Width="90" Height="30" Background="#FFA726" Foreground="White" Content="Atualizar" BorderThickness="0" Margin="9" Click="btnAtualizarPergunta_Click"/>
+                                <Button x:Name="btnExcluirPergunta" Width="50" Height="30" Background="#FFA726" Foreground="White" Content="Exluír" BorderThickness="0" Margin="9" Click="btnAtualizarPergunta_Click"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

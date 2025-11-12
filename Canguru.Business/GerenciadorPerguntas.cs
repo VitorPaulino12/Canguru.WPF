@@ -2,6 +2,7 @@
 using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuizTeste
 {
@@ -9,17 +10,6 @@ namespace QuizTeste
     {
         private static List<Pergunta> _todasAsPerguntas = new List<Pergunta>();
         private static Random GirarDaddo = new Random();
-        // Troquei o nome para ficar mais fácil imaginar a lógica disso funcionando
-        // a ideia para essa parte é que ele tem que pegar o nº de perguntas que tem na sessão -1
-        // e girar um dado para pegar uma pergunta aleatória dentre esse tanto de perguntas que tem nessa sessão
-
-
-        static GerenciadorPerguntas()
-        {
-           // PopularTodasAsPerguntas();
-            //Esse é um método para pegar as perguntas e colcoar no vetor que vai
-            //armazenar as perguntas no quiz
-        }
 
         public static List<Pergunta> GerarQuizAleatorio()
         {
@@ -48,7 +38,7 @@ namespace QuizTeste
             if (sessoesValidas.Count == 0)
             {
                 //Exbibir pop-up de erro aki! não há sessões válidas
-                
+
                 return quiz;
             }
 
@@ -69,12 +59,13 @@ namespace QuizTeste
 
             return quiz;
         }
+
         public static List<Pergunta> GetTodasPerguntas()
         {
             return _todasAsPerguntas;
         }
-        //método para adicionar uma pergunta,q ue eu disse que iria fazer
-        public static void AdicionarPergunta(int idSessao, string enunciado, string[] alternativas, int idRespostaCorreta)
+
+        public static int AdicionarPergunta(int idSessao, string enunciado, string[] alternativas, int idRespostaCorreta)
         {
             int novoid = _todasAsPerguntas.Count == 0 ? 1 : _todasAsPerguntas.Max(i => i.Id) + 1;
             var pergunta = new Pergunta
@@ -87,6 +78,25 @@ namespace QuizTeste
             };
 
             _todasAsPerguntas.Add(pergunta);
+            return pergunta.Id;
+        }
+
+        public static void RemoverPergunta(int idPergunta)
+        {
+            var perguntaParaRemover = _todasAsPerguntas.FirstOrDefault(p => p.Id == idPergunta);
+            if (perguntaParaRemover != null)
+            {
+                _todasAsPerguntas.Remove(perguntaParaRemover);
+            }
+        }
+
+        public static void RemoverPerguntasPorSessao(int idSessao)
+        {
+            var perguntasParaRemover = _todasAsPerguntas.Where(p => p.IdSessao == idSessao).ToList();
+            foreach (var pergunta in perguntasParaRemover)
+            {
+                _todasAsPerguntas.Remove(pergunta);
+            }
         }
         public static void AtualizarPergunta(int idPergunta, string enunciado, string[] alternativas, int idRespostaCorreta)
         {

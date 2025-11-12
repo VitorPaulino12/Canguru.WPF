@@ -37,8 +37,8 @@ namespace Canguru.WPF
 
         private void btnSalvar_Click(object sender, RoutedEventArgs e)
         {
-            GerenciadorSessao.AtualizarSessoes(sessaoSelecionadaId, txtNomeSessao.Text, txtDescricaoSessao.Text);
-            MessageBox.Show("Sessão atualizada com sucesso!");
+            GerenciadorSessao.AtualizarSessao(sessaoSelecionadaId, txtNomeSessao.Text, txtDescricaoSessao.Text);
+            MessageBox.Show("Sessão atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
         }
     }

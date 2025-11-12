@@ -1,4 +1,5 @@
 ﻿using Canguru.Core;
+using QuizTeste;
 using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ namespace Canguru.Business
 
         public static void AddSessao(string nomeSessao, string descricaoSessaobase)
         {
-           // int novoId = _norteSessao.Count == 0 ? 0 : _norteSessao.Max(s => s.Id) + 1;
             int novoId = _norteSessao.Count == 0 ? 1 : _norteSessao.Max(s => s.Id) + 1;
             Sessao novaSessao = new Sessao
             {
@@ -30,29 +30,32 @@ namespace Canguru.Business
         {
             return _norteSessao;
         }
-        public static void AtualizarSessoes(int idsessao, string NovoNomeSessao, string descricao)
+        public static void AtualizarSessao(int idSessao, string novoNome, string novaDescricao)
         {
-            
-            var sessaoExistente = _norteSessao.FirstOrDefault(p => p.Id == idsessao);
-
-            if (sessaoExistente == null)
+            var sessao = _norteSessao.FirstOrDefault(s => s.Id == idSessao);
+            if (sessao != null)
             {
-                throw new Exception($"Pergunta com ID {idsessao} não encontrada.");
+                sessao.NomeSessao = novoNome;
+                sessao.descricaoSessao = novaDescricao;
             }
-            sessaoExistente.NomeSessao = NovoNomeSessao;
-            sessaoExistente.descricaoSessao = descricao;
-            
-            //perguntaExistente.Enunciado = enunciado;
-            //perguntaExistente.Alternativas = alternativas;
-            //perguntaExistente.IdRespostaCorreta = idRespostaCorreta;
-            //ideal ter um pop Up aki para notificar o usuário de que a eprgunta dele foi alterada com os novos atributos
-
         }
-        public static Sessao GetSessoesPorId(int idsessao)
+        public static bool RemoverSessao(int idSessao)
         {
-            //vai até onde esta salvo a pergunta e procura uma pergunta com um id especifico
-            return _norteSessao.FirstOrDefault(p => p.Id == idsessao);
+            // Procura a sessão pelo ID
+            var sessao = _norteSessao.FirstOrDefault(s => s.Id == idSessao);
+
+            if (sessao == null)
+                return false; // Sessão não encontrada
+
+            // 🧹 Remove também as perguntas associadas a essa sessão
+            GerenciadorPerguntas.RemoverPerguntasPorSessao(idSessao);
+
+            // Remove a sessão da lista principal
+            _norteSessao.Remove(sessao);
+
+            return true; // Remoção bem-sucedida
         }
+
     }
 
 }
