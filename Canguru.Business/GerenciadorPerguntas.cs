@@ -24,11 +24,7 @@ namespace QuizTeste
         public static List<Pergunta> GerarQuizAleatorio()
         {
             List<Pergunta> quiz = new List<Pergunta>();
-
-            // Pega todas as sessões cadastradas
             var sessoes = GerenciadorSessao.GetSessoes();
-
-            // Verifica se há sessões registradas
             if (sessoes == null || sessoes.Count == 0)
             {
                 //pop-up de erro nãp hjá sessões registradas ainda
@@ -91,6 +87,33 @@ namespace QuizTeste
             };
 
             _todasAsPerguntas.Add(pergunta);
+        }
+        public static void AtualizarPergunta(int idPergunta, string enunciado, string[] alternativas, int idRespostaCorreta)
+        {
+            //Para esse método só precisa do id da pergunta, porque  a gente já tem ela salva na memória só tem que alterar os atributos dela
+            //usando como base as informações quee estão nos campos de texto que o usuário preencheu e atalizar os atributos com os novos
+            // Busca a pergunta existente na lista pelo ID
+
+            //armazena dentro de um a variavel local a pergunta 
+            //vai em _todasAsPerguntas procura uma pergunta com o p.id idgual a idPergunta passado no parâmetro
+            //logo depois coloca essa pergunta dentro de 'perguntaExistente'
+            var perguntaExistente = _todasAsPerguntas.FirstOrDefault(p => p.Id == idPergunta);
+
+            if (perguntaExistente == null)
+            {
+                throw new Exception($"Pergunta com ID {idPergunta} não encontrada.");
+            }
+             
+            perguntaExistente.Enunciado = enunciado;
+            perguntaExistente.Alternativas = alternativas;
+            perguntaExistente.IdRespostaCorreta = idRespostaCorreta;
+            //ideal ter um pop Up aki para notificar o usuário de que a eprgunta dele foi alterada com os novos atributos
+
+        }
+        public static Pergunta GetPerguntaPorId(int idPergunta)
+        {
+            //vai até onde esta salvo a pergunta e procura uma pergunta com um id especifico
+            return _todasAsPerguntas.FirstOrDefault(p => p.Id == idPergunta);
         }
     }
 }

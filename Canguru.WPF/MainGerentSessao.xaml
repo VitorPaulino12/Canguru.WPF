@@ -11,10 +11,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Painel Lateral -->
-        <Grid Background="#1E1B2E">
+        <!--  LATERAL (COLUNA 0)-->
+        <Grid Grid.Column="0" Background="#1E1B2E">
             <!-- Botão Voltar -->
-            <Button Content="&lt;" Width="35" Height="35" 
+            <Button Content="&lt;" Width="35" Height="35"
                     HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="20,20,0,0"
                     FontWeight="Bold"
@@ -24,23 +24,23 @@
                     BorderThickness="0" Click="Button_Click"/>
 
             <!-- Título Sessões -->
-            <Border Background="#DD8431" CornerRadius="10" 
+            <Border Background="#DD8431" CornerRadius="10"
                     Margin="20,80,20,0" Height="45" VerticalAlignment="Top">
-                <TextBlock Text="Sessões" 
-                           VerticalAlignment="Center" 
+                <TextBlock Text="Sessões"
+                           VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Foreground="White"
                            FontSize="20"
                            FontWeight="Bold"/>
             </Border>
 
-            <!-- Lista de Sessões -->
-            <Border Background="#DD8431" CornerRadius="10" 
+            <!-- Lista de Sessões - container laranja -->
+            <Border Background="#DD8431" CornerRadius="10"
                     Margin="20,130,20,80">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="463"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Cabeçalho -->
@@ -49,8 +49,8 @@
                         <TextBlock Text="N° perguntas" Foreground="White" FontWeight="Bold" HorizontalAlignment="Right"/>
                     </DockPanel>
 
-                    <!-- Conteúdo todas as sessões cadastradas no sistema-->
-                    <Border Background="White" CornerRadius="15" Padding="10" Margin="10,28,10,7">
+                    <!--  -->
+                    <Border Grid.Row="0" Background="White" CornerRadius="15" Padding="10" Margin="10,28,10,7">
                         <StackPanel>
                             <ListView x:Name="ListaDeSessoes" BorderThickness="0" MaxHeight="400" SelectionChanged="ListaDeSessoes_SelectionChanged">
                                 <ListView.ItemTemplate>
@@ -58,9 +58,9 @@
                                         <Border CornerRadius="10" BorderBrush="#D97A22" BorderThickness="1" Margin="0,0,0,6" Padding="6"
                                                 x:Name="borderSessao">
                                             <StackPanel>
-                                                <TextBlock Text="{Binding NomeSessao}" FontWeight="Bold" FontSize="10" Foreground="#D97A22"/>
-                                                <TextBlock Text="{Binding descricaoSessao}" FontSize="8" Foreground="Gray" TextWrapping="Wrap"/>
-                                                <TextBlock Text="{Binding Id, StringFormat='ID: {0}'}" FontSize="8" Foreground="DarkBlue"/>
+                                                <TextBlock Text="{Binding NomeSessao}" FontWeight="Bold" FontSize="12" Foreground="#D97A22"/>
+                                                <TextBlock Text="{Binding descricaoSessao}" FontSize="11" Foreground="Gray" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding Id, StringFormat='ID: {0}'}" FontSize="10" Foreground="DarkBlue"/>
                                             </StackPanel>
                                         </Border>
                                         <DataTemplate.Triggers>
@@ -74,17 +74,17 @@
                             </ListView>
                         </StackPanel>
                     </Border>
+
+                    <!-- Rodapé (botões) -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,10">
+                        <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Atualizar" BorderThickness="0" Click="btnAttSessao_Click" Margin="2,0"/>
+                        <Button Width="60" Height="30" Background="#E57A73" Foreground="White" Content="Excluir" BorderThickness="0" Click="Button_Click_2" Margin="2,0"/>
+                        <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Adicionar" BorderThickness="0" Click="Button_Click_4" Margin="2,0"/>
+
+                    </StackPanel>
                 </Grid>
             </Border>
-
-            <!-- Botões Inferiores -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,45">
-                <Button Width="80" Height="30" Background="#E57A73" Foreground="White" Content="Excluir" BorderThickness="0" Click="Button_Click_2"/>
-                <Button Width="80" Height="30" Background="#A5D6A7" Foreground="White" Content="Adicionar" BorderThickness="0" Click="Button_Click_4"/>
-            </StackPanel>
         </Grid>
-
-        <!-- Conteúdo Principal -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="90"/>
@@ -95,7 +95,7 @@
             <!-- Cabeçalho -->
             <Border Background="#DD8431" Grid.Row="0">
                 <TextBlock Text="Sessões CRUD"
-                           VerticalAlignment="Center" 
+                           VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            FontSize="28"
                            FontWeight="Bold"
@@ -104,7 +104,7 @@
 
             <!-- Sessão Selecionada -->
             <Border Grid.Row="1" Background="#E8F5E8" Margin="20,10,20,0" CornerRadius="5" Padding="10">
-                <TextBlock x:Name="lblSessaoSelecionada" Text="Nenhuma sessão selecionada" 
+                <TextBlock x:Name="lblSessaoSelecionada" Text="Nenhuma sessão selecionada"
                            FontWeight="Bold" Foreground="#2E7D32" HorizontalAlignment="Center"/>
             </Border>
 
@@ -115,21 +115,21 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Painel Perguntas -->
+                <!-- Painel Perguntas (col 0) -->
                 <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="10">
                     <Grid>
                         <StackPanel>
                             <Border Background="#DD8431" CornerRadius="15" Margin="20,20,20,10" Padding="10">
                                 <TextBlock Text="Perguntas da Sessão" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
                             </Border>
-                            <ScrollViewer Margin="20,0,20,20">
+                            <ScrollViewer Margin="20,0,20,20" >
                                 <StackPanel x:Name="ListaPerguntas"/>
                             </ScrollViewer>
                         </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- Painel Adicionar Pergunta -->
+                <!-- Painel Adicionar/Editar Pergunta (col 1) -->
                 <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="10" Grid.Column="1">
                     <Grid Margin="20">
                         <StackPanel>
@@ -137,7 +137,7 @@
                                 <TextBlock Text="Adicionar pergunta" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
                             </Border>
 
-                            <!-- Os campos onde o usuário entra com informação -->
+                            <!-- Campos -->
                             <StackPanel Margin="0,0,0,10">
                                 <TextBlock Text="Enunciado" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
                                 <TextBox x:Name="txtEnunciado" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
@@ -169,13 +169,15 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RenderTransformOrigin="0.505,0.459" >
-                                <Button x:Name="btnAtualizar" Width="112" Height="30" Background="#8E7CC3" Foreground="White" Content="Limpar" BorderThickness="0" Margin="9" Click="Button_Click_3"/>
-                                <Button x:Name="btnSalvar" Width="112" Height="30" Background="#A5D6A7" Foreground="White" Content="Salvar" BorderThickness="0" Margin="9" Click="Button_Click_1"/>
+                                <Button x:Name="btnLimpar" Width="90" Height="30" Background="#8E7CC3" Foreground="White" Content="Limpar" BorderThickness="0" Margin="9" Click="Button_Click_3"/>
+                                <Button x:Name="btnSalvar" Width="90" Height="30" Background="#A5D6A7" Foreground="White" Content="Salvar" BorderThickness="0" Margin="9" Click="Button_Click_1"/>
+                                <Button x:Name="btnAtualizarPergunta" Width="90" Height="30" Background="#FFA726" Foreground="White" Content="Atualizar" BorderThickness="0" Margin="9" Click="btnAtualizarPergunta_Click"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Border>
             </Grid>
         </Grid>
+
     </Grid>
 </Window>

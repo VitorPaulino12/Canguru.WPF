@@ -15,9 +15,8 @@ namespace Canguru.WPF
     {
         private Usuario usuarioLogado;
         private int SessaoSelecionadaId;
-        private List<Pergunta> _perguntasUsuario = new List<Pergunta>(); 
-        private int _proximoIdPergunta = 1000; 
-
+        private List<Pergunta> _perguntasUsuario = new List<Pergunta>();
+        private int PerguntaSelecionadaId = 0;
         public MainGerentSessao(Usuario usuario)
         {
             InitializeComponent();
@@ -35,7 +34,7 @@ namespace Canguru.WPF
             this.Close();
         }
 
-        private void CarregarSessoes()
+        public void CarregarSessoes()
         {
             var sessoes = GerenciadorSessao.GetSessoes();
 
@@ -102,9 +101,10 @@ namespace Canguru.WPF
                     CornerRadius = new CornerRadius(5),
                     Margin = new Thickness(0, 0, 0, 5),
                     Padding = new Thickness(10),
-                    Background = new SolidColorBrush(Colors.WhiteSmoke)
+                    Background = new SolidColorBrush(Colors.WhiteSmoke),
+                    Tag = pergunta.Id
                 };
-
+                border.MouseLeftButtonDown += PerguntaSelecionada_Click;
                 var stackPanel = new StackPanel();
                 var enunciadoText = new TextBlock
                 {
@@ -133,6 +133,29 @@ namespace Canguru.WPF
                 ListaPerguntas.Children.Add(border);
             }
         }
+        private void PerguntaSelecionada_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is Border border && border.Tag is int idPergunta)
+            {
+                PerguntaSelecionadaId = idPergunta;
+                //trocar por um popUp personalizado depois
+                MessageBox.Show($"Pergunta selecionada com ID: {PerguntaSelecionadaId}","Pergunta Selecionada", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var perguntaSelecionada = GerenciadorPerguntas.GetPerguntaPorId(PerguntaSelecionadaId);
+
+                if (perguntaSelecionada != null)
+                {
+                    // 📝 Preenche os campos do painel com os dados da pergunta
+                    txtEnunciado.Text = perguntaSelecionada.Enunciado;
+                    txtAlternativa1.Text = perguntaSelecionada.Alternativas.Length > 0 ? perguntaSelecionada.Alternativas[0] : "";
+                    txtAlternativa2.Text = perguntaSelecionada.Alternativas.Length > 1 ? perguntaSelecionada.Alternativas[1] : "";
+                    txtAlternativa3.Text = perguntaSelecionada.Alternativas.Length > 2 ? perguntaSelecionada.Alternativas[2] : "";
+                    txtAlternativa4.Text = perguntaSelecionada.Alternativas.Length > 3 ? perguntaSelecionada.Alternativas[3] : "";
+                    txtAlternativaCorreta.Text = perguntaSelecionada.IdRespostaCorreta.ToString();
+                }
+            }
+        }
+
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -267,6 +290,43 @@ namespace Canguru.WPF
             CriacaoSessao abrirTela = new CriacaoSessao(usuarioLogado);
             abrirTela.ShowDialog();
             CarregarSessoes();
+        }
+        private void btnAtualziar_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        private void btnAttSessao_Click(object sender, RoutedEventArgs e)
+        {
+            AtualizarSessao novatela = new AtualizarSessao(SessaoSelecionadaId);
+            novatela.ShowDialog();
+        }
+
+        private void btnAtualizarPergunta_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (PerguntaSelecionadaId <= 0)
+                {
+                    MessageBox.Show("Selecione uma pergunta antes de atualizar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                string enunciado = txtEnunciado.Text.Trim();
+                string[] alternativas = new string[] { txtAlternativa1.Text.Trim(), txtAlternativa2.Text.Trim(), txtAlternativa3.Text.Trim(), txtAlternativa4.Text.Trim() };
+                if (!int.TryParse(txtAlternativaCorreta.Text.Trim(), out int idRespostaCorreta))
+                {
+                    MessageBox.Show("Digite um número válido para a alternativa correta (0–3).", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                GerenciadorPerguntas.AtualizarPergunta(PerguntaSelecionadaId, enunciado, alternativas, idRespostaCorreta);
+                MessageBox.Show($"Pergunta ID {PerguntaSelecionadaId} atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                CarregarPerguntasDaSessao(SessaoSelecionadaId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao atualizar pergunta: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
