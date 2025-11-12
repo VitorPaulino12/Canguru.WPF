@@ -118,7 +118,11 @@
                             <TextBox Grid.Column="2" x:Name="CaixaTextoPost"
                                      TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                                      FontSize="14" Padding="10"
-                                     Text="O que você está pensando?"/>
+                                     Text="O que você está pensando?"
+                                     Foreground="Gray"
+                                     GotFocus="CaixaTextoPost_GotFocus"
+                                     LostFocus="CaixaTextoPost_LostFocus"/>
+                            
                         </Grid>
 
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">

@@ -117,8 +117,6 @@ namespace QuizTeste
 
 
             //Volta para tela principal
-            TelaHome telaHome = new TelaHome(usuarioLogado);
-            //telaHome.Show();
             this.Close();
         }
     }

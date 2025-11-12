@@ -65,18 +65,19 @@ namespace Canguru.WPF
         {
             string conteudo = CaixaTextoPost.Text.Trim();
 
-            if (string.IsNullOrEmpty(conteudo))//CASO ESTIVER VAZIO 
+            if (string.IsNullOrEmpty(conteudo) || conteudo == placeholderText)//CASO ESTIVER VAZIO 
             {
                 MessageBox.Show("Digite algo antes de postar!", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            Post novoPost = new Post
-            {
-                Autor = usuarioLogado,
-                Conteudo = conteudo,
-                Data = DateTime.Now,
-                
-            };
+       
+                Post novoPost = new Post
+                {
+                    Autor = usuarioLogado,
+                    Conteudo = conteudo,
+                    Data = DateTime.Now,
+
+                };
             // PEGA O 'NOVOPOST' E ADICIONA NO REPOSITPORIO
             GerenciadorDePosts.AdicionarPost(novoPost);
 
@@ -85,6 +86,28 @@ namespace Canguru.WPF
             // USA A FUNÇÃO DE 'MOSTRAR FEED' E ATUALIZA O FEED COM O NOVO OBJETO 'POST'
             MostrarFeed();
         }
+        private string placeholderText = "O que você está pensando?";
+
+        private void CaixaTextoPost_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if(CaixaTextoPost.Text == placeholderText)
+            {
+                CaixaTextoPost.Text = "";
+                CaixaTextoPost.Foreground = Brushes.Black;
+            }
+        }
+
+        private void CaixaTextoPost_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(CaixaTextoPost.Text))
+            {
+                CaixaTextoPost.Text = placeholderText;
+                CaixaTextoPost.Foreground = Brushes.Gray;
+            }
+        }
+
+       
+
         //FUNÇÃO PARA MOSTRAR O FEED (PEGA CADA OBJETO POST E COLOCA NO FEED)
         private void MostrarFeed()
         {
@@ -205,6 +228,8 @@ namespace Canguru.WPF
             var popup = new NotificacaoPopup(usuarioLogado);
             popup.ShowDialog();
         }
+
+
         //Tem que adicioinar o evento de checagem se existe um quiz para ser feito
         // e isso é definido pelo professor dono da sala
         //private void PanelNotifica_Click(object sender, RoutedEventArgs e) { }
