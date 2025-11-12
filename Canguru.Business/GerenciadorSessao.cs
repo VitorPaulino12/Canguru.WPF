@@ -1,4 +1,5 @@
 ﻿using Canguru.Core;
+using QuizTeste;
 using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ namespace Canguru.Business
 
         public static void AddSessao(string nomeSessao, string descricaoSessaobase)
         {
-           // int novoId = _norteSessao.Count == 0 ? 0 : _norteSessao.Max(s => s.Id) + 1;
             int novoId = _norteSessao.Count == 0 ? 1 : _norteSessao.Max(s => s.Id) + 1;
             Sessao novaSessao = new Sessao
             {
@@ -30,6 +30,19 @@ namespace Canguru.Business
         {
             return _norteSessao;
         }
-    }
 
+        public static bool RemoverSessao(int idSessao)
+        {
+            var sessaoParaRemover = _norteSessao.FirstOrDefault(s => s.Id == idSessao);
+            if (sessaoParaRemover != null)
+            {
+                // Remove todas as perguntas associadas a esta sessão primeiro
+                GerenciadorPerguntas.RemoverPerguntasPorSessao(idSessao);
+
+                // Remove a sessão
+                return _norteSessao.Remove(sessaoParaRemover);
+            }
+            return false;
+        }
+    }
 }

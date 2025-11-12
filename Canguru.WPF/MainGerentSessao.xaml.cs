@@ -15,8 +15,9 @@ namespace Canguru.WPF
     {
         private Usuario usuarioLogado;
         private int SessaoSelecionadaId;
-        private List<Pergunta> _perguntasUsuario = new List<Pergunta>(); 
-        private int _proximoIdPergunta = 1000; 
+        private List<Pergunta> _perguntasUsuario = new List<Pergunta>();
+        private Pergunta _perguntaSelecionada;
+        private int _proximoIdPergunta = 1000;
 
         public MainGerentSessao(Usuario usuario)
         {
@@ -26,6 +27,7 @@ namespace Canguru.WPF
             SessaoSelecionadaId = 0;
             _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
             lblSessaoSelecionada.Text = "Nenhuma sessão selecionada";
+            btnExcluirPergunta.IsEnabled = false;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -43,7 +45,6 @@ namespace Canguru.WPF
             {
                 ListaDeSessoes.ItemsSource = sessoes;
 
-                
                 System.Diagnostics.Debug.WriteLine($"Sessões carregadas: {sessoes.Count}");
                 foreach (var sessao in sessoes)
                 {
@@ -61,26 +62,27 @@ namespace Canguru.WPF
             if (ListaDeSessoes.SelectedItem is Sessao sessaoSelecionada)
             {
                 SessaoSelecionadaId = sessaoSelecionada.Id;
+
+                // ATUALIZA A LISTA DE PERGUNTAS ANTES DE CARREGAR
+                _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
                 CarregarPerguntasDaSessao(SessaoSelecionadaId);
 
-                
                 lblSessaoSelecionada.Text = $"Sessão selecionada: {sessaoSelecionada.NomeSessao} (ID: {sessaoSelecionada.Id})";
 
                 MessageBox.Show($"Sessão selecionada: {sessaoSelecionada.NomeSessao} (ID: {sessaoSelecionada.Id})",
                     "Sessão Selecionada", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            
         }
 
         private void CarregarPerguntasDaSessao(int idSessao)
         {
-            
             var perguntas = _perguntasUsuario.Where(p => p.IdSessao == idSessao).ToList();
             ListaPerguntas.Children.Clear();
+            _perguntaSelecionada = null;
+            btnExcluirPergunta.IsEnabled = false;
 
             if (perguntas.Count == 0)
             {
-                
                 var textBlock = new TextBlock
                 {
                     Text = "Nenhuma pergunta cadastrada para esta sessão.",
@@ -102,7 +104,28 @@ namespace Canguru.WPF
                     CornerRadius = new CornerRadius(5),
                     Margin = new Thickness(0, 0, 0, 5),
                     Padding = new Thickness(10),
-                    Background = new SolidColorBrush(Colors.WhiteSmoke)
+                    Background = new SolidColorBrush(Colors.WhiteSmoke),
+                    Tag = pergunta // Armazena a pergunta no Tag do Border
+                };
+
+                // Adiciona evento de clique para selecionar a pergunta
+                border.MouseLeftButtonDown += (s, e) =>
+                {
+                    // Remove a seleção anterior
+                    foreach (var child in ListaPerguntas.Children)
+                    {
+                        if (child is Border childBorder)
+                        {
+                            childBorder.Background = new SolidColorBrush(Colors.WhiteSmoke);
+                            childBorder.BorderBrush = new SolidColorBrush(Colors.LightGray);
+                        }
+                    }
+
+                    // Seleciona a pergunta atual
+                    border.Background = new SolidColorBrush(Colors.LightBlue);
+                    border.BorderBrush = new SolidColorBrush(Colors.DodgerBlue);
+                    _perguntaSelecionada = pergunta;
+                    btnExcluirPergunta.IsEnabled = true;
                 };
 
                 var stackPanel = new StackPanel();
@@ -125,10 +148,18 @@ namespace Canguru.WPF
                     Foreground = new SolidColorBrush(Colors.Green),
                     FontWeight = FontWeights.SemiBold
                 };
+                var idText = new TextBlock
+                {
+                    Text = $"ID Pergunta: {pergunta.Id}",
+                    FontSize = 9,
+                    Foreground = new SolidColorBrush(Colors.DarkBlue),
+                    FontWeight = FontWeights.Bold
+                };
 
                 stackPanel.Children.Add(enunciadoText);
                 stackPanel.Children.Add(alternativasText);
                 stackPanel.Children.Add(respostaText);
+                stackPanel.Children.Add(idText);
                 border.Child = stackPanel;
                 ListaPerguntas.Children.Add(border);
             }
@@ -187,13 +218,15 @@ namespace Canguru.WPF
                     return;
                 }
 
-
-                //int novaPerguntaId = AdicionarPerguntaUsuario(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
-                GerenciadorPerguntas.AdicionarPergunta(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
-                MessageBox.Show($"Pergunta salva com sucesso!", // eu retirei o texto que mencionava o id da pergunta que acabou de ser criada, por favor coloque aki de novo :D esqueci como faz!
+                // Adiciona a pergunta e obtém o ID retornado
+                int novaPerguntaId = GerenciadorPerguntas.AdicionarPergunta(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
+                MessageBox.Show($"Pergunta salva com sucesso! (ID: {novaPerguntaId})",
                     "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 LimparCamposPergunta();
+
+                // ATUALIZA A LISTA DE PERGUNTAS ANTES DE RECARREGAR
+                _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
                 CarregarPerguntasDaSessao(SessaoSelecionadaId);
             }
             catch (Exception ex)
@@ -203,31 +236,58 @@ namespace Canguru.WPF
             }
         }
 
-        /*eu retirei essa parte porque dessa forma as perguntas aparentemente não são de id exclusivo
-            da forma com que eu fiz o metodo 'AdicionarPergunta' ele eprmite na teoria deixar a pergunta com id exclusivo
-        private int AdicionarPerguntaUsuario(int idSessao, string enunciado, string[] alternativas, int idRespostaCorreta)
+        // Método para excluir pergunta individual
+        private void BtnExcluirPergunta_Click(object sender, RoutedEventArgs e)
         {
-            var pergunta = new Pergunta
+            if (_perguntaSelecionada == null)
             {
-                Id = _proximoIdPergunta,
-                IdSessao = idSessao,
-                Enunciado = enunciado,
-                Alternativas = alternativas,
-                IdRespostaCorreta = idRespostaCorreta
-            };
+                MessageBox.Show("Por favor, selecione uma pergunta para excluir.",
+                    "Pergunta Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-            _perguntasUsuario.Add(pergunta);
-            _proximoIdPergunta++;
-            return pergunta.Id;
+            if (SessaoSelecionadaId <= 0)
+            {
+                MessageBox.Show("Nenhuma sessão selecionada.",
+                    "Sessão Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var resultado = MessageBox.Show(
+                $"Tem certeza que deseja excluir esta pergunta?\n\n" +
+                $"Enunciado: {_perguntaSelecionada.Enunciado}\n" +
+                $"ID: {_perguntaSelecionada.Id}",
+                "Confirmar Exclusão da Pergunta",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (resultado == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    // Exclui a pergunta individual
+                    GerenciadorPerguntas.RemoverPergunta(_perguntaSelecionada.Id);
+
+                    MessageBox.Show($"Pergunta excluída com sucesso!",
+                        "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // ATUALIZA A LISTA DE PERGUNTAS E RECARREGA
+                    _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
+                    CarregarPerguntasDaSessao(SessaoSelecionadaId);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao excluir pergunta: {ex.Message}",
+                        "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
-        */
 
         private List<Pergunta> ObterPerguntasUsuarioPorSessao(int idSessao)
         {
             return _perguntasUsuario.Where(p => p.IdSessao == idSessao).ToList();
         }
 
-        
         private bool RemoverPerguntaUsuario(int id)
         {
             var pergunta = _perguntasUsuario.FirstOrDefault(p => p.Id == id);
@@ -250,9 +310,64 @@ namespace Canguru.WPF
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            
-            MessageBox.Show("Funcionalidade de excluir sessão será implementada em breve.",
-                "Funcionalidade Futura", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (SessaoSelecionadaId <= 0)
+            {
+                MessageBox.Show("Por favor, selecione uma sessão para excluir.",
+                    "Sessão Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Encontrar a sessão selecionada
+            var sessoes = GerenciadorSessao.GetSessoes();
+            var sessaoParaExcluir = sessoes.FirstOrDefault(s => s.Id == SessaoSelecionadaId);
+
+            if (sessaoParaExcluir == null)
+            {
+                MessageBox.Show("Sessão não encontrada.",
+                    "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Confirmação antes de excluir
+            var resultado = MessageBox.Show(
+                $"Tem certeza que deseja excluir a sessão '{sessaoParaExcluir.NomeSessao}'?\n\nTodas as perguntas associadas a esta sessão também serão excluídas.",
+                "Confirmar Exclusão",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (resultado == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    // Excluir a sessão (isso já remove as perguntas automaticamente)
+                    bool sucesso = GerenciadorSessao.RemoverSessao(SessaoSelecionadaId);
+
+                    if (sucesso)
+                    {
+                        MessageBox.Show($"Sessão '{sessaoParaExcluir.NomeSessao}' excluída com sucesso!",
+                            "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        // Limpar e atualizar a interface
+                        SessaoSelecionadaId = 0;
+                        lblSessaoSelecionada.Text = "Nenhuma sessão selecionada";
+                        ListaPerguntas.Children.Clear();
+
+                        // ATUALIZA A LISTA DE PERGUNTAS E RECARREGA AS SESSÕES
+                        _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
+                        CarregarSessoes();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao excluir a sessão.",
+                            "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao excluir sessão: {ex.Message}",
+                        "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -266,6 +381,9 @@ namespace Canguru.WPF
         {
             CriacaoSessao abrirTela = new CriacaoSessao(usuarioLogado);
             abrirTela.ShowDialog();
+
+            // ATUALIZA AS LISTAS APÓS CRIAR UMA NOVA SESSÃO
+            _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
             CarregarSessoes();
         }
     }
