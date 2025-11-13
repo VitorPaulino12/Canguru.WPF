@@ -2,13 +2,13 @@
 
 namespace Canguru.Core
 {
-    public class Aluno : Usuario // Herda de Usuario
+    public class Aluno : Usuario 
     {
         
 
         public Aluno()
         {
-            Tipo = TipoUsuario.Aluno; // Define o tipo automaticamente
+            Tipo = TipoUsuario.Aluno; 
             
         }
 

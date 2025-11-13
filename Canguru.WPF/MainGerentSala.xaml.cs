@@ -179,6 +179,7 @@ namespace Canguru.WPF
             }
         }
 
+
         // Clique no botão Excluir
         private void btnExcluir_Click(object sender, RoutedEventArgs e)
         {
