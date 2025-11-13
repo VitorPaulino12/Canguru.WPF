@@ -32,7 +32,6 @@ namespace Canguru.WPF
 
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(filePath);
-                    // Força o WPF a carregar a imagem e soltar o arquivo original.
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
 
