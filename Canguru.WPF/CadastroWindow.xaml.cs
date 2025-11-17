@@ -1,5 +1,4 @@
-﻿// using System; REMOVIDO (estava duplicado)
-using Canguru.Business;
+﻿using Canguru.Business;
 using Canguru.Core;
 using Microsoft.Win32;
 using System;
@@ -11,7 +10,6 @@ namespace Canguru.WPF
 {
     public partial class CadastroWindow : Window
     {
-        // CORREÇÃO 1: O nome da variável é 'caminhoImagemPerfil'
         private string caminhoImagemPerfil = null;
 
         public CadastroWindow()
@@ -34,18 +32,11 @@ namespace Canguru.WPF
 
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(filePath);
-
-                    // -----------------------------------------------------------------
-                    // CORREÇÃO 2: ADICIONAR ESTA LINHA!
-                    // Isso força o WPF a carregar a imagem e soltar o arquivo original.
-                    // Sem isso, o File.Copy() no botão Salvar falhará.
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    // -----------------------------------------------------------------
-
                     bitmap.EndInit();
 
                     imgPerfil.Source = bitmap;
-                    caminhoImagemPerfil = filePath; // Nome da variável corrigido
+                    caminhoImagemPerfil = filePath;
                 }
                 catch (Exception ex)
                 {
@@ -62,9 +53,9 @@ namespace Canguru.WPF
             string email = txtEmail.Text.Trim();
             string senha = txtSenhaCadastro.Password;
             string confSenha = txtConfirmarSenha.Password;
-            
 
-            // --- Validações (Seu código aqui já estava bom) ---
+
+            // --- Validações ---
             if (string.IsNullOrWhiteSpace(nome) ||
                 string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(senha))
@@ -91,12 +82,9 @@ namespace Canguru.WPF
                 return;
             }
 
-            // -----------------------------------------------------------------
-            // CORREÇÃO 3: LÓGICA DE DECISÃO (ALUNO ou PROFESSOR)
-            // -----------------------------------------------------------------
-
+            // --- Lógica de Decisão (Aluno ou Professor) ---
             Usuario novoUsuario;
-            if (chkProfessor.IsChecked == true) 
+            if (chkProfessor.IsChecked == true)
             {
                 novoUsuario = new Professor
                 {
@@ -137,12 +125,12 @@ namespace Canguru.WPF
                 }
             }
 
-
+           
             try
-            {               
-                bool cadastroOk = GerenciadorDeUsuarios.CadastrarUsuario(novoUsuario);
+            {
+                bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(novoUsuario.Nome, novoUsuario.Login, novoUsuario.Senha);
 
-                if (cadastroOk)
+                if (cadastroEfetuado)
                 {
                     MessageBox.Show($"Usuário '{novoUsuario.Nome}' cadastrado com sucesso!", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.DialogResult = true;
@@ -166,13 +154,12 @@ namespace Canguru.WPF
                     string caminhoParaDeletar = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", nomeArquivoFoto);
                     if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
                 }
-
             }
         }
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false; 
+            this.DialogResult = false;
             this.Close();
         }
     }

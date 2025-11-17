@@ -7,63 +7,98 @@ namespace Canguru.Business
 {
     public static class GerenciadorDeUsuarios
     {
-        private static List<Usuario> Usuarios { get; set; } = new List<Usuario>();
-        private static int proximoId = 1;
+        private static List<Usuario> listaUsuarios = new List<Usuario>();
 
-        static GerenciadorDeUsuarios()
+
+        // =====================================================================
+        // CADASTRO (LoginWindow e CadastroWindow usam este método)
+        // =====================================================================
+        public static bool CadastrarUsuario(string nome, string login, string senha)
         {
-            // Opcional: Adiciona um usuário admin para testes
-            Professor admin = new Professor
+            // Verifica se login já existe
+            if (listaUsuarios.Any(u => u.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            // Gera ID incremental
+            int novoId = listaUsuarios.Count == 0 ? 1 : listaUsuarios.Max(u => u.Id) + 1;
+
+            // Aqui estava o erro:
+            // ❌ new Usuario()  -> NÃO PODE, Usuario é abstract
+            // ✔ new Professor()
+            var novoUsuario = new Professor
             {
-                Id = proximoId++,
-                Nome = "Administrador",
-                Email = "admin@canguru.com",
-                Login = "admin",
-                Senha = "123"
+                Id = novoId,
+                Nome = nome,
+                Login = login,
+                Senha = senha,
+                Email = login,
+                Status = "Ativo",
+                DataEntrada = DateTime.Now
             };
-            Usuarios.Add(admin);
+
+            listaUsuarios.Add(novoUsuario);
+            return true;
         }
 
-        public static bool CadastrarUsuario(Usuario novoUsuario)
-        {
-            if (Usuarios.Any(u => u.Login.Equals(novoUsuario.Login, StringComparison.OrdinalIgnoreCase)))
-            {
- 
-                return false;
-            }
 
-            novoUsuario.Id = proximoId++;
-            novoUsuario.DataEntrada = DateTime.Now;
-            novoUsuario.Status = "Ativo";
-            if (string.IsNullOrWhiteSpace(novoUsuario.Email))
-            {
-                novoUsuario.Email = $"{novoUsuario.Login}@canguru.com";
-            }
-            Usuarios.Add(novoUsuario);
+        // =====================================================================
+        // LOGIN
+        // =====================================================================
+        public static Usuario ValidarLogin(string login, string senha)
+        {
+            return listaUsuarios.FirstOrDefault(u =>
+                u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) &&
+                u.Senha == senha
+            );
+        }
+
+
+        // =====================================================================
+        // LISTAGEM
+        // =====================================================================
+        public static List<Usuario> GetTodosUsuarios()
+        {
+            return listaUsuarios;
+        }
+
+
+        public static Usuario GetUsuarioPorId(int id)
+        {
+            return listaUsuarios.FirstOrDefault(u => u.Id == id);
+        }
+
+
+        // =====================================================================
+        // ATUALIZAR
+        // =====================================================================
+        public static bool AtualizarUsuario(Usuario usuarioAtualizado)
+        {
+            var usuario = listaUsuarios.FirstOrDefault(u => u.Id == usuarioAtualizado.Id);
+            if (usuario == null)
+                return false;
+
+            usuario.Nome = usuarioAtualizado.Nome;
+            usuario.Email = usuarioAtualizado.Email;
+            usuario.Senha = usuarioAtualizado.Senha;
+            usuario.Status = usuarioAtualizado.Status;
+            usuario.CaminhoFotoPerfil = usuarioAtualizado.CaminhoFotoPerfil;
 
             return true;
         }
 
-        public static Usuario ValidarLogin(string login, string senha)
-        {
-            return Usuarios.FirstOrDefault(u => u.Login.ToLower() == login.ToLower() && u.Senha == senha);
-        }
 
-        public static List<Usuario> GetTodosUsuarios()
-        {
-            return Usuarios;
-        }
+        // =====================================================================
+        // EXCLUIR
+        // =====================================================================
         public static bool ExcluirUsuario(int id)
         {
-            var usuario = Usuarios.FirstOrDefault(u => u.Id == id);
+            var usuario = listaUsuarios.FirstOrDefault(u => u.Id == id);
+            if (usuario == null)
+                return false;
 
-            if (usuario != null)
-            {
-                Usuarios.Remove(usuario);
-                return true;
-            }
-
-            return false;
+            listaUsuarios.Remove(usuario);
+            return true;
         }
     }
 }
+

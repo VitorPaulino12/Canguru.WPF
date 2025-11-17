@@ -207,7 +207,13 @@ namespace Canguru.WPF
 
 
         // DEPOIS TEM QUE ADICIONAR CADA EVENTO DE ABRIR E FECHAR TELA
-        private void BtnMeuPerfil_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Meu Perfil");
+        private void BtnMeuPerfil_Click(object sender, RoutedEventArgs e) 
+        {
+            PerfilWindow Perfil = new PerfilWindow();
+            Perfil.Show();
+        }
+            
+
         private void BtnAtividades_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Abrir Atividades");
         private void BtnCriarAtividade_Click(object sender, RoutedEventArgs e) {
             MainGerentSessao TelaSessao = new MainGerentSessao(usuarioLogado);
@@ -222,7 +228,13 @@ namespace Canguru.WPF
             tela.Show();          
             
         }
-        private void BtnSair_Click(object sender, RoutedEventArgs e) => this.Close();
+        private void BtnSair_Click(object sender, RoutedEventArgs e)
+        { 
+           this.Close();
+            LoginWindow login = new LoginWindow();
+            login.Show();
+
+        }
         private void BtnNotificacoes_Click(object sender, RoutedEventArgs e)
         {
             var popup = new NotificacaoPopup(usuarioLogado);
