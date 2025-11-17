@@ -60,28 +60,8 @@ namespace Canguru.WPF
 
         private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
-            string login = txtLogin.Text.Trim();
-            string senha = txtSenha.Password.Trim();
-
-            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
-            {
-                MessageBox.Show("Preencha login e senha para cadastrar.");
-                return;
-            }
-
-            bool ok = GerenciadorDeUsuarios.CadastrarUsuario(
-                nome: login,
-                login: login,
-                senha: senha
-            );
-
-            if (!ok)
-            {
-                MessageBox.Show("Login já existe!");
-                return;
-            }
-
-            MessageBox.Show("Professor cadastrado com sucesso!");
+            CadastroWindow TelaCadastro = new CadastroWindow();
+            TelaCadastro.ShowDialog();
         }
 
         private async void BtnEsqueceuSenha_Click(object sender, RoutedEventArgs e)
