@@ -106,7 +106,7 @@ namespace Canguru.WPF
                 {
                     var dadosParaGrid = interacoes.Select(i => new
                     {
-                        Pergunta = i.idPerguntaInteracao,Sessao = "Sessão " + i.idInteracao, Acerto = i.resultadoInteração == 1 ? "✔️" : "", Erro = i.resultadoInteração == 0 ? "❌" : ""}).ToList();
+                        Pergunta = i.idPerguntaInteracao,Sessao = "Interação " + i.idInteracao, Acerto = i.resultadoInteração == 1 ? "✔️" : "", Erro = i.resultadoInteração == 0 ? "❌" : ""}).ToList();
 
                     dgQuizSelecionado.ItemsSource = null;
                     dgQuizSelecionado.ItemsSource = dadosParaGrid;
@@ -118,7 +118,7 @@ namespace Canguru.WPF
                 }
                 //debug para mostrar se tem interações desse usuário e quantas são é so pra checar, temq ue tirar isso depois (as vezes se vc clicar muito rapido no final de ul quiz
                 //ele considera 2 sessões 'terminadas' então ao inves de ter 10 respostas ele passa a ter 11 ou 20... isso é pra checar)
-                MessageBox.Show($"Total de interações no sistema: {GerenciadorInteracao.GetInteracoes().Count}");
+               // MessageBox.Show($"Total de interações no sistema: {GerenciadorInteracao.GetInteracoes().Count}");
             }
             catch (Exception ex)
             {
@@ -208,6 +208,10 @@ namespace Canguru.WPF
                 }
             }
         }
-        
+
+        private void dgQuizSelecionado_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -83,9 +83,6 @@ namespace QuizTeste
                     botaoCorreto.Background = Brushes.LightGreen;
                 }
             }
-            //int novoId = GerenciadorInteracao.Count == 0 ? 0 : GerenciadorInteracao.Max(s => s.Id) + 1;
-
-
             // perguntar pro grupo depois de faz sentido isso ser um bool
             //porque ou ta certo ou errado...
 

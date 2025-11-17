@@ -85,7 +85,7 @@
                           AutoGenerateColumns="False"
                           Background="White"
                           BorderThickness="1"
-                          Height="160">
+                          Height="160" SelectionChanged="dgQuizSelecionado_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Pergunta" Width="2*" Binding="{Binding Pergunta}" />
                         <DataGridTextColumn Header="Sessão" Width="*" Binding="{Binding Sessao}" />
