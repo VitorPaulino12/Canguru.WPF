@@ -5,6 +5,8 @@ namespace Canguru.Core
     public enum TipoUsuario
     {
         Aluno,
-        Professor
+        Professor,
+        Adm
+        
     }
 }

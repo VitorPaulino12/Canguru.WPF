@@ -25,16 +25,24 @@ namespace Canguru.WPF
                 return;
             }
 
-            GerenciadorGlobal.AdicionarSessao(nome, descricao);
-            MessageBox.Show("Sessão adicionada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                
+                GerenciadorSessao.AddSessao(nome, descricao);
 
-            txtNomeSessao.Clear();
-            txtDescricaoSessao.Clear();
-            this.Close();
+                MessageBox.Show("Sessão criada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.DialogResult = true;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao criar sessão: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
         }
     }

@@ -27,6 +27,7 @@ namespace Canguru.WPF
             PreencherPainelUsuarioLogado(usuarioLogado);
             CarregarUsuarios();
             MostrarFeed();
+            ExibirMensagemDeBoasVindas();
 
         }
 
@@ -239,6 +240,26 @@ namespace Canguru.WPF
         {
             var popup = new NotificacaoPopup(usuarioLogado);
             popup.ShowDialog();
+        }
+
+        //Acição depop Up se é um professor ou aluno/ é apenas uma checagem se esta ok o cadastro
+        private void ExibirMensagemDeBoasVindas()
+        {
+            
+            string tipoUsuario = usuarioLogado switch // Alternativa para "vai lá e se for tal coisa... usa esse texto... mas se for tal coisa vai la e pega esse outro texto"
+                                                     // dependendo do usua´rio logado pega tal texto
+            {
+                Aluno => "ALUNO",
+                Professor => "PROFESSOR",
+                Adm => "ADMINISTRADOR",
+                _ => "USUÁRIO"
+            };
+
+            // Monta a mensagem final
+            string mensagem = $"Bem-vindo(a), {usuarioLogado.Nome}!\nVocê está logado(a) como: {tipoUsuario}";
+
+            // Exibe o popup (MessageBox)
+            MessageBox.Show(mensagem, "Bem-vindo!", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
 

@@ -54,6 +54,7 @@ namespace Canguru.WPF
             string senha = txtSenhaCadastro.Password;
             string confSenha = txtConfirmarSenha.Password;
 
+            bool isProfessor = chkProfessor.IsChecked.HasValue && chkProfessor.IsChecked.Value;
 
             // --- Validações ---
             if (string.IsNullOrWhiteSpace(nome) ||
@@ -124,15 +125,19 @@ namespace Canguru.WPF
                     nomeArquivoFoto = null;
                 }
             }
-
-           
             try
             {
-                bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(novoUsuario.Nome, novoUsuario.Login, novoUsuario.Senha);
+                bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(
+                    nome: nome,
+                    login: email,
+                    senha: senha,
+                    isProfessor: isProfessor,
+                    caminhoFotoPerfil: nomeArquivoFoto
+                );
 
                 if (cadastroEfetuado)
                 {
-                    MessageBox.Show($"Usuário '{novoUsuario.Nome}' cadastrado com sucesso!", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Usuário '{nome}' cadastrado com sucesso!", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.DialogResult = true;
                     this.Close();
                 }
@@ -155,12 +160,40 @@ namespace Canguru.WPF
                     if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
                 }
             }
+
+            // ...
+            /*
+            bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(novoUsuario.Nome, novoUsuario.Login, novoUsuario.Senha);
+
+            if (cadastroEfetuado)
+            {
+                MessageBox.Show($"Usuário '{novoUsuario.Nome}' cadastrado com sucesso!", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.DialogResult = true;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Não foi possível realizar o cadastro. O email/login informado já pode estar em uso.", "Falha no Cadastro", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                if (nomeArquivoFoto != null)
+                {
+                    string caminhoParaDeletar = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", nomeArquivoFoto);
+                    if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
+                }
+            }*/
         }
+                
+                
+            
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();
+        }
+
+        private void chkProfessor_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

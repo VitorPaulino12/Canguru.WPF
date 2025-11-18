@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Canguru.Business
 {
     public static class GerenciadorSessao
     {
-        private static List<Sessao> _norteSessao = new List<Sessao>();
-
+        //private static List<Sessao> _norteSessao = new List<Sessao>();
+        //trocar isso resolve a questão de atualizar de maneira responsiva depois que o usuárioo clica no botão de adicionar atualizar sessão
+        private static ObservableCollection<Sessao> _norteSessao = new ObservableCollection<Sessao>();
         public static void AddSessao(string nomeSessao, string descricaoSessaobase)
         {
             int novoId = _norteSessao.Count == 0 ? 1 : _norteSessao.Max(s => s.Id) + 1;
@@ -26,10 +28,11 @@ namespace Canguru.Business
             _norteSessao.Add(novaSessao);
         }
 
-        public static List<Sessao> GetSessoes()
+        public static ObservableCollection<Sessao> GetSessoes()
         {
             return _norteSessao;
         }
+
         public static void AtualizarSessao(int idSessao, string novoNome, string novaDescricao)
         {
             var sessao = _norteSessao.FirstOrDefault(s => s.Id == idSessao);
@@ -41,19 +44,16 @@ namespace Canguru.Business
         }
         public static bool RemoverSessao(int idSessao)
         {
-            // Procura a sessão pelo ID
             var sessao = _norteSessao.FirstOrDefault(s => s.Id == idSessao);
 
             if (sessao == null)
-                return false; // Sessão não encontrada
+                return false;
 
-            // 🧹 Remove também as perguntas associadas a essa sessão
             GerenciadorPerguntas.RemoverPerguntasPorSessao(idSessao);
 
-            // Remove a sessão da lista principal
             _norteSessao.Remove(sessao);
 
-            return true; // Remoção bem-sucedida
+            return true;
         }
 
     }

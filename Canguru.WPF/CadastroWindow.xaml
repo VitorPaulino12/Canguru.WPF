@@ -46,7 +46,7 @@
                         <Button x:Name="BtnSalvarCadastro" Grid.Column="1" Content="Salvar Cadastro"
                                 Margin="135,35,5,-35" Click="BtnSalvarCadastro_Click" IsDefault="True"/>
 
-                        <CheckBox x:Name="chkProfessor" Content="É um professor?" Margin="5" />
+                        <CheckBox x:Name="chkProfessor" Content="É um professor?" Margin="5" Checked="chkProfessor_Checked" />
                     </Grid>
                         
                 </StackPanel>

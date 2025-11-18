@@ -3,6 +3,7 @@ using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xceed.Wpf.Toolkit;
 
 namespace Canguru.Business
 {
@@ -15,8 +16,7 @@ namespace Canguru.Business
         private static List<Pergunta> _perguntas = new List<Pergunta>();
         private static Random _random = new Random();
 
-        // ===== MÉTODOS DE SESSÃO =====
-
+      
         public static void AdicionarSessao(string nomeSessao, string descricaoSessao)
         {
             int novoId = _sessoes.Count == 0 ? 1 : _sessoes.Max(s => s.Id) + 1;

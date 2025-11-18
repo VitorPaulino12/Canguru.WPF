@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using Canguru.Business;
+using Canguru.Core;
+using System.Runtime.Intrinsics.Arm;
+using System.Windows;
 using System.Windows.Input;
-using Canguru.Business;
 
 namespace Canguru.WPF
 {
@@ -29,6 +31,51 @@ namespace Canguru.WPF
 
         private void FazerLogin()
         {
+           
+            string login = txtLogin.Text.Trim();
+            string senha = txtSenha.Password;
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
+            {
+                MessageBox.Show("Preencha login e senha.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // 1. Valida o login. O método retorna um objeto do tipo "Usuario"
+            Usuario usuarioLogado = GerenciadorDeUsuarios.ValidarLogin(login, senha);
+
+            if (usuarioLogado != null)
+            {
+                // 2. AQUI ESTÁ A MÁGICA: Verificamos o tipo REAL do usuário que retornou
+                if (usuarioLogado is Aluno)
+                {
+                    // O usuário é um Aluno!
+                    MessageBox.Show($"Bem-vindo, Aluno {usuarioLogado.Nome}!", "Login Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Aqui você abre a tela principal do aluno
+                    // var telaAluno = new AlunoMainWindow(usuarioLogado);
+                    // telaAluno.Show();
+                }
+                else if (usuarioLogado is Professor)
+                {
+                    MessageBox.Show($"Bem-vindo, Professor {usuarioLogado.Nome}!", "Login Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (usuarioLogado is Adm)
+                {
+                    MessageBox.Show($"Bem-vindo, Administrador!", "Login Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                TelaHome novatela = new TelaHome(usuarioLogado);
+                novatela.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Login ou senha incorretos.", "Falha na Autenticação", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        
+            //CÓDIGO ANTERIOR PARA FICAR SALVO CASO NECESSÁRIO
+            /*
             LoadingOverlay.Visibility = Visibility.Visible;
 
             string login = txtLogin.Text.Trim();
@@ -52,10 +99,14 @@ namespace Canguru.WPF
             }
 
             MessageBox.Show($"Bem-vindo, {usuario.Nome}!");
+            TelaHome novatela = new TelaHome(usuario);
+            novatela.Show();
+            this.Close();
 
             // Aqui você abriria a janela principal
             // new MainWindow().Show();
             // Close();
+            */
         }
 
         private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
