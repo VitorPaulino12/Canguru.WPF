@@ -210,7 +210,7 @@ namespace Canguru.WPF
         // DEPOIS TEM QUE ADICIONAR CADA EVENTO DE ABRIR E FECHAR TELA
         private void BtnMeuPerfil_Click(object sender, RoutedEventArgs e) 
         {
-            PerfilWindow Perfil = new PerfilWindow();
+            PerfilWindow Perfil = new PerfilWindow(usuarioLogado);
             Perfil.Show();
         }
             
@@ -243,7 +243,7 @@ namespace Canguru.WPF
         }
 
         //Acição depop Up se é um professor ou aluno/ é apenas uma checagem se esta ok o cadastro
-        private void ExibirMensagemDeBoasVindas()
+        public void ExibirMensagemDeBoasVindas()
         {
             
             string tipoUsuario = usuarioLogado switch // Alternativa para "vai lá e se for tal coisa... usa esse texto... mas se for tal coisa vai la e pega esse outro texto"

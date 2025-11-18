@@ -74,7 +74,7 @@
 
                 <Border Style="{StaticResource ContentPanel}" MinHeight="200">
                     <StackPanel>
-                        <TextBlock Text="Sobre mim:" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                        <TextBlock x:Name="NomeUsuarioLogado" Text="Sobre mim:" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
                         <TextBlock x:Name="txtSobreMim" Text="Painel que agrega um post do usuário! assim como um 'Sobre mim' ou algo assim :D Seria um painel que ele escreveria e manteria, ao invés de abrir um pop-up ou algo assim"
                                    FontSize="14" TextWrapping="Wrap"/>
                     </StackPanel>
