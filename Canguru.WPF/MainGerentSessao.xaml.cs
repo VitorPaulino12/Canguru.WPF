@@ -37,27 +37,13 @@ namespace Canguru.WPF
             telaHome.Show();
             this.Close();
         }
-        /*
-        public void CarregarSessoes()
-        {
-            var sessoes = GerenciadorSessao.GetSessoes();
-
-            if (sessoes != null && sessoes.Count > 0)
-            {
-                ListaDeSessoes.ItemsSource = sessoes;
-            }
-            else
-            {
-                MessageBox.Show("Nenhuma sessão cadastrada ainda.", "Informação", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }*/
 
         private void ListaDeSessoes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListaDeSessoes.SelectedItem is Sessao sessaoSelecionada)
             {
                 SessaoSelecionadaId = sessaoSelecionada.Id;
-                _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas(); // Atualiza a lista de perguntas
+                _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
                 CarregarPerguntasDaSessao(SessaoSelecionadaId);
                 lblSessaoSelecionada.Text = $"Sessão selecionada: {sessaoSelecionada.NomeSessao} (ID: {sessaoSelecionada.Id})";
             }
@@ -134,28 +120,25 @@ namespace Canguru.WPF
                 ListaPerguntas.Children.Add(border);
             }
         }
+
         private void PerguntaSelecionada_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is Border border && border.Tag is int idPergunta)
             {
                 PerguntaSelecionadaId = idPergunta;
 
-                
                 foreach (var child in ListaPerguntas.Children)
                 {
                     if (child is Border b)
                         b.Background = new SolidColorBrush(Colors.WhiteSmoke);
                 }
 
-                
                 border.Background = new SolidColorBrush(Color.FromRgb(255, 230, 200));
 
-               
                 var perguntaEncontrada = GerenciadorPerguntas.GetPerguntaPorId(PerguntaSelecionadaId);
 
                 if (perguntaEncontrada != null)
                 {
-                    
                     _perguntaSelecionada = perguntaEncontrada;
                     txtEnunciado.Text = _perguntaSelecionada.Enunciado;
                     txtAlternativa1.Text = _perguntaSelecionada.Alternativas.Length > 0 ? _perguntaSelecionada.Alternativas[0] : "";
@@ -290,7 +273,7 @@ namespace Canguru.WPF
             btnExcluirPergunta.IsEnabled = false;
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e) 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             LimparCamposPergunta();
             MessageBox.Show("Campos limpos. Preencha os dados para uma nova pergunta.", "Campos Limpos", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -304,6 +287,7 @@ namespace Canguru.WPF
                 return;
             }
 
+            // MUDEI PARA GerenciadorSessao.GetSessoes() - porque é de onde vem as sessões
             var sessaoParaExcluir = GerenciadorSessao.GetSessoes().FirstOrDefault(s => s.Id == SessaoSelecionadaId);
             if (sessaoParaExcluir == null)
             {
@@ -317,6 +301,7 @@ namespace Canguru.WPF
             {
                 try
                 {
+                    // MAS AQUI use GerenciadorGlobal.RemoverSessao para excluir
                     bool sucesso = GerenciadorSessao.RemoverSessao(SessaoSelecionadaId);
                     if (sucesso)
                     {
@@ -326,6 +311,10 @@ namespace Canguru.WPF
                         ListaPerguntas.Children.Clear();
                         _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
                         LimparCamposPergunta();
+
+                        // Atualiza a lista de sessões
+                        ListaDeSessoes.ItemsSource = GerenciadorSessao.GetSessoes();
+                        ListaDeSessoes.Items.Refresh();
                     }
                     else
                     {
@@ -338,14 +327,15 @@ namespace Canguru.WPF
                 }
             }
         }
-
         private void Button_Click_4(object sender, RoutedEventArgs e) // Botão Criar Nova Sessão
         {
-            // 1. Cria a instância da janela de criação
             CriacaoSessao abrirTela = new CriacaoSessao(usuarioLogado);
             abrirTela.ShowDialog();
+
+            // Atualiza a lista após criar nova sessão
+            ListaDeSessoes.ItemsSource = GerenciadorSessao.GetSessoes();
+            ListaDeSessoes.Items.Refresh();
         }
-        
 
         private void btnAttSessao_Click(object sender, RoutedEventArgs e)
         {
