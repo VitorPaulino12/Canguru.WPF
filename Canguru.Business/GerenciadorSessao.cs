@@ -15,10 +15,6 @@ namespace Canguru.Business
         //private static List<Sessao> _norteSessao = new List<Sessao>();
         //trocar isso resolve a questão de atualizar de maneira responsiva depois que o usuárioo clica no botão de adicionar atualizar sessão
         private static ObservableCollection<Sessao> _norteSessao = new ObservableCollection<Sessao>();
-        // public static int contadorSessoes = new int();
-        //public static ObservableCollection<int> contadorSessoes = new ObservableCollection<int>();
-          
-        public static int contadorSessoes = new int();
         public static void AddSessao(string nomeSessao, string descricaoSessaobase)
         {
             int novoId = _norteSessao.Count == 0 ? 1 : _norteSessao.Max(s => s.Id) + 1;

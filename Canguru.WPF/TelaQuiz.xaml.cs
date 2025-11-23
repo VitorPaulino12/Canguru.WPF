@@ -19,7 +19,6 @@ namespace QuizTeste
         private List<Pergunta> _quiz;
         private int _indiceAtual = 0;
         private int _pontuacao = 0;
-        
 
         // variaveis do gerenciador interações
 
@@ -106,16 +105,16 @@ namespace QuizTeste
             double percentual = (double)_pontuacao / _quiz.Count * 100;
             MessageBox.Show($"Quiz finalizado!\n\nAcertos: {_pontuacao} de {_quiz.Count}\nDesempenho: {percentual:F1}%",
                 "Resultado", MessageBoxButton.OK, MessageBoxImage.Information);
-            if (GerenciadorSessao.contadorSessoes == 1) { GerenciadorSessao.contadorSessoes = 0; }
+
             //Registro de informação no 'Historico_GlobalResultados'
             //N precisa passar o identificadorQuiz porq na criação do objeto dentro do método add
             //ele já cria uma variavel local e adiciona um id ao atributo IdentificadorQuiz
             GerenciadorResultFinal.addResultado_Lista(usuarioLogado.Id,percentual);
             //
-            
 
-                //Volta para tela principal
-                this.Close();
+
+            //Volta para tela principal
+            this.Close();
         }
     }
 }

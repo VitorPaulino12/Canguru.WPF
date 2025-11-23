@@ -13,8 +13,6 @@ namespace Canguru.WPF
 {
     public partial class MainGerentSessao : Window
     {
-        public int _contadorTeste = 0;
-        
         private Usuario usuarioLogado;
         private int SessaoSelecionadaId;
         private int PerguntaSelecionadaId;
@@ -382,14 +380,6 @@ namespace Canguru.WPF
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao atualizar pergunta: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Button_Click_5(object sender, RoutedEventArgs e) //Esse é o botão que habilita o quiz
-        {
-            MessageBox.Show($"quiz ativado {GerenciadorSessao.contadorSessoes}", "Atenção", MessageBoxButton.OK, MessageBoxImage.Information);
-            if (_contadorTeste == 0) { GerenciadorSessao.contadorSessoes = 1; } else if(GerenciadorSessao.contadorSessoes > 1) {
-                MessageBox.Show($"Já há um quiz ativo", "Atenção", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }
