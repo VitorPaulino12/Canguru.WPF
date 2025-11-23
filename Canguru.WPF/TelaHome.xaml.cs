@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
 using Path = System.IO.Path;
 
 
@@ -28,7 +30,43 @@ namespace Canguru.WPF
             CarregarUsuarios();
             MostrarFeed();
             ExibirMensagemDeBoasVindas();
+            //if (GerenciadorSessao.contadorSessoes >= 1) { PanelNotifica.Visibility = true; } else { PanelNotifica.Visibility = false; }
+            this.DataContext = this;
+        }
+        // 2. Implementação padrão da interface INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
+        // 3. A propriedade que controla a visibilidade
+        public System.Windows.Visibility NotificacaoVisibilidade
+        {
+            get
+            {
+                // A lógica agora fica aqui dentro!
+                // Usamos 'Collapsed' em vez de 'Hidden' para que o painel não ocupe espaço quando invisível.
+                return GerenciadorSessao.contadorSessoes >= 1 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        // 4. Sempre que o número de sessões mudar, avise a interface para reavaliar a propriedade
+        private void AtualizarVisibilidadeNotificacao()
+        {
+            // Diz ao WPF: "Ei, a propriedade 'NotificacaoVisibilidade' mudou, por favor verifica de novo!"
+            OnPropertyChanged(nameof(NotificacaoVisibilidade));
+        }
+
+        // EXEMPLO: Onde você chamaria essa atualização?
+        // Se você adiciona/remove sessões nesta mesma janela, chame o método depois da operação.
+        // Se a mudança vem de outra janela (como a de criar sessão), você precisa de um jeito
+        // de ser notificado. A forma mais simples é chamar o método no evento Activated da janela.
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            // Toda vez que a janela ganhar foco, ela verifica a contagem de sessões.
+            AtualizarVisibilidadeNotificacao();
         }
 
         //Construindo o painel onde ficam os usuarios cadastrados no sistema

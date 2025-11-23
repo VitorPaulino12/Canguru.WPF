@@ -96,7 +96,7 @@
             </Border>
         </Grid>
 
-        <Border Grid.Row="2" Background="#2D2D3D" Padding="10">
+        <Border Grid.Row="1" Background="#2D2D3D" Padding="10" Margin="312,593,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button x:Name="btnEditarInformacoes" Content="Editar Informações de Cadastro" 
                         Style="{StaticResource FooterButton}" Background="#4A90E2" Click="btnEditarInformacoes_Click"/>

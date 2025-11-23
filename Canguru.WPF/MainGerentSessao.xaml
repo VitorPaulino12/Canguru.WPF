@@ -79,11 +79,15 @@
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,10">
                         <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Atualizar" BorderThickness="0" Click="btnAttSessao_Click" Margin="2,0"/>
                         <Button Width="60" Height="30" Background="#E57A73" Foreground="White" Content="Excluir" BorderThickness="0" Click="Button_Click_2" Margin="2,0"/>
-                        <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Adicionar" BorderThickness="0" Click="Button_Click_4" Margin="2,0"/>
+                        <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Adicionar" BorderThickness="0" Click="Button_Click_4" RenderTransformOrigin="0.522,0.578"/>
 
                     </StackPanel>
                 </Grid>
             </Border>
+            <!---->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,162,30">
+                <Button Width="80" Height="30" Background="#DD8431" Foreground="White" Content="Quiz" BorderThickness="0" Click="Button_Click_5" Margin="2,0"/>
+            </StackPanel>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -144,22 +148,22 @@
                             </Border>
 
                             <!-- Campos -->
-                            <StackPanel Margin="0,0,0,10">
+                            <StackPanel Margin="0,0,0,4">
                                 <TextBlock Text="Enunciado" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
                                 <TextBox x:Name="txtEnunciado" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
+                            <StackPanel Margin="0,0,0,4">
                                 <TextBlock Text="Alternativa 1" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
                                 <TextBox x:Name="txtAlternativa1" Height="28" />
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
+                            <StackPanel Margin="0,0,0,4">
                                 <TextBlock Text="Alternativa 2" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
                                 <TextBox x:Name="txtAlternativa2" Height="28" />
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
+                            <StackPanel Margin="0,0,0,4">
                                 <TextBlock Text="Alternativa 3" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
                                 <TextBox x:Name="txtAlternativa3" Height="28" />
                             </StackPanel>
@@ -174,7 +178,7 @@
                                 <TextBox x:Name="txtAlternativaCorreta" Height="28" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RenderTransformOrigin="0.505,0.459" Width="402" >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RenderTransformOrigin="0.505,0.459" Width="402" Height="51" >
                                 <Button x:Name="btnLimpar" Width="90" Height="30" Background="#8E7CC3" Foreground="White" Content="Limpar" BorderThickness="0" Margin="9" Click="Button_Click_3"/>
                                 <Button x:Name="btnSalvar" Width="90" Height="30" Background="#A5D6A7" Foreground="White" Content="Salvar" BorderThickness="0" Margin="9" Click="Button_Click_1"/>
                                 <Button x:Name="btnAtualizarPergunta" Width="90" Height="30" Background="#FFA726" Foreground="White" Content="Atualizar" BorderThickness="0" Margin="9" Click="btnAtualizarPergunta_Click"/>
