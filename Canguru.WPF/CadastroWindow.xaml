@@ -5,69 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Canguru.WPF"
         mc:Ignorable="d"
-        Title="CANGURUU - Cadastro" Height="515" Width="900"
+        Title="CANGURUU - Cadastro" Height="550" Width="850"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="280"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Background="{StaticResource CorLaranjaPrincipal}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="30">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10">
+                <StackPanel Margin="20,15">
 
-                    <TextBlock Text="Criar Nova Conta" FontSize="24" FontWeight="Bold"
-                               Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="Criar Nova Conta" FontSize="20" FontWeight="Bold"
+                               Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
-                    <Label Content="Nome Completo:" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtNome" Margin="0,0,0,15"/>
+                    <Label Content="Nome Completo:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
+                    <TextBox x:Name="txtNome" Margin="0,0,0,10" Height="28" FontSize="12"/>
 
-                    <Label Content="Email:" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtEmail" Margin="0,0,0,15"/>
+                    <Label Content="RA:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
+                    <TextBox x:Name="txtRA" Margin="0,0,0,10" Height="28" FontSize="12"/>
 
-                    <Label Content="Senha:" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtSenhaCadastro" Margin="0,0,0,15"/>
+                    <Label Content="Email:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
+                    <TextBox x:Name="txtEmail" Margin="0,0,0,10" Height="28" FontSize="12"/>
 
-                    <Label Content="Confirmar Senha:" Foreground="White" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtConfirmarSenha" Margin="0,0,0,25"/>
+                    <Label Content="Senha:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
+                    <PasswordBox x:Name="txtSenhaCadastro" Margin="0,0,0,10" Height="28" FontSize="12"/>
 
-                    <Grid>
+                    <Label Content="Confirmar Senha:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
+                    <PasswordBox x:Name="txtConfirmarSenha" Margin="0,0,0,15" Height="28" FontSize="12"/>
+
+                    <CheckBox x:Name="chkProfessor" Content="É um professor?" Margin="0,0,0,20" 
+                              Foreground="White" FontWeight="SemiBold" FontSize="12" Checked="chkProfessor_Checked"/>
+
+                    <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="BtnCancelar" Grid.Column="0" Content="Cancelar"
-                                Margin="233,35,172,-35" Click="BtnCancelar_Click" IsCancel="True" Grid.ColumnSpan="2"/>
+                        <Button x:Name="BtnCancelar" Grid.Column="0" Content="Cancelar" Height="32"
+                                Click="BtnCancelar_Click" IsCancel="True" FontSize="12" FontWeight="SemiBold"/>
 
-                        <Button x:Name="BtnSalvarCadastro" Grid.Column="1" Content="Salvar Cadastro"
-                                Margin="135,35,5,-35" Click="BtnSalvarCadastro_Click" IsDefault="True"/>
-
-                        <CheckBox x:Name="chkProfessor" Content="É um professor?" Margin="5" Checked="chkProfessor_Checked" />
+                        <Button x:Name="BtnSalvarCadastro" Grid.Column="2" Content="Salvar Cadastro" Height="32"
+                                Click="BtnSalvarCadastro_Click" IsDefault="True" FontSize="12" FontWeight="SemiBold"
+                                Background="#FF5722" Foreground="White"/>
                     </Grid>
-                        
+
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
-        <Border Grid.Column="1" Background="LightGray" Padding="30">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Grid.Column="1" Background="LightGray">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
 
-                <Label Content="Foto de Perfil (Opcional)" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,15"/>
+                <Label Content="Foto de Perfil (Opcional)" HorizontalAlignment="Center" 
+                       FontWeight="Bold" Margin="0,0,0,10" FontSize="12"/>
 
-                <Border x:Name="imgBorder" Width="150" Height="150" CornerRadius="75" Background="White"
-                        BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,20">
+                <Border x:Name="imgBorder" Width="120" Height="120" CornerRadius="60" Background="White"
+                        BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,15">
                     <Image x:Name="imgPerfil" Stretch="UniformToFill"/>
                     <Border.Clip>
-                        <EllipseGeometry Center="75,75" RadiusX="75" RadiusY="75"/>
+                        <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60"/>
                     </Border.Clip>
                 </Border>
 
-                <Button x:Name="BtnEscolherFoto" Content="Escolher Foto..."
-                        HorizontalAlignment="Center" Click="BtnEscolherFoto_Click"/>
+                <Button x:Name="BtnEscolherFoto" Content="Escolher Foto..." Height="28"
+                        HorizontalAlignment="Center" Click="BtnEscolherFoto_Click" FontSize="11"
+                        Padding="10,2"/>
 
             </StackPanel>
         </Border>

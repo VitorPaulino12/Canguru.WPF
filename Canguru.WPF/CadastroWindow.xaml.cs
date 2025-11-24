@@ -50,20 +50,31 @@ namespace Canguru.WPF
         private void BtnSalvarCadastro_Click(object sender, RoutedEventArgs e)
         {
             string nome = txtNome.Text.Trim();
+            string ra = txtRA.Text.Trim();
             string email = txtEmail.Text.Trim();
             string senha = txtSenhaCadastro.Password;
             string confSenha = txtConfirmarSenha.Password;
 
-            bool isProfessor = chkProfessor.IsChecked.HasValue && chkProfessor.IsChecked.Value;
+
 
             // --- Validações ---
             if (string.IsNullOrWhiteSpace(nome) ||
+                string.IsNullOrWhiteSpace(ra) ||
                 string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Por Favor, preencha Nome, Email e Senha.", "Campos Obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Por Favor, preencha Nome, RA, Email e Senha.", "Campos Obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+           
+            if (ra.Length < 8 || (!ra.StartsWith("1") && !ra.StartsWith("2")))
+            {
+                MessageBox.Show("RA inválido! Deve começar com 1 (Aluno) ou 2 (Professor) e ter pelo menos 8 dígitos.", "RA Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                txtRA.Focus();
+                return;
+            }
+
             if (senha != confSenha)
             {
                 MessageBox.Show("As duas senhas não coincidem.", "Verifique-as!", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -83,27 +94,6 @@ namespace Canguru.WPF
                 return;
             }
 
-            // --- Lógica de Decisão (Aluno ou Professor) ---
-            Usuario novoUsuario;
-            if (chkProfessor.IsChecked == true)
-            {
-                novoUsuario = new Professor
-                {
-                    Nome = nome,
-                    Login = email,
-                    Senha = senha
-                };
-            }
-            else
-            {
-                novoUsuario = new Aluno
-                {
-                    Nome = nome,
-                    Login = email,
-                    Senha = senha
-                };
-            }
-
             string nomeArquivoFoto = null;
             if (caminhoImagemPerfil != null)
             {
@@ -116,8 +106,6 @@ namespace Canguru.WPF
                     string caminhoDestino = Path.Combine(pastaDestino, nomeArquivoFoto);
 
                     File.Copy(caminhoImagemPerfil, caminhoDestino);
-
-                    novoUsuario.CaminhoFotoPerfil = nomeArquivoFoto;
                 }
                 catch (Exception ex)
                 {
@@ -125,19 +113,23 @@ namespace Canguru.WPF
                     nomeArquivoFoto = null;
                 }
             }
+
             try
             {
+               
                 bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(
                     nome: nome,
                     login: email,
                     senha: senha,
-                    isProfessor: isProfessor,
+                    ra: ra,
                     caminhoFotoPerfil: nomeArquivoFoto
                 );
 
                 if (cadastroEfetuado)
                 {
-                    MessageBox.Show($"Usuário '{nome}' cadastrado com sucesso!", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
+                    
+                    string tipoUsuario = ra.StartsWith("1") ? "Aluno" : "Professor";
+                    MessageBox.Show($"{tipoUsuario} '{nome}' cadastrado com sucesso!\nRA: {ra}", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.DialogResult = true;
                     this.Close();
                 }
@@ -160,30 +152,7 @@ namespace Canguru.WPF
                     if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
                 }
             }
-
-            // ...
-            /*
-            bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(novoUsuario.Nome, novoUsuario.Login, novoUsuario.Senha);
-
-            if (cadastroEfetuado)
-            {
-                MessageBox.Show($"Usuário '{novoUsuario.Nome}' cadastrado com sucesso!", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.DialogResult = true;
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Não foi possível realizar o cadastro. O email/login informado já pode estar em uso.", "Falha no Cadastro", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                if (nomeArquivoFoto != null)
-                {
-                    string caminhoParaDeletar = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", nomeArquivoFoto);
-                    if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
-                }
-            }*/
         }
-                
-                
-            
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
         {
@@ -193,7 +162,7 @@ namespace Canguru.WPF
 
         private void chkProfessor_Checked(object sender, RoutedEventArgs e)
         {
-
+          
         }
     }
 }

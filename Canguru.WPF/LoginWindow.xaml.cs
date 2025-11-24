@@ -31,7 +31,6 @@ namespace Canguru.WPF
 
         private void FazerLogin()
         {
-           
             string login = txtLogin.Text.Trim();
             string senha = txtSenha.Password;
 
@@ -73,7 +72,7 @@ namespace Canguru.WPF
             {
                 MessageBox.Show("Login ou senha incorretos.", "Falha na Autenticação", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        
+
             //CÓDIGO ANTERIOR PARA FICAR SALVO CASO NECESSÁRIO
             /*
             LoadingOverlay.Visibility = Visibility.Visible;
@@ -117,7 +116,7 @@ namespace Canguru.WPF
 
         private async void BtnEsqueceuSenha_Click(object sender, RoutedEventArgs e)
         {
-            string email = txtLogin.Text.Trim(); // ← AQUI! usando txtLogin, já que txtUsuario não existe
+            string email = txtLogin.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -148,6 +147,10 @@ namespace Canguru.WPF
                 );
             }
         }
+
+        private void txtLogin_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
     }
 }
-

@@ -37,8 +37,9 @@
                         <DropShadowEffect ShadowDepth="2" Direction="315" Color="DarkGray" Opacity="0.5" BlurRadius="3"/>
                     </TextBlock.Effect><Run Text="CANG" Foreground="Black"/><Run Text="URUU" Foreground="White"/></TextBlock>
 
-                <Label Content="Login (E-mail)" Foreground="White" FontSize="14"/>
-                <TextBox x:Name="txtLogin" Margin="0,5,0,10"/>
+                <!-- ALTEREI O LABEL PARA INDICAR QUE PODE SER EMAIL OU RA -->
+                <Label Content="Login (E-mail ou RA)" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="txtLogin" Margin="0,5,0,10" TextChanged="txtLogin_TextChanged"/>
 
                 <Label Content="Senha" Foreground="White" FontSize="14"/>
                 <PasswordBox x:Name="txtSenha" Margin="0,5,0,50" KeyDown="txtSenha_KeyDown"/>

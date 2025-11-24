@@ -7,7 +7,7 @@ public abstract class Usuario
     public string Login { get; set; }
     public string Senha { get; set; }
     public string Email { get; set; }
-
+    public string RA { get; set; }
     public TipoUsuario Tipo { get; set; } = TipoUsuario.Professor;
 
     public string CaminhoFotoPerfil { get; set; } = @"\assets\img\default.png";

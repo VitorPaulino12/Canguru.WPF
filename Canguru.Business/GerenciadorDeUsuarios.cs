@@ -26,15 +26,24 @@ namespace Canguru.Business
             };
             listaUsuarios.Add(usuarioAdm);
         }
-        public static bool CadastrarUsuario(string nome, string login, string senha, bool isProfessor, string caminhoFotoPerfil = null)
+
+        
+        public static bool CadastrarUsuario(string nome, string login, string senha, string ra, string caminhoFotoPerfil = null)
         {
             if (listaUsuarios.Any(u => u.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
                 return false;
 
-            // Gera ID incremental baseado no maior ID já existente na lista
+           
+            if (string.IsNullOrEmpty(ra) || ra.Length < 1)
+                return false;
+
+            
+            bool isProfessor = ra.StartsWith("2");
+
+            
             int novoId = listaUsuarios.Count == 0 ? 1 : listaUsuarios.Max(u => u.Id) + 1;
 
-            // Cria o objeto correto (Aluno ou Professor) baseado no booleano
+            
             Usuario novoUsuario;
             if (isProfessor)
             {
@@ -50,6 +59,7 @@ namespace Canguru.Business
             novoUsuario.Login = login;
             novoUsuario.Senha = senha;
             novoUsuario.Email = login;
+            novoUsuario.RA = ra;
             novoUsuario.Status = "Ativo";
             novoUsuario.DataEntrada = DateTime.Now;
             novoUsuario.CaminhoFotoPerfil = caminhoFotoPerfil ?? @"\assets\img\default.png";
@@ -57,13 +67,16 @@ namespace Canguru.Business
             listaUsuarios.Add(novoUsuario);
             return true;
         }
+
         public static Usuario ValidarLogin(string login, string senha)
         {
             return listaUsuarios.FirstOrDefault(u =>
-                u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) &&
+                (u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) ||
+                u.RA.Equals(login, StringComparison.OrdinalIgnoreCase)) &&
                 u.Senha == senha
             );
         }
+
         public static List<Usuario> GetTodosUsuarios()
         {
             return listaUsuarios;
