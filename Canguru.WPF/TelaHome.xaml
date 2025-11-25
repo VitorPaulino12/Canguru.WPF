@@ -170,16 +170,21 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Notificações" FontWeight="Bold" FontSize="16"/>
-                    <Button Grid.Column="1" x:Name="BtnNotificacoes" Click="BtnNotificacoes_Click" 
-                            Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand">
-                        <Grid>
+                        <Button Grid.Column="1"
+                            x:Name="BtnNotificacoes"
+                            Width="40"
+                            Height="40"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Click="BtnNotificacoes_Click">
 
-                            <Border x:Name="PanelNotifica" Background="Red" CornerRadius="5" 
-                                    HorizontalAlignment="Center" VerticalAlignment="Center" Width="116" Height="28">
-                                <TextBlock Text="!" Foreground="White" FontWeight="Bold" 
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
+                             <Border Background="White"
+                                     CornerRadius="5"
+                                     Padding="5">
+                                    <Image Source="/Assets/sino.png" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                             </Border>
+
                     </Button>
                 </Grid>
             </Border>

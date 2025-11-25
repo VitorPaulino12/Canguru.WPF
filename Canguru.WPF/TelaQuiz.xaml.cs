@@ -111,7 +111,7 @@ namespace QuizTeste
             //ele já cria uma variavel local e adiciona um id ao atributo IdentificadorQuiz
             GerenciadorResultFinal.addResultado_Lista(usuarioLogado.Id,percentual);
             //
-
+            GerenciadorNotificacoes.LimparNotificacoes();
 
             //Volta para tela principal
             this.Close();

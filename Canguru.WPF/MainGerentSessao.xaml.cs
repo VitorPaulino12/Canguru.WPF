@@ -382,5 +382,11 @@ namespace Canguru.WPF
                 MessageBox.Show($"Erro ao atualizar pergunta: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void AtivarQuiz_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show($"um quiz está ativo! {GerenciadorNotificacoes.Notificacoes.Count + 1}", "Notificação", MessageBoxButton.OK, MessageBoxImage.Information);
+            GerenciadorNotificacoes.Adicionar("Novo quiz disponível!", () => { TelaPerguntas tela = new TelaPerguntas(usuarioLogado); tela.Show(); });
+        }
     }
 }

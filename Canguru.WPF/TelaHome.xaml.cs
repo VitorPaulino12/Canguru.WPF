@@ -230,7 +230,8 @@ namespace Canguru.WPF
             
         }
         private void BtnSair_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            usuarioLogado = null;
            this.Close();
             LoginWindow login = new LoginWindow();
             login.Show();
@@ -238,7 +239,8 @@ namespace Canguru.WPF
         }
         private void BtnNotificacoes_Click(object sender, RoutedEventArgs e)
         {
-            var popup = new NotificacaoPopup(usuarioLogado);
+            //Abre um painel de notificações
+            var popup = new NotificacoesWindow(usuarioLogado);
             popup.ShowDialog();
         }
 

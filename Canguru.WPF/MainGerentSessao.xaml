@@ -77,12 +77,32 @@
 
                     <!-- Rodapé (botões) -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,10">
-                        <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Atualizar" BorderThickness="0" Click="btnAttSessao_Click"/>
+                        <Button Width="60" Height="30" Background="#FFA726" Foreground="White" Content="Atualizar" BorderThickness="0" Click="btnAttSessao_Click"/>
                         <Button Width="60" Height="30" Background="#E57A73" Foreground="White" Content="Excluir" BorderThickness="0" Click="Button_Click_2" Margin="20,0"/>
                         <Button Width="60" Height="30" Background="#A5D6A7" Foreground="White" Content="Adicionar" BorderThickness="0" Click="Button_Click_4" Margin="2,0"/>
 
                     </StackPanel>
+                    <StackPanel Background="Transparent"
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Margin="-4,60,0,-69" Width="254" Grid.Row="1">
+
+                        <!-- Botão 1 -->
+                        <Button x:Name="AtivarQuiz"
+                                Width="107"
+                                Height="30"
+                                Background="Yellow"
+                                Foreground="#1E1B2E"
+                                Content="Quiz"
+                                BorderThickness="0"
+                                Margin="5"
+                                Click="AtivarQuiz_Click"/>
+                        <!-- Botão 2 -->
+
+                    </StackPanel>
                 </Grid>
+
+
             </Border>
         </Grid>
         <Grid Grid.Column="1">
@@ -136,53 +156,105 @@
                 </Border>
 
                 <!-- Painel Adicionar/Editar Pergunta (col 1) -->
-                <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="10,10,10,56" Grid.Column="1">
-                    <Grid Margin="20">
+                <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="15" Margin="10,10,10,40" Grid.Column="1">
+                    <Grid Margin="15">
                         <StackPanel>
-                            <Border Background="#DD8431" CornerRadius="15" Margin="0,0,0,30" Padding="10">
-                                <TextBlock Text="Adicionar pergunta" HorizontalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
+
+                            <!-- Título -->
+                            <Border Background="#DD8431" CornerRadius="10" Margin="0,0,0,12" Padding="6">
+                                <TextBlock Text="Adicionar pergunta"
+                           HorizontalAlignment="Center"
+                           Foreground="White"
+                           FontSize="15"
+                           FontWeight="Bold"/>
                             </Border>
 
-                            <!-- Campos -->
-                            <StackPanel Margin="0,0,0,10">
-                                <TextBlock Text="Enunciado" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
-                                <TextBox x:Name="txtEnunciado" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+                            <!-- CAMPOS -->
+                            <StackPanel Margin="0,0,0,8">
+                                <TextBlock Text="Enunciado" FontWeight="SemiBold" Margin="3,0,0,2"/>
+                                <TextBox x:Name="txtEnunciado"
+                         Height="45"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
-                                <TextBlock Text="Alternativa 1" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
-                                <TextBox x:Name="txtAlternativa1" Height="28" />
+                            <StackPanel Margin="0,0,0,8">
+                                <TextBlock Text="Alternativa 1" FontWeight="SemiBold" Margin="3,0,0,2"/>
+                                <TextBox x:Name="txtAlternativa1" Height="32"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
-                                <TextBlock Text="Alternativa 2" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
-                                <TextBox x:Name="txtAlternativa2" Height="28" />
+                            <StackPanel Margin="0,0,0,8">
+                                <TextBlock Text="Alternativa 2" FontWeight="SemiBold" Margin="3,0,0,2"/>
+                                <TextBox x:Name="txtAlternativa2" Height="32"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
-                                <TextBlock Text="Alternativa 3" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
-                                <TextBox x:Name="txtAlternativa3" Height="28" />
+                            <StackPanel Margin="0,0,0,8">
+                                <TextBlock Text="Alternativa 3" FontWeight="SemiBold" Margin="3,0,0,2"/>
+                                <TextBox x:Name="txtAlternativa3" Height="32"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,10">
-                                <TextBlock Text="Alternativa 4" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
-                                <TextBox x:Name="txtAlternativa4" Height="28" />
+                            <StackPanel Margin="0,0,0,8">
+                                <TextBlock Text="Alternativa 4" FontWeight="SemiBold" Margin="3,0,0,2"/>
+                                <TextBox x:Name="txtAlternativa4" Height="32"/>
                             </StackPanel>
 
-                            <StackPanel Margin="0,0,0,20">
-                                <TextBlock Text="Alternativa correta (0-3)" Foreground="Black" FontWeight="SemiBold" Margin="5,0,0,2"/>
-                                <TextBox x:Name="txtAlternativaCorreta" Height="28" />
+                            <StackPanel Margin="0,0,0,15">
+                                <TextBlock Text="Alternativa correta (0-3)" FontWeight="SemiBold" Margin="3,0,0,2"/>
+                                <TextBox x:Name="txtAlternativaCorreta" Height="32"/>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RenderTransformOrigin="0.505,0.459" Width="402" >
-                                <Button x:Name="btnLimpar" Width="90" Height="30" Background="#8E7CC3" Foreground="White" Content="Limpar" BorderThickness="0" Margin="9" Click="Button_Click_3"/>
-                                <Button x:Name="btnSalvar" Width="90" Height="30" Background="#A5D6A7" Foreground="White" Content="Salvar" BorderThickness="0" Margin="9" Click="Button_Click_1"/>
-                                <Button x:Name="btnAtualizarPergunta" Width="90" Height="30" Background="#FFA726" Foreground="White" Content="Atualizar" BorderThickness="0" Margin="9" Click="btnAtualizarPergunta_Click"/>
-                                <Button x:Name="btnExcluirPergunta" Width="50" Height="30" Background="#FFA726" Foreground="White" Content="Excluír" BorderThickness="0" Margin="9" Click="btnAtualizarPergunta_Click"/>
+                            <!-- BOTÕES -->
+                            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Width="320"
+                        Margin="0,5,0,0">
+
+                                <Button x:Name="btnLimpar"
+                        Width="70"
+                        Height="26"
+                        Background="#8E7CC3"
+                        Foreground="White"
+                        Content="Limpar"
+                        BorderThickness="0"
+                        Margin="4"
+                        Click="Button_Click_3"/>
+
+                                <Button x:Name="btnSalvar"
+                        Width="70"
+                        Height="26"
+                        Background="#A5D6A7"
+                        Foreground="White"
+                        Content="Salvar"
+                        BorderThickness="0"
+                        Margin="4"
+                        Click="Button_Click_1"/>
+
+                                <Button x:Name="btnAtualizarPergunta"
+                        Width="70"
+                        Height="26"
+                        Background="#FFA726"
+                        Foreground="White"
+                        Content="Atualizar"
+                        BorderThickness="0"
+                        Margin="4"
+                        Click="btnAtualizarPergunta_Click"/>
+
+                                <Button x:Name="btnExcluirPergunta"
+                        Width="70"
+                        Height="26"
+                        Background="#F44336"
+                        Foreground="White"
+                        Content="Excluir"
+                        BorderThickness="0"
+                        Margin="4"
+                        Click="BtnExcluirPergunta_Click"/>
                             </StackPanel>
+
                         </StackPanel>
                     </Grid>
                 </Border>
+
+
             </Grid>
         </Grid>
 
