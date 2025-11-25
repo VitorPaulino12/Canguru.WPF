@@ -1,113 +1,91 @@
-﻿using Canguru.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Canguru.Core;
 
 namespace Canguru.Business
 {
     public static class GerenciadorDeUsuarios
     {
-        // Continuamos usando a lista, como estava originalmente
-        private static List<Usuario> listaUsuarios = new List<Usuario>();
+        // --- BANCO DE DADOS EM MEMÓRIA ---
+        private static List<Usuario> _bancoDeUsuarios = new List<Usuario>();
 
-        // Construtor estático para criar o usuário ADM na inicialização
         static GerenciadorDeUsuarios()
         {
-            // Cria o usuário Administrador e o adiciona à lista
-            var usuarioAdm = new Adm
+            // --- AQUI ESTÁ O ADMIN QUE VOCÊ PEDIU ---
+            _bancoDeUsuarios.Add(new Adm
             {
-                Id = 0, // ID fixo para o ADM
-                Nome = "Administrador do Sistema",
-                Login = "adm",
-                Senha = "123",
-                Email = "adm@sistema.com",
-                Status = "Ativo",
-                DataEntrada = DateTime.Now
-            };
-            listaUsuarios.Add(usuarioAdm);
+                Id = 1,
+                Nome = "Administrador",
+                Login = "admin",   // Login
+                Senha = "admin",   // Senha
+                RA = "0000"
+            });
         }
 
-        
-        public static bool CadastrarUsuario(string nome, string login, string senha, string ra, string caminhoFotoPerfil = null)
+        // --- MÉTODOS DE LEITURA ---
+        public static List<Usuario> GetTodosUsuarios()
         {
-            if (listaUsuarios.Any(u => u.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
-                return false;
+            return _bancoDeUsuarios;
+        }
 
-           
-            if (string.IsNullOrEmpty(ra) || ra.Length < 1)
-                return false;
+        public static Usuario ValidarLogin(string login, string senha)
+        {
+            // Busca usuário onde login e senha batem
+            return _bancoDeUsuarios.FirstOrDefault(u => u.Login == login && u.Senha == senha);
+        }
 
-            
-            bool isProfessor = ra.StartsWith("2");
+        public static Usuario BuscarPorEmail(string email)
+        {
+            // Busca para recuperar senha (ignora maiúsculas/minúsculas)
+            return _bancoDeUsuarios.FirstOrDefault(u => u.Login.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
 
-            
-            int novoId = listaUsuarios.Count == 0 ? 1 : listaUsuarios.Max(u => u.Id) + 1;
+        // --- MÉTODOS DE GRAVAÇÃO ---
+        public static bool CadastrarUsuario(string nome, string login, string senha, string ra, string caminhoFotoPerfil)
+        {
+            // Verifica duplicidade de login
+            if (_bancoDeUsuarios.Any(u => u.Login == login)) return false;
 
-            
             Usuario novoUsuario;
-            if (isProfessor)
-            {
-                novoUsuario = new Professor();
-            }
-            else
-            {
-                novoUsuario = new Aluno();
-            }
+
+            if (ra.StartsWith("1")) novoUsuario = new Aluno();
+            else if (ra.StartsWith("2")) novoUsuario = new Professor();
+            else return false;
+
+            // Gera ID automático (pega o maior ID e soma 1)
+            int novoId = _bancoDeUsuarios.Count > 0 ? _bancoDeUsuarios.Max(u => u.Id) + 1 : 1;
 
             novoUsuario.Id = novoId;
             novoUsuario.Nome = nome;
             novoUsuario.Login = login;
             novoUsuario.Senha = senha;
-            novoUsuario.Email = login;
             novoUsuario.RA = ra;
-            novoUsuario.Status = "Ativo";
-            novoUsuario.DataEntrada = DateTime.Now;
-            novoUsuario.CaminhoFotoPerfil = caminhoFotoPerfil ?? @"\assets\img\default.png";
+            novoUsuario.CaminhoFotoPerfil = caminhoFotoPerfil;
 
-            listaUsuarios.Add(novoUsuario);
+            _bancoDeUsuarios.Add(novoUsuario);
             return true;
         }
 
-        public static Usuario ValidarLogin(string login, string senha)
+        public static void AtualizarSenha(int idUsuario, string novaSenha)
         {
-            return listaUsuarios.FirstOrDefault(u =>
-                (u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) ||
-                u.RA.Equals(login, StringComparison.OrdinalIgnoreCase)) &&
-                u.Senha == senha
-            );
+            var usuario = _bancoDeUsuarios.FirstOrDefault(u => u.Id == idUsuario);
+            if (usuario != null)
+            {
+                usuario.Senha = novaSenha;
+            }
         }
 
-        public static List<Usuario> GetTodosUsuarios()
+        public static bool ExcluirUsuario(int idUsuario)
         {
-            return listaUsuarios;
-        }
+            Usuario usuarioParaRemover = _bancoDeUsuarios.FirstOrDefault(u => u.Id == idUsuario);
 
-        public static Usuario GetUsuarioPorId(int id)
-        {
-            return listaUsuarios.FirstOrDefault(u => u.Id == id);
-        }
-
-        public static bool AtualizarUsuario(Usuario usuarioAtualizado)
-        {
-            var usuario = listaUsuarios.FirstOrDefault(u => u.Id == usuarioAtualizado.Id);
-            if (usuario == null) return false;
-
-            usuario.Nome = usuarioAtualizado.Nome;
-            usuario.Email = usuarioAtualizado.Email;
-            usuario.Senha = usuarioAtualizado.Senha;
-            usuario.Status = usuarioAtualizado.Status;
-            usuario.CaminhoFotoPerfil = usuarioAtualizado.CaminhoFotoPerfil;
-
-            return true;
-        }
-
-        public static bool ExcluirUsuario(int id)
-        {
-            var usuario = listaUsuarios.FirstOrDefault(u => u.Id == id);
-            if (usuario == null) return false;
-
-            listaUsuarios.Remove(usuario);
-            return true;
+            if (usuarioParaRemover != null)
+            {
+                _bancoDeUsuarios.Remove(usuarioParaRemover);
+                return true;
+            }
+            return false;
         }
     }
 }
