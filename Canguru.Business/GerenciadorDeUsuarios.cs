@@ -15,7 +15,7 @@ namespace Canguru.Business
                 Nome = "Administrador Sistema",
                 Login = "admin",
                 // AQUI: Transformamos "admin" em código secreto antes de salvar
-                Senha = Criptografia.GerarHash("admin"),
+                Senha = Criptografia.GerarHash("123"),
                 RA = "0000"
             });
         }
