@@ -1,72 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Canguru.Core;
+﻿using Canguru.Core;
 
 namespace Canguru.Business
 {
     public static class GerenciadorDeUsuarios
     {
-        // --- BANCO DE DADOS COMPARTILHADO (MEMÓRIA RAM) ---
-        // Todos os usuários (Admin e Cadastrados na hora) ficam aqui.
         private static List<Usuario> _bancoDeUsuarios = new List<Usuario>();
 
         static GerenciadorDeUsuarios()
         {
-            // Usuário padrão para você não ficar trancado fora do sistema
+            // --- ATENÇÃO: AGORA A SENHA DO ADMIN TAMBÉM É CRIPTOGRAFADA ---
             _bancoDeUsuarios.Add(new Adm
             {
                 Id = 1,
-                Nome = "Administrador",
-                Login = "admin",  // Você pode trocar por um email se preferir
-                Senha = "123",
+                Nome = "Administrador Sistema",
+                Login = "admin",
+                // AQUI: Transformamos "admin" em código secreto antes de salvar
+                Senha = Criptografia.GerarHash("admin"),
                 RA = "0000"
             });
         }
 
-        // --- MÉTODOS DE BUSCA ---
         public static List<Usuario> GetTodosUsuarios()
         {
             return _bancoDeUsuarios;
         }
 
-        public static Usuario ValidarLogin(string login, string senha)
+        public static Usuario ValidarLogin(string login, string senhaDigitada)
         {
-            // Verifica Login e Senha exatos
-            return _bancoDeUsuarios.FirstOrDefault(u => u.Login == login && u.Senha == senha);
+            // 1. Criptografa o que o usuário digitou agora
+            string senhaCriptografada = Criptografia.GerarHash(senhaDigitada);
+
+            // 2. Compara o LOGIN e a SENHA CRIPTOGRAFADA
+            return _bancoDeUsuarios.FirstOrDefault(u =>
+                u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) &&
+                u.Senha == senhaCriptografada);
         }
 
         public static Usuario BuscarPorEmail(string email)
         {
-            // Busca pelo Login/Email (Ignora maiúsculas/minúsculas para facilitar)
-            // Funciona tanto para "admin" quanto para "joao@gmail.com"
             return _bancoDeUsuarios.FirstOrDefault(u => u.Login.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
-        // --- MÉTODOS DE AÇÃO ---
         public static bool CadastrarUsuario(string nome, string login, string senha, string ra, string caminhoFotoPerfil)
         {
-            // Evita duplicidade
-            if (_bancoDeUsuarios.Any(u => u.Login == login)) return false;
+            if (_bancoDeUsuarios.Any(u => u.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
+                return false;
 
             Usuario novoUsuario;
 
-            // Define o tipo
             if (ra.StartsWith("1")) novoUsuario = new Aluno();
             else if (ra.StartsWith("2")) novoUsuario = new Professor();
             else return false;
 
-            // Gera ID novo (Auto Incremento Simulado)
             int novoId = _bancoDeUsuarios.Count > 0 ? _bancoDeUsuarios.Max(u => u.Id) + 1 : 1;
 
             novoUsuario.Id = novoId;
             novoUsuario.Nome = nome;
-            novoUsuario.Login = login; // O Login É O EMAIL cadastrado
-            novoUsuario.Senha = senha;
+            novoUsuario.Login = login;
+
+            // AQUI: Criptografamos a senha antes de salvar na lista!
+            novoUsuario.Senha = Criptografia.GerarHash(senha);
+
             novoUsuario.RA = ra;
             novoUsuario.CaminhoFotoPerfil = caminhoFotoPerfil;
 
-            // ADICIONA NA LISTA GERAL
             _bancoDeUsuarios.Add(novoUsuario);
             return true;
         }
@@ -76,7 +73,8 @@ namespace Canguru.Business
             var usuario = _bancoDeUsuarios.FirstOrDefault(u => u.Id == idUsuario);
             if (usuario != null)
             {
-                usuario.Senha = novaSenha;
+                // AQUI: Se resetar a senha, salvamos a nova versão criptografada
+                usuario.Senha = Criptografia.GerarHash(novaSenha);
             }
         }
 
