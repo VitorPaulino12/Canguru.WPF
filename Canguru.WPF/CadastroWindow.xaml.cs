@@ -1,9 +1,10 @@
 ﻿using Canguru.Business;
-using Canguru.Core;
 using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input; // Necessário para bloquear teclas e Mouse
 using System.Windows.Media.Imaging;
 
 namespace Canguru.WPF
@@ -17,11 +18,19 @@ namespace Canguru.WPF
             InitializeComponent();
         }
 
+        // --- MÁSCARA 1: BLOQUEIA ESPAÇOS ENQUANTO DIGITA ---
+        private void txtEmail_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true; // Ignora a tecla espaço
+            }
+        }
+
         private void BtnEscolherFoto_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Arquivos de Imagem (*.png;*.jpg;*.jpeg;*.gif;*.bmp)|*.png;*.jpg;*.jpeg;*.gif;*.bmp|Todos os Arquivos (*.*)|*.*";
-            openFileDialog.Title = "Selecione uma Foto de Perfil";
+            openFileDialog.Filter = "Imagens|*.png;*.jpg;*.jpeg;*.bmp";
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -29,71 +38,64 @@ namespace Canguru.WPF
                 {
                     string filePath = openFileDialog.FileName;
                     BitmapImage bitmap = new BitmapImage();
-
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(filePath);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
 
-                    imgPerfil.Source = bitmap;
+                    FotoBrush.ImageSource = bitmap;
                     caminhoImagemPerfil = filePath;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao carregar a imagem: {ex.Message}", "Erro de Imagem", MessageBoxButton.OK, MessageBoxImage.Error);
-                    caminhoImagemPerfil = null;
-                    imgPerfil.Source = null;
+                    MessageBox.Show("Erro ao carregar imagem: " + ex.Message);
                 }
             }
         }
 
         private void BtnSalvarCadastro_Click(object sender, RoutedEventArgs e)
         {
+            // 1. PEGAR VALORES
             string nome = txtNome.Text.Trim();
-            string ra = txtRA.Text.Trim();
             string email = txtEmail.Text.Trim();
+            string ra = txtRA.Text.Trim();
             string senha = txtSenhaCadastro.Password;
             string confSenha = txtConfirmarSenha.Password;
 
-
-
-            // --- Validações ---
-            if (string.IsNullOrWhiteSpace(nome) ||
-                string.IsNullOrWhiteSpace(ra) ||
-                string.IsNullOrWhiteSpace(email) ||
-                string.IsNullOrWhiteSpace(senha))
+            // 2. VERIFICA CAMPOS VAZIOS
+            if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(ra) || string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Por Favor, preencha Nome, RA, Email e Senha.", "Campos Obrigatórios", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Preencha todos os campos obrigatórios.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-           
-            if (ra.Length < 8 || (!ra.StartsWith("1") && !ra.StartsWith("2")))
+            // --- NOVA VALIDAÇÃO DE EMAIL (MÁSCARA LÓGICA) ---
+            // Verifica se tem '@' E se contém '.com' (independente de maiúscula/minúscula)
+            if (!email.Contains("@") || !email.ToLower().Contains(".com"))
             {
-                MessageBox.Show("RA inválido! Deve começar com 1 (Aluno) ou 2 (Professor) e ter pelo menos 8 dígitos.", "RA Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtRA.Focus();
+                MessageBox.Show("E-mail inválido!\n\nO e-mail deve conter '@' e o domínio '.com'.\nExemplo: usuario@gmail.com",
+                                "Erro no Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                txtEmail.Focus(); // Coloca o cursor lá para a pessoa arrumar
+                return;
+            }
+            // --------------------------------------------------
+
+            // 3. VALIDAÇÃO DO RA
+            if (!ra.StartsWith("1") && !ra.StartsWith("2"))
+            {
+                MessageBox.Show("RA Inválido!\nDeve começar com 1 (Aluno) ou 2 (Professor).", "Erro de RA", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
+            // 4. VALIDAÇÃO DE SENHA
             if (senha != confSenha)
             {
-                MessageBox.Show("As duas senhas não coincidem.", "Verifique-as!", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtSenhaCadastro.Focus();
-                return;
-            }
-            if (!email.Contains("@") || !email.Contains("."))
-            {
-                MessageBox.Show("Formato de Email Inválido.", "Email Inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtEmail.Focus();
-                return;
-            }
-            if (senha.Length < 6)
-            {
-                MessageBox.Show("A senha deve ter no mínimo 6 caracteres.", "Senha insuficiente.", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtSenhaCadastro.Focus();
+                MessageBox.Show("As senhas não conferem.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
+            // 5. SALVAR FOTO
             string nomeArquivoFoto = null;
             if (caminhoImagemPerfil != null)
             {
@@ -101,68 +103,36 @@ namespace Canguru.WPF
                 {
                     string pastaDestino = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil");
                     Directory.CreateDirectory(pastaDestino);
-
                     nomeArquivoFoto = Guid.NewGuid().ToString() + Path.GetExtension(caminhoImagemPerfil);
-                    string caminhoDestino = Path.Combine(pastaDestino, nomeArquivoFoto);
-
-                    File.Copy(caminhoImagemPerfil, caminhoDestino);
+                    File.Copy(caminhoImagemPerfil, Path.Combine(pastaDestino, nomeArquivoFoto));
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Erro ao salvar a foto de perfil: {ex.Message}\nO cadastro continuará sem foto.", "Erro Foto", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    nomeArquivoFoto = null;
-                }
+                catch { }
             }
 
-            try
-            {
-               
-                bool cadastroEfetuado = GerenciadorDeUsuarios.CadastrarUsuario(
-                    nome: nome,
-                    login: email,
-                    senha: senha,
-                    ra: ra,
-                    caminhoFotoPerfil: nomeArquivoFoto
-                );
+            // 6. FINALIZAR CADASTRO NA MEMÓRIA
+            bool sucesso = GerenciadorDeUsuarios.CadastrarUsuario(nome, email, senha, ra, nomeArquivoFoto);
 
-                if (cadastroEfetuado)
-                {
-                    
-                    string tipoUsuario = ra.StartsWith("1") ? "Aluno" : "Professor";
-                    MessageBox.Show($"{tipoUsuario} '{nome}' cadastrado com sucesso!\nRA: {ra}", "Cadastro Concluído", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.DialogResult = true;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Não foi possível realizar o cadastro. O email/login informado já pode estar em uso.", "Falha no Cadastro", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                    if (nomeArquivoFoto != null)
-                    {
-                        string caminhoParaDeletar = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", nomeArquivoFoto);
-                        if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (sucesso)
             {
-                MessageBox.Show($"Ocorreu um erro inesperado ao salvar o cadastro: {ex.Message}", "Erro Crítico", MessageBoxButton.OK, MessageBoxImage.Error);
-                if (nomeArquivoFoto != null)
-                {
-                    string caminhoParaDeletar = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", nomeArquivoFoto);
-                    if (File.Exists(caminhoParaDeletar)) File.Delete(caminhoParaDeletar);
-                }
+                string tipo = ra.StartsWith("1") ? "Aluno" : "Professor";
+                MessageBox.Show($"{tipo} cadastrado com sucesso!", "Bem-vindo", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.DialogResult = true;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Erro: Este Login/Email já está cadastrado.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
             this.Close();
         }
 
-        private void chkProfessor_Checked(object sender, RoutedEventArgs e)
+        private void txtEmail_TextChanged(object sender, TextChangedEventArgs e)
         {
-          
+            // Método vazio necessário para o XAML não dar erro
         }
     }
 }

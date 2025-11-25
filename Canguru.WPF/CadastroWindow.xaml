@@ -1,84 +1,121 @@
 ﻿<Window x:Class="Canguru.WPF.CadastroWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Canguru.WPF"
-        mc:Ignorable="d"
-        Title="CANGURUU - Cadastro" Height="550" Width="850"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        Title="Novo Cadastro - Canguru" Height="680" Width="400"
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="280"/>
-        </Grid.ColumnDefinitions>
+        <Border Background="Transparent" Margin="10">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.3"/>
+            </Border.Effect>
+        </Border>
 
-        <Border Grid.Column="0" Background="{StaticResource CorLaranjaPrincipal}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10">
-                <StackPanel Margin="20,15">
+        <Border Background="{StaticResource CorLaranjaPrincipal}"
+                CornerRadius="15" Margin="10">
 
-                    <TextBlock Text="Criar Nova Conta" FontSize="20" FontWeight="Bold"
-                               Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+            <Grid Margin="25">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <Label Content="Nome Completo:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
-                    <TextBox x:Name="txtNome" Margin="0,0,0,10" Height="28" FontSize="12"/>
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,20">
+                    <Border Width="110" Height="110" CornerRadius="100" BorderBrush="White" BorderThickness="3">
+                        <Border.Background>
+                            <ImageBrush x:Name="FotoBrush" Stretch="UniformToFill" ImageSource="https://cdn-icons-png.flaticon.com/512/847/847969.png"/>
+                        </Border.Background>
+                    </Border>
 
-                    <Label Content="RA:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
-                    <TextBox x:Name="txtRA" Margin="0,0,0,10" Height="28" FontSize="12"/>
+                    <Button Content="Alterar Foto" Margin="0,10,0,0" Padding="15,4" 
+                            Background="White" BorderThickness="0" FontWeight="Bold" Foreground="{StaticResource CorLaranjaPrincipal}"
+                            Click="BtnEscolherFoto_Click" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="15"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
 
-                    <Label Content="Email:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
-                    <TextBox x:Name="txtEmail" Margin="0,0,0,10" Height="28" FontSize="12"/>
+                <StackPanel Grid.Row="1" VerticalAlignment="Center">
 
-                    <Label Content="Senha:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
-                    <PasswordBox x:Name="txtSenhaCadastro" Margin="0,0,0,10" Height="28" FontSize="12"/>
+                    <TextBlock Text="Nome Completo:" FontWeight="Bold" Foreground="White" Margin="0,0,0,3"/>
+                    <TextBox x:Name="txtNome" Padding="8" Margin="0,0,0,10" BorderThickness="0">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
 
-                    <Label Content="Confirmar Senha:" Foreground="White" FontWeight="SemiBold" Margin="0,0,0,2" FontSize="12"/>
-                    <PasswordBox x:Name="txtConfirmarSenha" Margin="0,0,0,15" Height="28" FontSize="12"/>
+                    <TextBlock Text="Email (Login):" FontWeight="Bold" Foreground="White" Margin="0,0,0,3"/>
+                    <TextBox x:Name="txtEmail" Padding="8" Margin="0,0,0,10" BorderThickness="0" 
+                             TextChanged="txtEmail_TextChanged" 
+                             PreviewKeyDown="txtEmail_PreviewKeyDown">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
 
-                    <CheckBox x:Name="chkProfessor" Content="É um professor?" Margin="0,0,0,20" 
-                              Foreground="White" FontWeight="SemiBold" FontSize="12" Checked="chkProfessor_Checked"/>
+                    <TextBlock Text="RA (Registro Acadêmico):" FontWeight="Bold" Foreground="White" Margin="0,0,0,3"/>
+                    <TextBox x:Name="txtRA" Padding="8" Margin="0,0,0,2" BorderThickness="0" ToolTip="Comece com 1 (Aluno) ou 2 (Professor)">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock Text="*Inicie com 1 para Aluno ou 2 para Professor" FontSize="11" Foreground="White" Opacity="0.8" Margin="0,0,0,10" FontStyle="Italic"/>
 
-                    <Grid Margin="0,10,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <TextBlock Text="Senha:" FontWeight="Bold" Foreground="White" Margin="0,0,0,3"/>
+                    <PasswordBox x:Name="txtSenhaCadastro" Padding="8" Margin="0,0,0,10" BorderThickness="0">
+                        <PasswordBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </PasswordBox.Resources>
+                    </PasswordBox>
 
-                        <Button x:Name="BtnCancelar" Grid.Column="0" Content="Cancelar" Height="32"
-                                Click="BtnCancelar_Click" IsCancel="True" FontSize="12" FontWeight="SemiBold"/>
-
-                        <Button x:Name="BtnSalvarCadastro" Grid.Column="2" Content="Salvar Cadastro" Height="32"
-                                Click="BtnSalvarCadastro_Click" IsDefault="True" FontSize="12" FontWeight="SemiBold"
-                                Background="#FF5722" Foreground="White"/>
-                    </Grid>
+                    <TextBlock Text="Confirmar Senha:" FontWeight="Bold" Foreground="White" Margin="0,0,0,3"/>
+                    <PasswordBox x:Name="txtConfirmarSenha" Padding="8" Margin="0,0,0,5" BorderThickness="0">
+                        <PasswordBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </PasswordBox.Resources>
+                    </PasswordBox>
 
                 </StackPanel>
-            </ScrollViewer>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,5">
+
+                    <Button Content="Cancelar" Width="110" Height="40" Margin="0,0,15,0" 
+                            Background="Transparent" BorderBrush="White" BorderThickness="2" Foreground="White" FontWeight="SemiBold"
+                            Click="BtnCancelar_Click" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="Salvar Cadastro" Width="140" Height="40" FontWeight="SemiBold" 
+                            Background="{StaticResource CorBotaoCinza}" Foreground="Black" BorderThickness="0"
+                            Click="BtnSalvarCadastro_Click" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
         </Border>
-
-        <Border Grid.Column="1" Background="LightGray">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
-
-                <Label Content="Foto de Perfil (Opcional)" HorizontalAlignment="Center" 
-                       FontWeight="Bold" Margin="0,0,0,10" FontSize="12"/>
-
-                <Border x:Name="imgBorder" Width="120" Height="120" CornerRadius="60" Background="White"
-                        BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,15">
-                    <Image x:Name="imgPerfil" Stretch="UniformToFill"/>
-                    <Border.Clip>
-                        <EllipseGeometry Center="60,60" RadiusX="60" RadiusY="60"/>
-                    </Border.Clip>
-                </Border>
-
-                <Button x:Name="BtnEscolherFoto" Content="Escolher Foto..." Height="28"
-                        HorizontalAlignment="Center" Click="BtnEscolherFoto_Click" FontSize="11"
-                        Padding="10,2"/>
-
-            </StackPanel>
-        </Border>
-
     </Grid>
 </Window>

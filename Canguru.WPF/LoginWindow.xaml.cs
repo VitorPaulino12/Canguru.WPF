@@ -20,6 +20,13 @@ namespace Canguru.WPF
             }
         }
 
+        // Deixei o método aqui (vazio) para não dar erro no seu XAML, 
+        // mas agora ele NÃO bloqueia mais nada. Pode digitar espaço à vontade.
+        private void txtLogin_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // LIVRE: Nenhuma tecla é bloqueada.
+        }
+
         private void BtnEntrar_Click(object sender, RoutedEventArgs e)
         {
             FazerLogin();
@@ -36,18 +43,20 @@ namespace Canguru.WPF
             string login = txtLogin.Text.Trim();
             string senha = txtSenha.Password;
 
+            // Validação simples: Só impede login vazio
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Preencha login e senha.", "Campos Vazios", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Preencha login e senha.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // Busca direto na memória (sem verificar se é email ou RA antes)
             Usuario usuarioLogado = GerenciadorDeUsuarios.ValidarLogin(login, senha);
 
             if (usuarioLogado != null)
             {
                 string tipo = usuarioLogado is Adm ? "Administrador" : (usuarioLogado is Professor ? "Professor" : "Aluno");
-                MessageBox.Show($"Bem-vindo, {tipo} {usuarioLogado.Nome}!", "Login Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Bem-vindo, {tipo} {usuarioLogado.Nome}!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 TelaHome novatela = new TelaHome(usuarioLogado);
                 novatela.Show();
@@ -55,7 +64,7 @@ namespace Canguru.WPF
             }
             else
             {
-                MessageBox.Show("Login ou senha incorretos.", "Erro de Login", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Login ou senha incorretos.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 txtSenha.Clear();
                 txtSenha.Focus();
             }
@@ -73,12 +82,11 @@ namespace Canguru.WPF
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                MessageBox.Show("Digite seu Login/Email no campo de usuário para recuperar a senha.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Digite seu Login no campo acima para recuperar a senha.", "Ajuda", MessageBoxButton.OK, MessageBoxImage.Information);
                 txtLogin.Focus();
                 return;
             }
 
-            // Busca usuário
             Usuario usuario = GerenciadorDeUsuarios.BuscarPorEmail(email);
 
             if (usuario == null)
@@ -87,28 +95,24 @@ namespace Canguru.WPF
                 return;
             }
 
-            // Gera senha aleatória
             string novaSenha = System.IO.Path.GetRandomFileName().Replace(".", "").Substring(0, 6);
-
-            // Atualiza na memória
             GerenciadorDeUsuarios.AtualizarSenha(usuario.Id, novaSenha);
 
-            // Tenta enviar ou simular
             string resultado = EmailService.EnviarOuSimular(email, novaSenha);
 
             if (resultado == "OK")
             {
-                MessageBox.Show("Email de recuperação enviado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Nova senha enviada para: {email}", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                // MODO SIMULAÇÃO: Mostra a senha na tela porque estamos num protótipo
-                MessageBox.Show($"[SIMULAÇÃO DE EMAIL]\n\n" +
-                                $"Para: {email}\n" +
-                                $"Nova Senha Gerada: {resultado}\n\n" +
-                                $"(Copie esta senha para logar)",
-                                "Email Simulado", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"[SIMULAÇÃO]\nUsuário: {usuario.Nome}\nNova Senha: {resultado}", "Recuperação", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        private void BtnSair_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
 
         private void txtLogin_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) { }

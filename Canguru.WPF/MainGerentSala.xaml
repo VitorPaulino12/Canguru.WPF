@@ -124,7 +124,7 @@
 
             <!-- Conteúdo central -->
             <ScrollViewer Grid.Row="1" Margin="40,20,40,20" VerticalScrollBarVisibility="Auto">
-                <Border Background="White" CornerRadius="25" Padding="30">
+                <Border Background="White" CornerRadius="25" Padding="30" RenderTransformOrigin="0.506,0.516" Width="919" Height="574">
                     <StackPanel>
 
                         <!-- Título -->

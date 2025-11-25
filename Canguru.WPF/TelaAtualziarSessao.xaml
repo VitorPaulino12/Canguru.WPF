@@ -45,7 +45,7 @@
             </Border>
 
             <!-- Área de formulário -->
-            <Border Grid.Row="1" Background="White" CornerRadius="20" Padding="40" Margin="40,10,55,58">
+            <Border Grid.Row="1" Background="White" CornerRadius="20" Padding="40" Margin="10,10,30,31">
                 <StackPanel Margin="0,-30,0,45">
                     <TextBlock Text="Nome da sessão:" FontWeight="Bold" FontSize="14" Margin="5,0,0,5"/>
                     <TextBox x:Name="txtNomeSessao" Height="45" BorderBrush="Gray" BorderThickness="1" Padding="10"/>

@@ -6,38 +6,38 @@ namespace Canguru.Business
 {
     public static class EmailService
     {
-        /// <summary>
-        /// Tenta enviar o email. Se falhar (modo simulação), retorna a senha gerada para ser exibida na tela.
-        /// </summary>
         public static string EnviarOuSimular(string destinatario, string novaSenha)
         {
             try
             {
-                // Configuração de exemplo (Preencher com dados reais se for usar SMTP de verdade)
-                string meuEmail = "teste@canguru.com";
-                string minhaSenha = "123";
+                // ====================================================================
+                // PREENCHA AQUI SEUS DADOS REAIS DO GMAIL
+                // ====================================================================
+                string meuEmail = "seu.email.real@gmail.com";
+                string minhaSenhaDeApp = "xxxx xxxx xxxx xxxx"; // Senha de App de 16 dígitos
 
-                // Se os dados forem fictícios, forçamos o erro para cair no catch (Modo Simulação)
-                if (meuEmail == "teste@canguru.com") throw new Exception("Modo Simulação");
+                // Validação simples para não tentar conectar se você não configurou
+                if (meuEmail.Contains("seu.email.real")) throw new Exception("Não configurado");
 
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(meuEmail);
+                mail.From = new MailAddress(meuEmail, "Suporte Canguru");
                 mail.To.Add(destinatario);
-                mail.Subject = "Recuperação de Senha - Canguru";
-                mail.Body = $"Olá! \n\nSua senha foi resetada.\nNova Senha: {novaSenha}";
+                mail.Subject = "Recuperação de Senha";
+                mail.Body = $"Olá!\n\nSua nova senha é: {novaSenha}\n\nUse-a para entrar no sistema.";
 
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com");
                 smtp.Port = 587;
-                smtp.Credentials = new NetworkCredential(meuEmail, minhaSenha);
+                smtp.Credentials = new NetworkCredential(meuEmail, minhaSenhaDeApp);
                 smtp.EnableSsl = true;
 
                 smtp.Send(mail);
 
-                return "OK"; // Retorna OK se enviou de verdade
+                return "OK"; // Sucesso real!
             }
             catch (Exception)
             {
-                // Retorna a própria senha para a tela de Login exibir no MessageBox
+                // Se falhar (ou se o usuário cadastrado tiver email falso "a@a.com"), 
+                // devolve a senha para mostrar na tela.
                 return novaSenha;
             }
         }
