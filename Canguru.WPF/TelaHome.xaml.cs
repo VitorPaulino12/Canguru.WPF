@@ -232,9 +232,7 @@ namespace Canguru.WPF
         private void BtnSair_Click(object sender, RoutedEventArgs e)
         {
             usuarioLogado = null;
-           this.Close();
-            LoginWindow login = new LoginWindow();
-            login.Show();
+            FecharJanelas.VoltarParaLogin();
 
         }
         private void BtnNotificacoes_Click(object sender, RoutedEventArgs e)
