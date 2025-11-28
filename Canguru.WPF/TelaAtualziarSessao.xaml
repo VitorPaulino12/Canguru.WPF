@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Atualizar Sessão" Height="600" Width="900"
         WindowStartupLocation="CenterScreen"
-        Background="#E68933">
+        Background="{StaticResource CorLaranjaPrincipal}">
 
     <Grid>
         <Grid.ColumnDefinitions>

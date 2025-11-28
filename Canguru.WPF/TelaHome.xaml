@@ -13,7 +13,7 @@
     <!-- RECURSOS GLOBAIS DA JANELA -->
     <Window.Resources>
         <!-- Cor principal do aplicativo -->
-        <SolidColorBrush x:Key="CorLaranjaPrincipal" Color="#FFA64D"/>
+        <SolidColorBrush x:Key="CorLaranjaPrincipal" Color="#DE9B67"/>
         <SolidColorBrush x:Key="CorLaranjaEscuro" Color="#E59500"/>
         <SolidColorBrush x:Key="CorCinzaClaro" Color="#F0F0F0"/>
 
@@ -126,7 +126,7 @@
                         </Grid>
 
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-                            <Border Background="#FFA64D" CornerRadius="20" Padding="25,8" Cursor="Hand">
+                            <Border Background="#DE9B67" CornerRadius="20" Padding="25,8" Cursor="Hand">
                                 <Button x:Name="BtnEnviarPost" Click="BtnEnviarPost_Click"
             Content="Enviar" Background="Transparent" Foreground="White" 
             BorderThickness="0" FontWeight="Bold" Cursor="Hand"/>

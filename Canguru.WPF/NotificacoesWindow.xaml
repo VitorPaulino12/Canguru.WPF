@@ -23,7 +23,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="White"
-                Background="#FF3333"
+                Background="{StaticResource CorLaranjaPrincipal}"
                 BorderThickness="0"
                 Cursor="Hand"
                 HorizontalAlignment="Right"
@@ -46,7 +46,7 @@
         </Border>
 
         <!-- Main Content Area -->
-        <Border Background="#D18233"
+        <Border Background="{StaticResource CorLaranjaPrincipal}"
                 CornerRadius="25"
                 Margin="10,180,10,10">
 

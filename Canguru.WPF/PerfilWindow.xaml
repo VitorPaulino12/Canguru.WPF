@@ -41,7 +41,7 @@
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
-        <Grid Grid.Row="1" Background="#D27D2D">
+        <Grid Grid.Row="1" Background="{StaticResource CorLaranjaPrincipal}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="1*"/>
