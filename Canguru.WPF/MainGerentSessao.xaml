@@ -88,7 +88,7 @@
                 Margin="-4,60,0,-69" Width="254" Grid.Row="1" Cursor="Hand">
 
                         <!-- Botão 1 -->
-                        <Button x:Name="AtivarQuiz"
+                        <Button x:Name="AtivarQuizFinal"
                                 Width="107"
                                 Height="30"
                                 Background="Yellow"
@@ -96,7 +96,7 @@
                                 Content="Quiz"
                                 BorderThickness="0"
                                 Margin="5"
-                                Click="AtivarQuiz_Click"/>
+                                Click="AtivarQuizFinal_Click"/>
                         <!-- Botão 2 -->
 
                     </StackPanel>
@@ -217,7 +217,7 @@
                         Content="Limpar"
                         BorderThickness="0"
                         Margin="4"
-                        Click="Button_Click_3" Cursor="Hand"/>
+                        Click="btnLimpar_Click" Cursor="Hand"/>
 
                                 <Button x:Name="btnSalvar"
                         Width="70"

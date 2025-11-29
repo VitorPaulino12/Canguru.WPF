@@ -1,5 +1,6 @@
 ﻿using Canguru.Business;
 using Canguru.Core;
+using Canguru.WPF.Pop_Ups;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -85,7 +86,7 @@ namespace Canguru.WPF
             if (sender is Button btn && btn.DataContext is Usuario usuario)
             {
                 _usuarioSelecionadoId = usuario.Id;
-                MessageBox.Show($"[DEBUG] Editar usuário: {usuario.Nome} (ID: {_usuarioSelecionadoId})");
+                //MessageBox.Show($"[DEBUG] Editar usuário: {usuario.Nome} (ID: {_usuarioSelecionadoId})");
             }
         }
 
@@ -95,31 +96,29 @@ namespace Canguru.WPF
             {
                 _usuarioSelecionadoId = usuario.Id;
 
-                var result = MessageBox.Show(
-                    $"Tem certeza que deseja excluir \"{usuario.Nome}\"?",
-                    "Confirmar exclusão",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning
-                );
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    bool sucesso = GerenciadorDeUsuarios.ExcluirUsuario(_usuarioSelecionadoId);
-
-                    if (sucesso)
-                    {
-                        MessageBox.Show("Usuário excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                        AtualizarUsuarios();
-                        dgHistorico.ItemsSource = null;
-                        dgQuizSelecionado.ItemsSource = null;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Erro ao excluir usuário.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
+                // Abre popup de CONFIRMAÇÃO (case 18)
+                var popupConfirmacao = new PopUpsGerais(18, ExecutarExclusao);
+                popupConfirmacao.ShowDialog();
             }
         }
+        private void ExecutarExclusao()
+        {
+            bool sucesso = GerenciadorDeUsuarios.ExcluirUsuario(_usuarioSelecionadoId);
+
+            if (sucesso)
+            {
+                AtualizarUsuarios();
+                dgHistorico.ItemsSource = null;
+                dgQuizSelecionado.ItemsSource = null;
+            }
+            else
+            {
+                // Se der erro → abre popup de erro (case 19)
+                var popupErro = new PopUpsGerais(19);
+                popupErro.ShowDialog();
+            }
+        }
+
 
         private void AtualizarHistorico()
         {
@@ -136,7 +135,9 @@ namespace Canguru.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao carregar histórico: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erro ao carregar histórico: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var pOPuP = new PopUpsGerais(20);
+                pOPuP.ShowDialog();
             }
         }
 
@@ -167,7 +168,9 @@ namespace Canguru.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao carregar interações: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erro ao carregar interações: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(21);
+                PopUp.ShowDialog();
             }
         }
 
@@ -181,23 +184,12 @@ namespace Canguru.WPF
                 alunosFakes.ForEach(turma.Adicionar);
 
                 string nomeArquivo = "ModeloResultados.xlsx";
-                string caminhoModelo = null;
-
-                caminhoModelo = EncontrarArquivo(Path.Combine("Resources", nomeArquivo));
-
-                if (caminhoModelo == null)
-                {
-                    caminhoModelo = EncontrarArquivo(nomeArquivo);
-                }
+                string caminhoModelo = EncontrarArquivo(Path.Combine("Resources", nomeArquivo))
+                                       ?? EncontrarArquivo(nomeArquivo);
 
                 if (caminhoModelo == null)
                 {
-                    MessageBox.Show(
-                        $"Não consegui encontrar o arquivo '{nomeArquivo}'.\n\nDICA: Mova o arquivo Excel para dentro da pasta 'Canguru.WPF/Resources'.",
-                        "Arquivo perdido",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                    new Pop_Ups.PopUpInfoemações(1).ShowDialog();
                     return;
                 }
 
@@ -210,27 +202,23 @@ namespace Canguru.WPF
                     turma.Resultados
                 );
 
-                var abrir = MessageBox.Show(
-                    $"Sucesso! Arquivo gerado em:\n{caminhoFinal}\n\nDeseja abrir a pasta?",
-                    "Relatório Gerado",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Information
-                );
-
-                if (abrir == MessageBoxResult.Yes)
+                var popup = new Pop_Ups.PopUpInfoemações(2, () =>
                 {
                     System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{caminhoFinal}\"");
-                }
+                });
+
+                popup.ShowDialog();
             }
             catch (IOException)
             {
-                MessageBox.Show("O arquivo Excel parece estar aberto. Feche-o e tente novamente.", "Arquivo em uso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                new Pop_Ups.PopUpInfoemações(3).ShowDialog();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro: " + ex.Message, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                new Pop_Ups.PopUpInfoemações(1).ShowDialog();
             }
         }
+
 
         private string EncontrarArquivo(string caminhoRelativo)
         {

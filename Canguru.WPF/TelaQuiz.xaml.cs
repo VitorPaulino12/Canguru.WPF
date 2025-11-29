@@ -1,6 +1,7 @@
-﻿using Canguru.Core;
-using Canguru.Business;
+﻿using Canguru.Business;
+using Canguru.Core;
 using Canguru.WPF;
+using Canguru.WPF.Pop_Ups;
 using QuizTeste.Core;
 using System;
 using System.Collections.Generic;
@@ -103,8 +104,28 @@ namespace QuizTeste
             // saber qual foi e não precisar realizar um salvamento de pergunta no repositório, uma vez que se tiver o Id da eprgunta é só buscar no repositório
             //onde está salvo uma eprgunta com o memso id, e depois mais um atributo para identificar se foi um erro ou acerto
             double percentual = (double)_pontuacao / _quiz.Count * 100;
-            MessageBox.Show($"Quiz finalizado!\n\nAcertos: {_pontuacao} de {_quiz.Count}\nDesempenho: {percentual:F1}%",
-                "Resultado", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Texto do popup
+            string titulo = "Resultado do Quiz";
+            string mensagem =
+                $"Quiz finalizado!\n\n" +
+                $"Acertos: {_pontuacao} de {_quiz.Count}\n" +
+                $"Desempenho: {percentual:F1}%";
+
+            // Escolha da imagem conforme desempenho
+            string caminhoImagem;
+
+            if (percentual >= 80)
+                caminhoImagem = "Assets/sucesso.png";
+            else if (percentual >= 50)
+                caminhoImagem = "Assets/medio.png";
+            else
+                caminhoImagem = "Assets/fracasso.png";
+
+            // Criação e exibição do popup
+            var popup = new PopUpInofrmacoesResultado(titulo, mensagem, caminhoImagem);
+            popup.ShowDialog();
+
 
             //Registro de informação no 'Historico_GlobalResultados'
             //N precisa passar o identificadorQuiz porq na criação do objeto dentro do método add
@@ -114,6 +135,7 @@ namespace QuizTeste
             GerenciadorNotificacoes.LimparNotificacoes();
 
             //Volta para tela principal
+            usuarioLogado = null;
             this.Close();
         }
     }

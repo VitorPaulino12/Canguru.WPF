@@ -1,5 +1,6 @@
 ﻿using Canguru.Business;
 using Canguru.Core;
+using Canguru.WPF.Pop_Ups;
 using QuizTeste;
 using QuizTeste.Core;
 using System;
@@ -169,8 +170,10 @@ namespace Canguru.WPF
                 }
                 else
                 {
-                    MessageBox.Show($"Erro: não foi possível localizar a pergunta de ID {PerguntaSelecionadaId}.",
-                        "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    //MessageBox.Show($"Erro: não foi possível localizar a pergunta de ID {PerguntaSelecionadaId}.",
+                    //  "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    var PopUp = new PopUpsGerais(21);
+                    PopUp.ShowDialog();
                 }
             }
         }
@@ -184,8 +187,10 @@ namespace Canguru.WPF
         {
             if (SessaoSelecionadaId <= 0)
             {
-                MessageBox.Show($"Por favor, selecione uma sessão antes de criar uma pergunta. (SessaoSelecionadaId: {SessaoSelecionadaId})",
-                    "Sessão Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                // MessageBox.Show($"Por favor, selecione uma sessão antes de criar uma pergunta. (SessaoSelecionadaId: {SessaoSelecionadaId})",
+                //   "Sessão Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(23);
+                PopUp.ShowDialog();
                 return;
             }
 
@@ -202,35 +207,42 @@ namespace Canguru.WPF
 
                 if (!int.TryParse(txtAlternativaCorreta.Text.Trim(), out int idRespostaCorreta))
                 {
-                    MessageBox.Show("Por favor, insira um número válido para a alternativa correta (0-3).",
-                        "Alternativa Correta Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // MessageBox.Show("Por favor, insira um número válido para a alternativa correta (0-3).",
+                    //     "Alternativa Correta Inválida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var PopUp = new PopUpsGerais(24);
+                    PopUp.ShowDialog();
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(enunciado))
                 {
-                    MessageBox.Show("Por favor, insira o enunciado da pergunta.",
-                        "Enunciado Vazio", MessageBoxButton.OK, MessageBoxImage.Warning);
+                   // MessageBox.Show("Por favor, insira o enunciado da pergunta.",
+                   //     "Enunciado Vazio", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var PopUp = new PopUpsGerais(25);
+                    PopUp.ShowDialog();
                     return;
                 }
 
                 if (alternativas.Any(string.IsNullOrWhiteSpace))
                 {
-                    MessageBox.Show("Por favor, preencha todas as alternativas.",
-                        "Alternativas Incompletas", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //MessageBox.Show("Por favor, preencha todas as alternativas.",
+                    //    "Alternativas Incompletas", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var PopUp = new PopUpsGerais(26);
+                    PopUp.ShowDialog();
                     return;
                 }
 
                 if (idRespostaCorreta < 0 || idRespostaCorreta > 3)
                 {
-                    MessageBox.Show("A alternativa correta deve ser um número entre 0 e 3.",
-                        "Alternativa Correta Fora do Range", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var PopUp = new PopUpsGerais(27);
+                    PopUp.ShowDialog();
+                    //MessageBox.Show("A alternativa correta deve ser um número entre 0 e 3.",
+                       // "Alternativa Correta Fora do Range", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 int novaPerguntaId = GerenciadorPerguntas.AdicionarPergunta(SessaoSelecionadaId, enunciado, alternativas, idRespostaCorreta);
-                MessageBox.Show($"Pergunta salva com sucesso! (ID: {novaPerguntaId})",
-                    "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                var popup = new Pop_Ups.PopUpInfoemações("Sucesso",$"Pergunta salva com sucesso!\n\nID gerado: {novaPerguntaId}");
 
                 LimparCamposPergunta();
                 _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
@@ -238,8 +250,8 @@ namespace Canguru.WPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao salvar pergunta: {ex.Message}",
-                    "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(28);
+                PopUp.ShowDialog();
             }
         }
 
@@ -247,36 +259,38 @@ namespace Canguru.WPF
         {
             if (_perguntaSelecionada == null)
             {
-                MessageBox.Show("Por favor, selecione uma pergunta para excluir.",
-                    "Pergunta Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(29);
+                PopUp.ShowDialog();
                 return;
             }
 
-            var resultado = MessageBox.Show(
+            var popupConfirmacao = new Canguru.WPF.Pop_Ups.PopUpInfoemações(
+                "Confirmar Exclusão da Pergunta",
                 $"Tem certeza que deseja excluir esta pergunta?\n\n" +
                 $"Enunciado: {_perguntaSelecionada.Enunciado}\n" +
                 $"ID: {_perguntaSelecionada.Id}",
-                "Confirmar Exclusão da Pergunta",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
 
-            if (resultado == MessageBoxResult.Yes)
-            {
-                try
+                () =>
                 {
-                    GerenciadorPerguntas.RemoverPergunta(_perguntaSelecionada.Id);
-                    MessageBox.Show($"Pergunta excluída com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    try
+                    {
+                        GerenciadorPerguntas.RemoverPergunta(_perguntaSelecionada.Id);
+                        new Canguru.WPF.Pop_Ups.PopUpInfoemações("Sucesso","Pergunta excluída com sucesso!").ShowDialog();
 
-                    _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
-                    CarregarPerguntasDaSessao(SessaoSelecionadaId);
-                    LimparCamposPergunta();
+                        _perguntasUsuario = GerenciadorPerguntas.GetTodasPerguntas();
+                        CarregarPerguntasDaSessao(SessaoSelecionadaId);
+                        LimparCamposPergunta();
+                    }
+                    catch (Exception ex)
+                    {
+                        new Canguru.WPF.Pop_Ups.PopUpInfoemações("Erro",$"Erro ao excluir pergunta:\n{ex.Message}").ShowDialog();
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Erro ao excluir pergunta: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+            );
+
+            popupConfirmacao.ShowDialog();
         }
+
 
         private void LimparCamposPergunta()
         {
@@ -292,35 +306,39 @@ namespace Canguru.WPF
 
         private void Button_Click_2(object sender, RoutedEventArgs e) 
         {
-            LimparCamposPergunta();
-            MessageBox.Show("Campos limpos. Preencha os dados para uma nova pergunta.", "Campos Limpos", MessageBoxButton.OK, MessageBoxImage.Information);
+            GerenciadorSessao.RemoverSessao(SessaoSelecionadaId);
+           
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e) // Botão Excluir Sessão
+        private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             if (SessaoSelecionadaId <= 0)
             {
-                MessageBox.Show("Por favor, selecione uma sessão para excluir.", "Sessão Não Selecionada", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var popUp = new PopUpsGerais(30);
+                popUp.ShowDialog();
                 return;
             }
 
-            var sessaoParaExcluir = GerenciadorSessao.GetSessoes().FirstOrDefault(s => s.Id == SessaoSelecionadaId);
+            var sessaoParaExcluir = GerenciadorSessao.GetSessoes()
+                .FirstOrDefault(s => s.Id == SessaoSelecionadaId);
+
             if (sessaoParaExcluir == null)
             {
-                MessageBox.Show("Sessão não encontrada.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var popUp = new PopUpsGerais(31);
+                popUp.ShowDialog();
                 return;
             }
 
-            var resultado = MessageBox.Show($"Tem certeza que deseja excluir a sessão '{sessaoParaExcluir.NomeSessao}'?\n\nTodas as perguntas associadas a esta sessão também serão excluídas.", "Confirmar Exclusão", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-            if (resultado == MessageBoxResult.Yes)
+            var popConfirmacao = new PopUpsGerais(17, () =>
             {
                 try
                 {
                     bool sucesso = GerenciadorSessao.RemoverSessao(SessaoSelecionadaId);
+
                     if (sucesso)
                     {
-                        MessageBox.Show($"Sessão '{sessaoParaExcluir.NomeSessao}' excluída com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                        new PopUpsGerais(15).ShowDialog();
+
                         SessaoSelecionadaId = 0;
                         lblSessaoSelecionada.Text = "Nenhuma sessão selecionada";
                         ListaPerguntas.Children.Clear();
@@ -329,14 +347,16 @@ namespace Canguru.WPF
                     }
                     else
                     {
-                        MessageBox.Show("Erro ao excluir a sessão.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        new PopUpsGerais(31).ShowDialog();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao excluir sessão: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Erro ao excluir sessão: {ex.Message}");
                 }
-            }
+            });
+
+            popConfirmacao.ShowDialog();
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e) // Botão Criar Nova Sessão
@@ -362,7 +382,9 @@ namespace Canguru.WPF
             {
                 if (_perguntaSelecionada == null)
                 {
-                    MessageBox.Show("Selecione uma pergunta antes de atualizar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //MessageBox.Show("Selecione uma pergunta antes de atualizar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var PopUp = new PopUpsGerais(32);
+                    PopUp.ShowDialog();
                     return;
                 }
 
@@ -370,23 +392,87 @@ namespace Canguru.WPF
                 string[] alternativas = new string[] { txtAlternativa1.Text.Trim(), txtAlternativa2.Text.Trim(), txtAlternativa3.Text.Trim(), txtAlternativa4.Text.Trim() };
                 if (!int.TryParse(txtAlternativaCorreta.Text.Trim(), out int idRespostaCorreta))
                 {
-                    MessageBox.Show("Digite um número válido para a alternativa correta (0–3).", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //MessageBox.Show("Digite um número válido para a alternativa correta (0–3).", "Erro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var PopUp = new PopUpsGerais(27);
+                    PopUp.ShowDialog();
                     return;
                 }
                 GerenciadorPerguntas.AtualizarPergunta(_perguntaSelecionada.Id, enunciado, alternativas, idRespostaCorreta);
-                MessageBox.Show($"Pergunta ID {_perguntaSelecionada.Id} atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                var popUp = new PopUpsGerais(33);
+                popUp.ShowDialog();
+
                 CarregarPerguntasDaSessao(SessaoSelecionadaId);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao atualizar pergunta: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show($"Erro ao atualizar pergunta: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var popUp = new PopUpsGerais(34);
+                popUp.ShowDialog();
             }
         }
 
         private void AtivarQuiz_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"um quiz está ativo! {GerenciadorNotificacoes.Notificacoes.Count + 1}", "Notificação", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show($"um quiz está ativo! {GerenciadorNotificacoes.Notificacoes.Count + 1}", "Notificação", MessageBoxButton.OK, MessageBoxImage.Information);
+            var popup = new PopUpComImagem("Sucesso","Pergunta atualizada com sucesso!","Assets/5.png");
             GerenciadorNotificacoes.Adicionar("Novo quiz disponível!", () => { TelaPerguntas tela = new TelaPerguntas(usuarioLogado); tela.Show(); });
         }
+
+        private void btnLimpar_Click(object sender, RoutedEventArgs e)
+        {
+            LimparCamposPergunta();
+
+            // Remove destaque visual das perguntas
+            foreach (var child in ListaPerguntas.Children)
+            {
+                if (child is Border b)
+                {
+                    b.Background = new SolidColorBrush(Colors.WhiteSmoke);
+                }
+            }
+
+            PerguntaSelecionadaId = 0;
+        }
+
+        private void AtivarQuizFinal_Click(object sender, RoutedEventArgs e)
+        {
+            // caminho relativo — veja nota abaixo sobre Build Action
+            string caminhoImagem = "Assets/5.png";
+
+            // checar se arquivo existe (ajuda a depurar)
+            try
+            {
+                if (!System.IO.File.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, caminhoImagem)))
+                {
+                    // tenta usar pack uri como fallback (se imagem for Resource)
+                    // não interrompe: a janela abrirá sem imagem
+                }
+
+                var popup = new PopUpComImagem(
+                    "Sucesso",
+                    "Quiz ativado com sucesso!",
+                    caminhoImagem
+                );
+
+                // opcional: define owner para centralizar e manter foco
+                popup.Owner = this;
+
+                // mostra a janela (bloqueante)
+                popup.ShowDialog();
+
+                // adiciona notificação para abrir o quiz (a ação não depende do popup fechar)
+                GerenciadorNotificacoes.Adicionar("Novo quiz disponível!", () =>
+                {
+                    var tela = new TelaPerguntas(usuarioLogado);
+                    tela.Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                // debug rápido
+                MessageBox.Show($"Erro ao abrir popup: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }

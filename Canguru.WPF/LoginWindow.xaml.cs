@@ -1,5 +1,6 @@
 ﻿using Canguru.Business;
 using Canguru.Core;
+using Canguru.WPF.Pop_Ups;
 using System.Windows;
 using System.Windows.Input;
 
@@ -46,7 +47,9 @@ namespace Canguru.WPF
             // Validação simples: Só impede login vazio
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Preencha login e senha.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(1);
+                PopUp.ShowDialog();
+                //MessageBox.Show("Preencha login e senha.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -55,18 +58,23 @@ namespace Canguru.WPF
 
             if (usuarioLogado != null)
             {
-                string tipo = usuarioLogado is Adm ? "Administrador" : (usuarioLogado is Professor ? "Professor" : "Aluno");
-                MessageBox.Show($"Bem-vindo, {tipo} {usuarioLogado.Nome}!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                //string tipo = usuarioLogado is Adm ? "Administrador" : (usuarioLogado is Professor ? "Professor" : "Aluno");
+                //MessageBox.Show($"Bem-vindo, {tipo} {usuarioLogado.Nome}!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                var popup = new PopUpsGerais(6);
+                popup.ShowDialog();
                 TelaHome novatela = new TelaHome(usuarioLogado);
                 novatela.Show();
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Login ou senha incorretos.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-                txtSenha.Clear();
-                txtSenha.Focus();
+
+                //MessageBox.Show("Login ou senha incorretos.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(2);
+                PopUp.ShowDialog();
+                    txtSenha.Clear();
+                    txtSenha.Focus();
             }
         }
 
@@ -82,7 +90,9 @@ namespace Canguru.WPF
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                MessageBox.Show("Digite seu Login no campo acima para recuperar a senha.", "Ajuda", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Digite seu Login no campo acima para recuperar a senha.", "Ajuda", MessageBoxButton.OK, MessageBoxImage.Information);
+                var PopUp = new PopUpsGerais(3);
+                PopUp.ShowDialog();
                 txtLogin.Focus();
                 return;
             }
@@ -91,7 +101,9 @@ namespace Canguru.WPF
 
             if (usuario == null)
             {
-                MessageBox.Show("Usuário não encontrado.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Usuário não encontrado.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(4);
+                PopUp.ShowDialog();
                 return;
             }
 
@@ -102,7 +114,9 @@ namespace Canguru.WPF
 
             if (resultado == "OK")
             {
-                MessageBox.Show($"Nova senha enviada para: {email}", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show($"Nova senha enviada para: {email}", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                var PopUp = new PopUpsGerais(5);
+                PopUp.ShowDialog();
             }
             else
             {

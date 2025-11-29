@@ -1,5 +1,6 @@
 ﻿using Canguru.Business;
 using Canguru.Core;
+using Canguru.WPF.Pop_Ups;
 using System.Windows;
 
 namespace Canguru.WPF
@@ -21,7 +22,9 @@ namespace Canguru.WPF
 
             if (string.IsNullOrEmpty(nome))
             {
-                MessageBox.Show("Por favor, insira o nome da sessão.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Por favor, insira o nome da sessão.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(35);
+                PopUp.ShowDialog();
                 return;
             }
 
@@ -30,13 +33,17 @@ namespace Canguru.WPF
                 
                 GerenciadorSessao.AddSessao(nome, descricao);
 
-                MessageBox.Show("Sessão criada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Sessão criada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                var PopUp = new PopUpsGerais(36);
+                PopUp.ShowDialog();
                 this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao criar sessão: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(37);
+                PopUp.ShowDialog();
+                //MessageBox.Show($"Erro ao criar sessão: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

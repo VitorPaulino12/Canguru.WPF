@@ -1,5 +1,6 @@
 ﻿using Canguru.Business; // PARA ENCONTRAR A CLASSE (PROFESSOR)
 using Canguru.Core;
+using Canguru.WPF.Pop_Ups;
 using System;
 using System.IO;
 using System.Windows;
@@ -27,8 +28,6 @@ namespace Canguru.WPF
             PreencherPainelUsuarioLogado(usuarioLogado);
             CarregarUsuarios();
             MostrarFeed();
-            ExibirMensagemDeBoasVindas();
-
         }
 
         //Construindo o painel onde ficam os usuarios cadastrados no sistema
@@ -68,7 +67,9 @@ namespace Canguru.WPF
 
             if (string.IsNullOrEmpty(conteudo) || conteudo == placeholderText)//CASO ESTIVER VAZIO 
             {
-                MessageBox.Show("Digite algo antes de postar!", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Digite algo antes de postar!", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(16);
+                PopUp.ShowDialog();
                 return;
             }
        
@@ -231,8 +232,14 @@ namespace Canguru.WPF
         }
         private void BtnSair_Click(object sender, RoutedEventArgs e)
         {
+            var popup = new PopUpsGerais(17, () =>
+            {
+                FecharJanelas.VoltarParaLogin();
+                usuarioLogado = null;
+            });
+
+            popup.ShowDialog();
             usuarioLogado = null;
-            FecharJanelas.VoltarParaLogin();
 
         }
         private void BtnNotificacoes_Click(object sender, RoutedEventArgs e)
@@ -243,24 +250,7 @@ namespace Canguru.WPF
         }
 
         //Acição depop Up se é um professor ou aluno/ é apenas uma checagem se esta ok o cadastro
-        public void ExibirMensagemDeBoasVindas()
-        {
-            
-            string tipoUsuario = usuarioLogado switch // Alternativa para "vai lá e se for tal coisa... usa esse texto... mas se for tal coisa vai la e pega esse outro texto"
-                                                     // dependendo do usua´rio logado pega tal texto
-            {
-                Aluno => "ALUNO",
-                Professor => "PROFESSOR",
-                Adm => "ADMINISTRADOR",
-                _ => "USUÁRIO"
-            };
-
-            // Monta a mensagem final
-            string mensagem = $"Bem-vindo(a), {usuarioLogado.Nome}!\nVocê está logado(a) como: {tipoUsuario}";
-
-            // Exibe o popup (MessageBox)
-            MessageBox.Show(mensagem, "Bem-vindo!", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        
 
 
         //Tem que adicioinar o evento de checagem se existe um quiz para ser feito
