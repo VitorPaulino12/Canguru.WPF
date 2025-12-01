@@ -1,0 +1,75 @@
+﻿<Window x:Class="Canguru.WPF.Pop_Ups.PopUpsGerais"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Canguru.WPF.Pop_Ups"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Title="PopUpsGerais" Height="320" Width="520">
+    <Border BorderThickness="1" BorderBrush="#FF2C2B3E" CornerRadius="8">
+        <Grid>
+
+            <!-- Cabeçalho -->
+            <Grid Background="#1C1B2A" Height="103" VerticalAlignment="Top">
+                <TextBlock x:Name="txtTituloNotificacao" Text="Notificações"
+                        Foreground="White"
+                        FontSize="22"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"/>
+                <!-- Botão fechar -->
+                <Button Content="✕"
+                     Width="40" Height="30"
+                     Background="#F15E5E"
+                     Foreground="White"
+                     FontWeight="Bold"
+                     BorderThickness="0"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Top"
+                     Margin="0,10,10,0"
+                     Click="BtnFechar_Click"/>
+            </Grid>
+
+            <!-- Conteúdo principal -->
+            <Border BorderBrush="#FF1B1B1B"
+                 BorderThickness="1"
+                 CornerRadius="4"
+                 Padding="20"
+                 Margin="40,0,40,0"
+                 VerticalAlignment="Center" Height="102">
+                <TextBlock x:Name="txtConteudo" Text="conteudo que é mudado diacordo com a entrada"
+                        TextAlignment="Center"
+                        FontSize="16"
+                        Foreground="Black"
+                        VerticalAlignment="Center" Height="62"/>
+            </Border>
+
+            <!-- Botões inferiores -->
+            <StackPanel Orientation="Horizontal"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Bottom"
+                     Margin="0,0,0,30"
+                     >
+                <Button x:Name="btnVermelho" Content="Não"
+                     Width="120" Height="50"
+                     Background="#F15E5E"
+                     Foreground="White"
+                     FontSize="16"
+                     FontWeight="SemiBold"
+                     BorderThickness="0"
+                     Click="BtnNao_Click"/>
+                <Button x:Name="btnVerde" Content="Sim"
+                     Width="120" Height="50"
+                     Background="#A4E6B1"
+                     Foreground="Black"
+                     FontSize="16"
+                     FontWeight="SemiBold"
+                     BorderThickness="0"
+                     Click="btnVerde_Click"/>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

@@ -1,4 +1,5 @@
 ﻿using Canguru.Business;
+using Canguru.WPF.Pop_Ups;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -48,7 +49,9 @@ namespace Canguru.WPF
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao carregar imagem: " + ex.Message);
+                    //MessageBox.Show("Erro ao carregar imagem: " + ex.Message);
+                    var PopUp = new PopUpsGerais(7);
+                    PopUp.ShowDialog();
                 }
             }
         }
@@ -66,7 +69,9 @@ namespace Canguru.WPF
             if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(ra) || string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Preencha todos os campos obrigatórios.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Preencha todos os campos obrigatórios.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(8);
+                PopUp.ShowDialog();
                 return;
             }
 
@@ -74,8 +79,10 @@ namespace Canguru.WPF
             // Verifica se tem '@' E se contém '.com' (independente de maiúscula/minúscula)
             if (!email.Contains("@") || !email.ToLower().Contains(".com"))
             {
-                MessageBox.Show("E-mail inválido!\n\nO e-mail deve conter '@' e o domínio '.com'.\nExemplo: usuario@gmail.com",
-                                "Erro no Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                // MessageBox.Show("E-mail inválido!\n\nO e-mail deve conter '@' e o domínio '.com'.\nExemplo: usuario@gmail.com",
+                //"Erro no Email", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var PopUp = new PopUpsGerais(9);
+                PopUp.ShowDialog();
                 txtEmail.Focus(); // Coloca o cursor lá para a pessoa arrumar
                 return;
             }
@@ -84,14 +91,18 @@ namespace Canguru.WPF
             // 3. VALIDAÇÃO DO RA
             if (!ra.StartsWith("1") && !ra.StartsWith("2"))
             {
-                MessageBox.Show("RA Inválido!\nDeve começar com 1 (Aluno) ou 2 (Professor).", "Erro de RA", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("RA Inválido!\nDeve começar com 1 (Aluno) ou 2 (Professor).", "Erro de RA", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(10);
+                PopUp.ShowDialog();
                 return;
             }
 
             // 4. VALIDAÇÃO DE SENHA
             if (senha != confSenha)
             {
-                MessageBox.Show("As senhas não conferem.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("As senhas não conferem.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(11);
+                PopUp.ShowDialog();
                 return;
             }
 
@@ -115,13 +126,28 @@ namespace Canguru.WPF
             if (sucesso)
             {
                 string tipo = ra.StartsWith("1") ? "Aluno" : "Professor";
-                MessageBox.Show($"{tipo} cadastrado com sucesso!", "Bem-vindo", MessageBoxButton.OK, MessageBoxImage.Information);
+                // MessageBox.Show($"{tipo} cadastrado com sucesso!", "Bem-vindo", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (ra == "1")
+                {
+                    //mensagem para aluno
+                    var PopUp = new PopUpsGerais(12);
+                    PopUp.ShowDialog();
+                }
+                else if (ra == "2")
+                {
+                    //mensagem para professor
+                    var PopUp = new PopUpsGerais(13);
+                    PopUp.ShowDialog();
+                }
+                
                 this.DialogResult = true;
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Erro: Este Login/Email já está cadastrado.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Erro: Este Login/Email já está cadastrado.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                var PopUp = new PopUpsGerais(14);
+                PopUp.ShowDialog();
             }
         }
 

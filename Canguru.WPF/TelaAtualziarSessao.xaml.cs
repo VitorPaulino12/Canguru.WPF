@@ -1,5 +1,6 @@
 ﻿using Canguru.Business;
 using Canguru.Core;
+using Canguru.WPF.Pop_Ups;
 using QuizTeste;
 using QuizTeste.Core;
 using System;
@@ -38,7 +39,9 @@ namespace Canguru.WPF
         private void btnSalvar_Click(object sender, RoutedEventArgs e)
         {
             GerenciadorSessao.AtualizarSessao(sessaoSelecionadaId, txtNomeSessao.Text, txtDescricaoSessao.Text);
-            MessageBox.Show("Sessão atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show("Sessão atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            var PopUp = new PopUpsGerais(38);
+            PopUp.ShowDialog();
             this.Close();
         }
     }

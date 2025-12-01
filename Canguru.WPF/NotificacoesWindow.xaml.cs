@@ -1,4 +1,5 @@
 ﻿using Canguru.Business;
+using QuizTeste;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,7 +53,8 @@ namespace Canguru.WPF
             };
             btn.Click += (s, e) =>
             {
-                acao?.Invoke();
+                TelaPerguntas tela = new TelaPerguntas(usuarioLogado);
+                tela.Show();
                 this.Close();
             };
 
