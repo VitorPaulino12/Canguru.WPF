@@ -1,4 +1,7 @@
 ﻿using Canguru.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Canguru.Business
 {
@@ -8,15 +11,17 @@ namespace Canguru.Business
 
         static GerenciadorDeUsuarios()
         {
-            // --- ATENÇÃO: AGORA A SENHA DO ADMIN TAMBÉM É CRIPTOGRAFADA ---
-            _bancoDeUsuarios.Add(new Adm
+            // 1. Criado como PROFESSOR
+            // 2. RA começa com '2'
+            _bancoDeUsuarios.Add(new Professor
             {
-                Id = 1,
+                Id = 999, 
                 Nome = "Administrador Sistema",
                 Login = "admin",
-                // AQUI: Transformamos "admin" em código secreto antes de salvar
+                Email = "admin@canguru.com",
                 Senha = Criptografia.GerarHash("123"),
-                RA = "0000"
+                RA = "20000000000", // COMEÇA COM 2 = PROFESSOR
+                CaminhoFotoPerfil = null
             });
         }
 
@@ -27,18 +32,12 @@ namespace Canguru.Business
 
         public static Usuario ValidarLogin(string login, string senhaDigitada)
         {
-            // 1. Criptografa o que o usuário digitou agora
             string senhaCriptografada = Criptografia.GerarHash(senhaDigitada);
 
-            // 2. Compara o LOGIN e a SENHA CRIPTOGRAFADA
             return _bancoDeUsuarios.FirstOrDefault(u =>
-                u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) &&
+                (u.Login.Equals(login, StringComparison.OrdinalIgnoreCase) ||
+                 (u.Email != null && u.Email.Equals(login, StringComparison.OrdinalIgnoreCase))) &&
                 u.Senha == senhaCriptografada);
-        }
-
-        public static Usuario BuscarPorEmail(string email)
-        {
-            return _bancoDeUsuarios.FirstOrDefault(u => u.Login.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
         public static bool CadastrarUsuario(string nome, string login, string senha, string ra, string caminhoFotoPerfil)
@@ -48,45 +47,36 @@ namespace Canguru.Business
 
             Usuario novoUsuario;
 
-            if (ra.StartsWith("1")) novoUsuario = new Aluno();
-            else if (ra.StartsWith("2")) novoUsuario = new Professor();
-            else return false;
+            if (ra.StartsWith("1"))
+            {
+                novoUsuario = new Aluno(); // Começa com 1 = Aluno
+            }
+            else if (ra.StartsWith("2"))
+            {
+                novoUsuario = new Professor(); // Começa com 2 = Professor
+            }
+            else
+            {
+                return false; // RA Inválido (não começa com 1 nem 2)
+            }
 
             int novoId = _bancoDeUsuarios.Count > 0 ? _bancoDeUsuarios.Max(u => u.Id) + 1 : 1;
 
             novoUsuario.Id = novoId;
             novoUsuario.Nome = nome;
             novoUsuario.Login = login;
-
-            // AQUI: Criptografamos a senha antes de salvar na lista!
+            novoUsuario.Email = login;
             novoUsuario.Senha = Criptografia.GerarHash(senha);
-
-            novoUsuario.RA = ra;
+            novoUsuario.RA = ra; 
             novoUsuario.CaminhoFotoPerfil = caminhoFotoPerfil;
 
             _bancoDeUsuarios.Add(novoUsuario);
             return true;
         }
 
-        public static void AtualizarSenha(int idUsuario, string novaSenha)
-        {
-            var usuario = _bancoDeUsuarios.FirstOrDefault(u => u.Id == idUsuario);
-            if (usuario != null)
-            {
-                // AQUI: Se resetar a senha, salvamos a nova versão criptografada
-                usuario.Senha = Criptografia.GerarHash(novaSenha);
-            }
-        }
-
-        public static bool ExcluirUsuario(int idUsuario)
-        {
-            Usuario usuarioParaRemover = _bancoDeUsuarios.FirstOrDefault(u => u.Id == idUsuario);
-            if (usuarioParaRemover != null)
-            {
-                _bancoDeUsuarios.Remove(usuarioParaRemover);
-                return true;
-            }
-            return false;
-        }
+        // Métodos
+        public static Usuario BuscarPorEmail(string email) => _bancoDeUsuarios.FirstOrDefault(u => u.Login.Equals(email, StringComparison.OrdinalIgnoreCase));
+        public static void AtualizarSenha(int id, string s) { var u = _bancoDeUsuarios.FirstOrDefault(x => x.Id == id); if (u != null) u.Senha = Criptografia.GerarHash(s); }
+        public static bool ExcluirUsuario(int id) { var u = _bancoDeUsuarios.FirstOrDefault(x => x.Id == id); if (u != null) { _bancoDeUsuarios.Remove(u); return true; } return false; }
     }
 }

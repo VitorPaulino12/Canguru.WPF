@@ -93,11 +93,7 @@
                                 <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Ellipse Grid.Column="0" Width="45">
-                                <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding CaminhoFotoPerfil}" Stretch="UniformToFill"/>
-                                </Ellipse.Fill>
-                            </Ellipse>
+                            <Ellipse Grid.Column="0" Width="45" Fill="LightGray"/>
                             <TextBox Grid.Column="2" x:Name="CaixaTextoPost"
                                      TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                                      FontSize="14" Padding="10"
@@ -123,6 +119,7 @@
         </Border>
 
         <StackPanel Grid.Column="2" Margin="10">
+
             <Border Background="White" CornerRadius="15" Padding="20" Margin="0,0,0,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -130,9 +127,11 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Notificações" FontWeight="Bold" FontSize="16"/>
-                    <Button Grid.Column="1" x:Name="BtnNotificacoes" Width="40" Height="40" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="BtnNotificacoes_Click">
-                        <Border Background="White" CornerRadius="5" Padding="5">
-                            <TextBlock Text="🔔" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <Button Grid.Column="1" x:Name="BtnNotificacoes" Width="40" Height="40" 
+                            Background="Transparent" BorderThickness="0" Cursor="Hand" Click="BtnNotificacoes_Click">
+                        <Border Background="#F0F0F0" CornerRadius="20">
+                            <TextBlock Text="🔔" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Button>
                 </Grid>

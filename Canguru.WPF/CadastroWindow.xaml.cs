@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input; // Necessário para bloquear teclas e Mouse
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace Canguru.WPF
@@ -19,13 +19,9 @@ namespace Canguru.WPF
             InitializeComponent();
         }
 
-        // --- MÁSCARA 1: BLOQUEIA ESPAÇOS ENQUANTO DIGITA ---
         private void txtEmail_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Space)
-            {
-                e.Handled = true; // Ignora a tecla espaço
-            }
+            if (e.Key == Key.Space) e.Handled = true;
         }
 
         private void BtnEscolherFoto_Click(object sender, RoutedEventArgs e)
@@ -47,9 +43,8 @@ namespace Canguru.WPF
                     FotoBrush.ImageSource = bitmap;
                     caminhoImagemPerfil = filePath;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    //MessageBox.Show("Erro ao carregar imagem: " + ex.Message);
                     var PopUp = new PopUpsGerais(7);
                     PopUp.ShowDialog();
                 }
@@ -58,55 +53,45 @@ namespace Canguru.WPF
 
         private void BtnSalvarCadastro_Click(object sender, RoutedEventArgs e)
         {
-            // 1. PEGAR VALORES
             string nome = txtNome.Text.Trim();
             string email = txtEmail.Text.Trim();
             string ra = txtRA.Text.Trim();
             string senha = txtSenhaCadastro.Password;
             string confSenha = txtConfirmarSenha.Password;
 
-            // 2. VERIFICA CAMPOS VAZIOS
+            // Validações básicas
             if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(ra) || string.IsNullOrWhiteSpace(senha))
             {
-                //MessageBox.Show("Preencha todos os campos obrigatórios.", "Atenção", MessageBoxButton.OK, MessageBoxImage.Warning);
                 var PopUp = new PopUpsGerais(8);
                 PopUp.ShowDialog();
                 return;
             }
 
-            // --- NOVA VALIDAÇÃO DE EMAIL (MÁSCARA LÓGICA) ---
-            // Verifica se tem '@' E se contém '.com' (independente de maiúscula/minúscula)
             if (!email.Contains("@") || !email.ToLower().Contains(".com"))
             {
-                // MessageBox.Show("E-mail inválido!\n\nO e-mail deve conter '@' e o domínio '.com'.\nExemplo: usuario@gmail.com",
-                //"Erro no Email", MessageBoxButton.OK, MessageBoxImage.Warning);
                 var PopUp = new PopUpsGerais(9);
                 PopUp.ShowDialog();
-                txtEmail.Focus(); // Coloca o cursor lá para a pessoa arrumar
+                txtEmail.Focus();
                 return;
             }
-            // --------------------------------------------------
 
-            // 3. VALIDAÇÃO DO RA
+            // VALIDAÇÃO DO RA (1 ou 2)
             if (!ra.StartsWith("1") && !ra.StartsWith("2"))
             {
-                //MessageBox.Show("RA Inválido!\nDeve começar com 1 (Aluno) ou 2 (Professor).", "Erro de RA", MessageBoxButton.OK, MessageBoxImage.Error);
-                var PopUp = new PopUpsGerais(10);
+                var PopUp = new PopUpsGerais(10); // RA Inválido
                 PopUp.ShowDialog();
                 return;
             }
 
-            // 4. VALIDAÇÃO DE SENHA
             if (senha != confSenha)
             {
-                //MessageBox.Show("As senhas não conferem.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 var PopUp = new PopUpsGerais(11);
                 PopUp.ShowDialog();
                 return;
             }
 
-            // 5. SALVAR FOTO
+            // Salva a foto fisicamente
             string nomeArquivoFoto = null;
             if (caminhoImagemPerfil != null)
             {
@@ -120,33 +105,27 @@ namespace Canguru.WPF
                 catch { }
             }
 
-            // 6. FINALIZAR CADASTRO NA MEMÓRIA
             bool sucesso = GerenciadorDeUsuarios.CadastrarUsuario(nome, email, senha, ra, nomeArquivoFoto);
 
             if (sucesso)
             {
-                string tipo = ra.StartsWith("1") ? "Aluno" : "Professor";
-                // MessageBox.Show($"{tipo} cadastrado com sucesso!", "Bem-vindo", MessageBoxButton.OK, MessageBoxImage.Information);
-                if (ra == "1")
+                if (ra.StartsWith("1"))
                 {
-                    //mensagem para aluno
-                    var PopUp = new PopUpsGerais(12);
+                    var PopUp = new PopUpsGerais(12); 
                     PopUp.ShowDialog();
                 }
-                else if (ra == "2")
+                else if (ra.StartsWith("2"))
                 {
-                    //mensagem para professor
-                    var PopUp = new PopUpsGerais(13);
+                    var PopUp = new PopUpsGerais(13); 
                     PopUp.ShowDialog();
                 }
-                
+
                 this.DialogResult = true;
                 this.Close();
             }
             else
             {
-                //MessageBox.Show("Erro: Este Login/Email já está cadastrado.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-                var PopUp = new PopUpsGerais(14);
+                var PopUp = new PopUpsGerais(14); // Erro: Usuário já existe
                 PopUp.ShowDialog();
             }
         }
@@ -156,9 +135,6 @@ namespace Canguru.WPF
             this.Close();
         }
 
-        private void txtEmail_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Método vazio necessário para o XAML não dar erro
-        }
+        private void txtEmail_TextChanged(object sender, TextChangedEventArgs e) { }
     }
 }

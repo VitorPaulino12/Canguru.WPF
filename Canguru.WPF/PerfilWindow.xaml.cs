@@ -18,7 +18,7 @@ namespace Canguru.WPF
         public PerfilWindow()
         {
             InitializeComponent();
-            _usuarioLogado = new Aluno { Id = 999, Nome = "Teste", Email = "teste@canguru.com" }; 
+            _usuarioLogado = new Aluno { Id = 1, Nome = "Teste", Email = "teste@canguru.com", RA = "11111111111" };
             ConfigurarJanela();
         }
 
@@ -43,45 +43,27 @@ namespace Canguru.WPF
                 txtNomeUsuario.Text = _usuarioLogado.Nome;
                 txtEmail.Text = "E-mail: " + _usuarioLogado.Email;
 
-                txtRA.Text = "RA: " + _usuarioLogado.RA;
+                // Exibe o RA
+                string ra = _usuarioLogado.RA ?? "";
+                txtRA.Text = "RA: " + ra;
 
-                // LÓGICA DE EXIBIÇÃO:
-                if (_usuarioLogado is Aluno)
+                if (ra.StartsWith("1"))
                 {
                     txtTipoUsuario.Text = "Tipo usuário: Aluno";
                 }
-                else if (_usuarioLogado is Adm)
-                {
-                    txtTipoUsuario.Text = "Tipo usuário: Administrador";
-                }
                 else
                 {
+                    // Admin (RA 2000...) ou Professor (RA 2...) caem aqui
                     txtTipoUsuario.Text = "Tipo usuário: Professor";
                 }
             }
 
-            try
-            {
-                if (!string.IsNullOrEmpty(_usuarioLogado.CaminhoFotoPerfil))
-                {
-                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", _usuarioLogado.CaminhoFotoPerfil);
-                    if (File.Exists(path)) imgPerfil.ImageSource = new BitmapImage(new Uri(path));
-                    else imgPerfil.ImageSource = new BitmapImage(new Uri("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"));
-                }
-                else imgPerfil.ImageSource = new BitmapImage(new Uri("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"));
-            }
-            catch { }
+            try { if (!string.IsNullOrEmpty(_usuarioLogado.CaminhoFotoPerfil)) { string p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FotosPerfil", _usuarioLogado.CaminhoFotoPerfil); if (File.Exists(p)) imgPerfil.ImageSource = new BitmapImage(new Uri(p)); else imgPerfil.ImageSource = new BitmapImage(new Uri("https://cdn-icons-png.flaticon.com/512/3135/3135715.png")); } else imgPerfil.ImageSource = new BitmapImage(new Uri("https://cdn-icons-png.flaticon.com/512/3135/3135715.png")); } catch { }
         }
 
-        private void CarregarFeed()
-        {
-            MeusPosts = new ObservableCollection<FeedPost>();
-            var posts = GerenciadorDePosts.ObterPosts().Where(p => p.Autor.Id == _usuarioLogado.Id).OrderByDescending(p => p.Data);
-            foreach (var post in posts) MeusPosts.Add(new FeedPost { Titulo = post.Conteudo, FoiConcluido = true, DataPostagem = post.Data });
-            lstFeed.ItemsSource = MeusPosts;
-        }
+        private void CarregarFeed() { MeusPosts = new ObservableCollection<FeedPost>(); var posts = GerenciadorDePosts.ObterPosts().Where(p => p.Autor.Id == _usuarioLogado.Id).OrderByDescending(p => p.Data); foreach (var p in posts) MeusPosts.Add(new FeedPost { Titulo = p.Conteudo, FoiConcluido = true, DataPostagem = p.Data }); lstFeed.ItemsSource = MeusPosts; }
         private void BtnVoltar_Click(object sender, RoutedEventArgs e) => Close();
-        private void btnEditarSobreMim_Click(object sender, RoutedEventArgs e) { if (txtSobreMim.Visibility == Visibility.Visible) { txtEditSobreMim.Text = txtSobreMim.Text; txtSobreMim.Visibility = Visibility.Collapsed; txtEditSobreMim.Visibility = Visibility.Visible; btnEditarSobreMim.Content = "Salvar Alterações"; btnEditarSobreMim.Background = Brushes.OrangeRed; } else { txtSobreMim.Text = txtEditSobreMim.Text; txtSobreMim.Visibility = Visibility.Visible; txtEditSobreMim.Visibility = Visibility.Collapsed; btnEditarSobreMim.Content = "Editar 'Sobre mim'"; btnEditarSobreMim.Background = (Brush)new BrushConverter().ConvertFrom("#50E3C2"); } }
-        private void btnEditarInformacoes_Click(object sender, RoutedEventArgs e) { var w = new EditarCadastroWindow(txtNomeUsuario.Text, txtEmail.Text); if (w.ShowDialog() == true) { txtNomeUsuario.Text = w.NovoNome; txtEmail.Text = "E-mail: " + w.NovoEmail; if (_usuarioLogado != null) { _usuarioLogado.Nome = w.NovoNome; _usuarioLogado.Email = w.NovoEmail; } MessageBox.Show("Dados atualizados!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information); } }
+        private void btnEditarSobreMim_Click(object sender, RoutedEventArgs e) { if (txtSobreMim.Visibility == Visibility.Visible) { txtEditSobreMim.Text = txtSobreMim.Text; txtSobreMim.Visibility = Visibility.Collapsed; txtEditSobreMim.Visibility = Visibility.Visible; btnEditarSobreMim.Content = "Salvar"; btnEditarSobreMim.Background = Brushes.OrangeRed; } else { txtSobreMim.Text = txtEditSobreMim.Text; txtSobreMim.Visibility = Visibility.Visible; txtEditSobreMim.Visibility = Visibility.Collapsed; btnEditarSobreMim.Content = "Editar"; btnEditarSobreMim.Background = (Brush)new BrushConverter().ConvertFrom("#50E3C2"); } }
+        private void btnEditarInformacoes_Click(object sender, RoutedEventArgs e) { var w = new EditarCadastroWindow(txtNomeUsuario.Text, txtEmail.Text); if (w.ShowDialog() == true) { txtNomeUsuario.Text = w.NovoNome; txtEmail.Text = "E-mail: " + w.NovoEmail; if (_usuarioLogado != null) { _usuarioLogado.Nome = w.NovoNome; _usuarioLogado.Email = w.NovoEmail; } MessageBox.Show("Atualizado!"); } }
     }
 }
