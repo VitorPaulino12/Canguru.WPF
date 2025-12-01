@@ -10,14 +10,11 @@
         WindowState="Maximized"
         FontFamily="Segoe UI">
 
-    <!-- RECURSOS GLOBAIS DA JANELA -->
     <Window.Resources>
-        <!-- Cor principal do aplicativo -->
         <SolidColorBrush x:Key="CorLaranjaPrincipal" Color="#DE9B67"/>
         <SolidColorBrush x:Key="CorLaranjaEscuro" Color="#E59500"/>
         <SolidColorBrush x:Key="CorCinzaClaro" Color="#F0F0F0"/>
 
-        <!-- Estilo para os botões do menu -->
         <Style x:Key="MenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#333"/>
@@ -37,7 +34,6 @@
         </Style>
     </Window.Resources>
 
-    <!-- GRID PRINCIPAL -->
     <Grid Background="{StaticResource CorCinzaClaro}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
@@ -45,9 +41,6 @@
             <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ======================================================= -->
-        <!-- = COLUNA 0: SIDEBAR (MENU LATERAL)                  = -->
-        <!-- ======================================================= -->
         <Grid Grid.Column="0" Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -55,7 +48,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- PERFIL DO USUÁRIO -->
             <Border Grid.Row="0" Background="{StaticResource CorLaranjaPrincipal}" CornerRadius="0,0,25,25" Padding="20,30">
                 <StackPanel Orientation="Horizontal">
                     <Ellipse x:Name="ellipseFoto" Width="80" Height="80" Stroke="Gray" StrokeThickness="1" Margin="0,0,10,0"/>
@@ -66,24 +58,20 @@
                 </StackPanel>
             </Border>
 
-            <!-- MENU DE NAVEGAÇÃO -->
             <StackPanel Grid.Row="1">
                 <Button Content="🏠 Home" Style="{StaticResource MenuButtonStyle}" Background="#FFF0F0F0" FontWeight="Bold"/>
                 <Button Content="👤 Meu Perfil" Style="{StaticResource MenuButtonStyle}" Click="BtnMeuPerfil_Click"/>
                 <Button Content="📚 Atividades" Style="{StaticResource MenuButtonStyle}" Click="BtnAtividades_Click"/>
-                <Button Content="➕ Criar Atividade" Style="{StaticResource MenuButtonStyle}" Click="BtnCriarAtividade_Click"/>
-                <Button Content="👥 Gerenciar Classe" Style="{StaticResource MenuButtonStyle}" Click="BtnGerenciarClasse_Click"/>
+
+                <Button x:Name="BtnCriarAtividade" Content="➕ Criar Atividade" Style="{StaticResource MenuButtonStyle}" Click="BtnCriarAtividade_Click"/>
+                <Button x:Name="BtnGerenciarClasse" Content="👥 Gerenciar Classe" Style="{StaticResource MenuButtonStyle}" Click="BtnGerenciarClasse_Click"/>
             </StackPanel>
 
-            <!-- RODAPÉ (SAIR) -->
             <Button Grid.Row="2" Content="🚪 Sair" Style="{StaticResource MenuButtonStyle}" 
                     Background="{StaticResource CorLaranjaEscuro}" Foreground="White" 
                     FontWeight="Bold" Click="BtnSair_Click"/>
         </Grid>
 
-        <!-- ======================================================= -->
-        <!-- = COLUNA 1: FEED DE POSTAGENS (ÁREA PRINCIPAL)      = -->
-        <!-- ======================================================= -->
         <Border Grid.Column="1" Background="{StaticResource CorLaranjaPrincipal}" CornerRadius="35" Margin="10" Padding="20">
             <Grid>
                 <Grid.RowDefinitions>
@@ -91,7 +79,6 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- PAINEL "CRIAR NOVO POST" -->
                 <Border Grid.Row="0" Background="White" CornerRadius="20" Padding="20" Margin="0,0,0,20">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -99,17 +86,13 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-
                         <TextBlock Grid.Row="0" Text="Criar novo post" FontWeight="Bold" FontSize="18" Margin="0,0,0,15"/>
-
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-
-                            <!-- AKI TEM UMA IMAGEM DE USUÁRIO E NÃO ESTA SENDO CARREGADA NO SISTEMA-->
                             <Ellipse Grid.Column="0" Width="45">
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="{Binding CaminhoFotoPerfil}" Stretch="UniformToFill"/>
@@ -122,47 +105,24 @@
                                      Foreground="Gray"
                                      GotFocus="CaixaTextoPost_GotFocus"
                                      LostFocus="CaixaTextoPost_LostFocus"/>
-                            
                         </Grid>
-
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
                             <Border Background="#DE9B67" CornerRadius="20" Padding="25,8" Cursor="Hand">
                                 <Button x:Name="BtnEnviarPost" Click="BtnEnviarPost_Click"
-            Content="Enviar" Background="Transparent" Foreground="White" 
-            BorderThickness="0" FontWeight="Bold" Cursor="Hand"/>
+                                        Content="Enviar" Background="Transparent" Foreground="White" 
+                                        BorderThickness="0" FontWeight="Bold" Cursor="Hand"/>
                             </Border>
                         </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- FEED DE POSTAGENS -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="PainelDePosts">
-                        <!-- Exemplo de post para visualização -->
-                        <Border Background="White" CornerRadius="15" Padding="20" Margin="0,0,0,15">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Ellipse Grid.Column="0" Width="50" Height="50" Fill="LightGray" Margin="0,0,15,0"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Autor Exemplo" FontWeight="Bold"/>
-                                    <TextBlock Text="Este é um post de exemplo para mostrar como a interface fica preenchida." TextWrapping="Wrap" Margin="0,5"/>
-                                    <TextBlock Text="Há 2 horas" FontSize="12" Foreground="Gray"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </StackPanel>
+                    <StackPanel x:Name="PainelDePosts"/>
                 </ScrollViewer>
             </Grid>
         </Border>
 
-        <!-- ======================================================= -->
-        <!-- = COLUNA 2: WIDGETS (NOTIFICAÇÕES E USUÁRIOS)      = -->
-        <!-- ======================================================= -->
         <StackPanel Grid.Column="2" Margin="10">
-            <!-- WIDGET DE NOTIFICAÇÕES -->
             <Border Background="White" CornerRadius="15" Padding="20" Margin="0,0,0,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -170,26 +130,14 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Notificações" FontWeight="Bold" FontSize="16"/>
-                        <Button Grid.Column="1"
-                            x:Name="BtnNotificacoes"
-                            Width="40"
-                            Height="40"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Cursor="Hand"
-                            Click="BtnNotificacoes_Click">
-
-                             <Border Background="White"
-                                     CornerRadius="5"
-                                     Padding="5">
-                                    <Image Source="/Assets/sino.png" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                             </Border>
-
+                    <Button Grid.Column="1" x:Name="BtnNotificacoes" Width="40" Height="40" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="BtnNotificacoes_Click">
+                        <Border Background="White" CornerRadius="5" Padding="5">
+                            <TextBlock Text="🔔" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                     </Button>
                 </Grid>
             </Border>
 
-            <!-- WIDGET DE USUÁRIOS -->
             <Border Background="White" CornerRadius="15" Padding="20">
                 <StackPanel>
                     <TextBlock Text="Usuários Cadastrados" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
