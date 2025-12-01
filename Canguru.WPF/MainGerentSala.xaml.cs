@@ -75,7 +75,6 @@ namespace Canguru.WPF
             }
         }
 
-        // Métodos auxiliares
         private void dgHistorico_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
         private void dgQuizSelecionado_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
         private void NomeProf_TextChanged(object sender, TextChangedEventArgs e) { }
@@ -152,6 +151,7 @@ namespace Canguru.WPF
                     .ToList();
 
                 dgQuizSelecionado.ItemsSource = null;
+
                 if (interacoes.Any())
                 {
                     var dadosParaGrid = interacoes.Select(i => new
@@ -170,7 +170,7 @@ namespace Canguru.WPF
                 MessageBox.Show($"Erro ao carregar interações: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+                
         private void BtnGerarRelatorio_Click(object sender, RoutedEventArgs e)
         {
             try

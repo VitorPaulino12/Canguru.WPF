@@ -14,11 +14,11 @@
         <!--  LATERAL (COLUNA 0)-->
         <Grid Grid.Column="0" Background="#1E1B2E">
             <!-- Botão Voltar -->
-            <Button Content="&lt;" Width="35" Height="35"
+            <Button Content="&lt;" Width="34" Height="29"
                     HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="20,20,0,0"
+                    Margin="20,26,0,0"
                     FontWeight="Bold"
-                    FontSize="18"
+                    FontSize="20"
                     Foreground="White"
                     Background="#DD8431"
                     BorderThickness="0" Click="Button_Click"/>

@@ -1,20 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Canguru.Core;
 
-namespace Canguru.Core
+public class Aluno : Usuario
 {
-    public class Aluno : Usuario 
+    public Aluno()
     {
-        
+        Tipo = TipoUsuario.Aluno;
+    }
 
-        public Aluno()
-        {
-            Tipo = TipoUsuario.Aluno; 
-            
-        }
-
-        public override string ToString()
-        {
-            return $"{Id} - {Nome} ({Email})";
-        }
+    public override string ToString()
+    {
+        return $"{Id} - {Nome} ({Email})";
     }
 }
